@@ -62,3 +62,31 @@ off I'll fix it fast.
 ## Updating the site later
 Just replace `world-cup-pool.html` in the GitHub repo (edit → upload new version → commit).
 Netlify redeploys automatically in a minute or two.
+
+---
+
+## OPTIONAL: live-to-the-minute results (KickoffAPI)
+By default the site already auto-updates results daily from openfootball with **no key**. To upgrade to
+near-instant results during matches, add a free KickoffAPI key. The site tries KickoffAPI first and
+silently falls back to openfootball if the key isn't set — so this can't break anything.
+
+Requires the **GitHub deploy** (functions only run on a real deploy, not a drag-drop).
+
+1. **Get a free key:** go to **kickoffapi.com/signup.html**, sign up (no card), copy your API key.
+2. **Add it to Netlify:** your `lgm-wc` project → **Site configuration → Environment variables → Add a variable**:
+   - Key: `FOOTBALL_API_KEY`  Value: *(paste your key)*
+   - (Optional) `WC_LEAGUE_ID` = `1`  — only change if step 4 shows the wrong competition.
+3. **Redeploy:** Deploys tab → **Trigger deploy → Deploy site** (env vars apply on the next deploy).
+4. **Check it:** open `lgm-wc.netlify.app`. Under the title it should say **"LIVE · to-the-minute via KickoffAPI."**
+   - The page refreshes results about once a minute while it's open.
+   - The key is never exposed — it lives only in the Netlify function, which caches results (max one
+     upstream call per minute) to stay inside the free 100-requests/day tier.
+
+### If it doesn't say "LIVE via KickoffAPI"
+Visit **lgm-wc.netlify.app/.netlify/functions/live** directly — you'll see raw JSON:
+- `"error":"FOOTBALL_API_KEY not set"` → the env var didn't apply; re-check step 2 and redeploy.
+- `"error":"upstream 401/403"` → the key is wrong or not active yet.
+- Team names look wrong / empty `matches` → paste me that JSON and I'll fix the name mapping or the
+  league id. (I can't test the live API from my end, so this one-time check is where we confirm it.)
+
+Either way, if anything's off it just keeps using openfootball, so the site stays working.

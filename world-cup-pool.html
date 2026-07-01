@@ -257,7 +257,7 @@ section{margin:26px 0}
     <div class="inner">
       <span class="badge"><span class="dot"></span> Round of 32 · Live</span>
       <h1 class="disp">LGM WC <span class="sub">Cup</span></h1>
-      <p>The group chat's 2026 World Cup pool, wired to the real tournament. Group stage done, knockouts underway — <b id="stageNote"></b>.</p>
+      <p>The group chat's 2026 World Cup pool, wired to the real tournament. Group stage done, knockouts underway — <b id="stageNote"></b>. <span id="liveTag" style="color:var(--mut);font-size:12px"></span></p>
       <div class="kpis">
         <div class="kpi"><div class="n disp" id="kLeader">—</div><div class="l">Leading manager</div></div>
         <div class="kpi"><div class="n disp" id="kLeadPts">—</div><div class="l">Points out front</div></div>
@@ -353,7 +353,7 @@ section{margin:26px 0}
   <section>
     <div class="h"><span class="disp">Golden Boot</span><span class="tag">side pool · total goals</span></div>
     <div class="card"><div class="boot" id="boot"></div>
-      <div class="note" style="padding:0 14px 14px">Total goals scored by each manager's six nations. <b>Provisional</b> — these are my best count so far; send me any corrections and I'll lock them in.</div>
+      <div class="note" style="padding:0 14px 14px">Total goals scored by each manager's six nations, <b>auto-updated from the live results feed</b>. (Falls back to a manual count if the feed can't be reached.)</div>
     </div>
   </section>
 
@@ -908,12 +908,83 @@ function renderAwards(){
     `<div class="aw"><div class="em">${a[0]}</div><div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div></div>`).join('');
 }
 
+/* ---------- LIVE RESULTS (openfootball · no API key) ---------- */
+const OF_URL='https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
+const OF_MAP={'Czech Republic':'Czechia','DR Congo':'Congo','Bosnia & Herzegovina':'Bosnia','Curaçao':'Curacao'};
+const ofName=n=>OF_MAP[n]||n;
+let LIVE=false, LIVE_AT=null;
+function applyLive(data){
+  const pair={}, tg={};
+  (data.matches||[]).forEach(m=>{
+    const s=m.score||{}; const f=s.et||s.ft; if(!f) return;           // not played yet
+    const t1=ofName(m.team1), t2=ofName(m.team2);
+    if(!(t1 in FLAG)||!(t2 in FLAG)) return;                          // skip placeholder slots
+    tg[t1]=(tg[t1]||0)+(f[0]||0); tg[t2]=(tg[t2]||0)+(f[1]||0);
+    let win=null;
+    if(s.p) win = s.p[0]>s.p[1]?t1:t2;                                // penalty shootout
+    else if(f[0]>f[1]) win=t1; else if(f[1]>f[0]) win=t2;             // else draw
+    pair[[t1,t2].sort().join('|')]={win, note: s.p?`${s.p[0]}-${s.p[1]} pens`:''};
+  });
+  R32.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r){ row[2]=r.win; if(r.note&&!row[4]) row[4]=r.note; } });
+  GROUPS.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r) row[2]=r.win; });
+  Object.keys(GF).forEach(k=>{ if(k in tg) GF[k]=tg[k]; });
+  return Object.keys(pair).length;
+}
+async function syncLive(){
+  const tag=document.getElementById('liveTag');
+  if(tag) tag.textContent='· syncing results…';
+  try{
+    const r=await fetch(OF_URL,{cache:'no-store'}); if(!r.ok) throw 0;
+    const data=await r.json(); const n=applyLive(data); LIVE=true; LIVE_AT=new Date();
+    if(tag) tag.textContent=`· live: auto-updated from openfootball (${n} matches)`;
+  }catch(e){ LIVE=false; if(tag) tag.textContent='· using built-in results (live feed unreachable)'; }
+  renderAll();
+}
+
+/* ---------- LIVE TO-THE-MINUTE (KickoffAPI via Netlify function) ---------- */
+// The function returns matches already mapped to our nation names:
+//   [{t1,t2,g1,g2,p1,p2}]  (g=goals incl. extra time, p=penalty score or null)
+function applyMatches(rows){
+  const FINAL={FT:1,AET:1,PEN:1,AWD:1,WO:1};                          // only count finished matches
+  const pair={}, tg={};
+  rows.forEach(m=>{
+    const t1=m.t1, t2=m.t2; if(!(t1 in FLAG)||!(t2 in FLAG)) return;
+    if(m.status && !FINAL[m.status]) return;                          // ignore in-progress / scheduled
+    const g1=m.g1, g2=m.g2; if(g1==null||g2==null) return;            // not played yet
+    tg[t1]=(tg[t1]||0)+g1; tg[t2]=(tg[t2]||0)+g2;
+    let win=null;
+    if(m.p1!=null&&m.p2!=null) win = m.p1>m.p2?t1:t2;                  // penalty shootout
+    else if(g1>g2) win=t1; else if(g2>g1) win=t2;                     // else draw
+    pair[[t1,t2].sort().join('|')]={win, note:(m.p1!=null)?`${m.p1}-${m.p2} pens`:''};
+  });
+  // knockouts: only overwrite with a definite winner — never wipe a known result to a draw
+  R32.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r&&r.win){ row[2]=r.win; if(r.note&&!row[4]) row[4]=r.note; } });
+  GROUPS.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r) row[2]=r.win; });
+  Object.keys(GF).forEach(k=>{ if(k in tg) GF[k]=tg[k]; });
+  return Object.keys(pair).length;
+}
+let POLL=null;
+async function syncLiveAPI(){
+  try{
+    const r=await fetch('/.netlify/functions/live',{cache:'no-store'}); if(!r.ok) return false;
+    const j=await r.json(); if(!j||!j.ok||!Array.isArray(j.matches)||!j.matches.length) return false;
+    applyMatches(j.matches); LIVE=true; LIVE_AT=new Date();
+    const tag=document.getElementById('liveTag');
+    if(tag) tag.textContent=`· LIVE · to-the-minute via KickoffAPI · updated ${LIVE_AT.toLocaleTimeString()}`;
+    renderAll();
+    if(!POLL) POLL=setInterval(syncLiveAPI, 60000);   // refresh ~every minute
+    return true;
+  }catch(e){ return false; }
+}
+
 /* ---------- BOOT ---------- */
-renderAll();
+renderAll();          // instant paint from built-in results
 renderAwards();
 renderRoasts();
 renderCardButtons();
 loadReactions();
+// Results: try the to-the-minute API first, fall back to openfootball (daily, no key), else built-in.
+(async()=>{ if(!(await syncLiveAPI())) syncLive(); })();
 
 </script>
 </body>
