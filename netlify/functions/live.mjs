@@ -52,29 +52,20 @@ async function fromFootballData(token){
 }
 
 async function fromWorldcup26(){
-  const [tr, gr] = await Promise.all([
-    fetch('https://worldcup26.ir/get/teams'),
-    fetch('https://worldcup26.ir/get/games')
-  ]);
-  if (!tr.ok || !gr.ok) throw new Error('worldcup26 '+tr.status+'/'+gr.status);
-  const tj = await tr.json(), gj = await gr.json();
-  const teamsArr = tj.teams || tj.data || (Array.isArray(tj)?tj:[]);
-  const nameOf = {};
-  teamsArr.forEach(t=>{ const id=String(t.id ?? t.team_id ?? t._id ?? '');
-    const nm=t.name || t.title || t.team_name || t.en_name; if(id&&nm) nameOf[id]=nm; });
-  const games = gj.games || gj.data || (Array.isArray(gj)?gj:[]);
-  const matches = games.map(g=>{
-    const t1=toPool(nameOf[String(g.home_team_id)]), t2=toPool(nameOf[String(g.away_team_id)]);
-    const g1=N(g.home_score), g2=N(g.away_score);
-    // status heuristics: skip games flagged live / not finished if such fields exist
-    const st=String(g.status ?? g.state ?? '').toLowerCase();
-    const live = g.is_live===true || g.live===true || /live|1h|2h|ht|playing/.test(st);
-    const done = g.finished===true || /ft|finish|full|ended|played|complete/.test(st) || (!st && g1!=null && g2!=null && !live);
-    let w=null; const wf = g.winner || g.winner_team_id;
-    if (wf!=null && nameOf[String(wf)]) w = toPool(nameOf[String(wf)]);
-    const p1=N(g.home_penalties ?? g.home_pen), p2=N(g.away_penalties ?? g.away_pen);
-    return { t1,t2,g1,g2,p1,p2,w, status: done&&!live ? 'FT' : 'NS' };
-  }).filter(m=>m.t1&&m.t2&&m.g1!=null&&m.g2!=null&&m.status==='FT');
+  const r = await fetch('https://worldcup26.ir/get/games');
+  if (!r.ok) throw new Error('worldcup26 '+r.status);
+  const j = await r.json();
+  const games = j.games || j.data || (Array.isArray(j)?j:[]);
+  const isFin = x => String(x.finished).toUpperCase() === 'TRUE';
+  const matches = games.filter(isFin).map(g=>{
+    const t1 = toPool(g.home_team_name_en), t2 = toPool(g.away_team_name_en);
+    const g1 = N(g.home_score), g2 = N(g.away_score);
+    const p1 = N(g.home_penalty_score), p2 = N(g.away_penalty_score);
+    let w = null;
+    if (p1!=null && p2!=null && p1!==p2) w = p1>p2 ? t1 : t2;   // shootout winner
+    else if (g1!=null && g2!=null) { if (g1>g2) w=t1; else if (g2>g1) w=t2; }
+    return { t1, t2, g1, g2, p1, p2, w, status:'FT' };
+  }).filter(m => m.t1 && m.t2 && m.g1!=null && m.g2!=null);
   if (!matches.length) throw new Error('worldcup26: no finished matches');
   return { source:'worldcup26.ir', matches };
 }
