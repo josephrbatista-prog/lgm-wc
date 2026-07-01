@@ -1,19 +1,39 @@
 import { getStore } from '@netlify/blobs';
 
-// Shared play-money bets for the LGM WC Cup book.
-// GET  -> { ok, bets:[...] }
-// POST { punter,key,a,b,round,market,mlabel,selection,sellabel,odds,stake } -> appends, returns full list.
-// Settlement happens client-side from the live results, so this is just append-only storage.
+// Shared play-money bets + punter roster for the LGM WC Cup book.
+// GET  -> { ok, bets:[...], roster:[...] }
+// POST { join:true, punter }                     -> registers a punter name
+// POST { punter,key,market,selection,odds,stake} -> appends a bet
+// Settlement happens client-side from live results; this is append-only storage.
+
+const MANAGERS = ['Harris','Ray','Jordan','Jake','Eric','Fink','Chris','Vinny'];
+
 export default async (req) => {
   const store = getStore('lgm-bets');
-  const KEY = 'all';
+  const KEY = 'all', RKEY = 'roster';
+  const s = (v,n)=>String(v==null?'':v).slice(0,n);
   try {
     if (req.method === 'POST') {
       const b = await req.json();
+
+      // Punter registration
+      if (b && b.join === true) {
+        const name = s(b.punter,24).trim();
+        if (!name) return Response.json({ ok:false, error:'no name' }, { status:400 });
+        const roster = (await store.get(RKEY, { type:'json' })) || [];
+        if (!MANAGERS.includes(name) && !roster.includes(name)) {
+          roster.push(name);
+          if (roster.length > 50) roster.splice(0, roster.length - 50);
+          await store.setJSON(RKEY, roster);
+        }
+        const list = (await store.get(KEY, { type:'json' })) || [];
+        return Response.json({ ok:true, bets:list, roster });
+      }
+
+      // Bet placement
       if (!b || !b.punter || !b.key || !b.market || !b.selection || typeof b.stake !== 'number')
         return Response.json({ ok:false, error:'bad bet' }, { status:400 });
       const list = (await store.get(KEY, { type:'json' })) || [];
-      const s = (v,n)=>String(v==null?'':v).slice(0,n);
       list.push({
         id: b.id || ('b'+Date.now()),
         punter: s(b.punter,24), key: s(b.key,64),
@@ -23,13 +43,17 @@ export default async (req) => {
         odds: Number(b.odds) || 1, stake: Math.max(1, Math.floor(b.stake)),
         ts: Date.now()
       });
-      // keep it bounded
       if (list.length > 2000) list.splice(0, list.length - 2000);
       await store.setJSON(KEY, list);
-      return Response.json({ ok:true, bets:list });
+      // any better who isn't a manager lands on the roster too
+      const roster = (await store.get(RKEY, { type:'json' })) || [];
+      const nm = s(b.punter,24).trim();
+      if (nm && !MANAGERS.includes(nm) && !roster.includes(nm)) { roster.push(nm); await store.setJSON(RKEY, roster); }
+      return Response.json({ ok:true, bets:list, roster });
     }
     const list = (await store.get(KEY, { type:'json' })) || [];
-    return Response.json({ ok:true, bets:list });
+    const roster = (await store.get(RKEY, { type:'json' })) || [];
+    return Response.json({ ok:true, bets:list, roster });
   } catch (e) {
     return Response.json({ ok:false, error:String(e) }, { status:500 });
   }

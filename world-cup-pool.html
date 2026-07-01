@@ -986,6 +986,7 @@ function recordResult(a,b,g1,g2,p1,p2,winner){ RESULTS[keyOf(a,b)]={a,b,g1,g2,p1
 
 let punter=(typeof localStorage!=='undefined' && localStorage.getItem('lgm_punter'))||null;
 let bets=[];
+let roster=[];
 let slip=null;
 let betServer=false;
 const BET_URL='/.netlify/functions/bets';
@@ -1042,6 +1043,21 @@ function balances(){
 }
 function myBalance(){ if(!punter) return BANK_START; const b=balances().find(x=>x.punter===punter); return b?b.bal:BANK_START; }
 
+
+function fmtTs(t){ try{ const d=new Date(t);
+  return d.toLocaleDateString(undefined,{day:'numeric',month:'short'})+' '+d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+function punterNames(){
+  const s=new Set(roster);
+  bets.forEach(b=>s.add(b.punter));
+  return [...s].filter(n=>n&&!OWN[n]).sort();
+}
+async function registerPunter(n){
+  try{ const l=JSON.parse(localStorage.getItem('lgm_roster')||'[]'); if(!l.includes(n)){ l.push(n); localStorage.setItem('lgm_roster',JSON.stringify(l)); } }catch(e){}
+  if(!roster.includes(n)) roster.push(n);
+  try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({join:true,punter:n})});
+    if(r.ok){ const j=await r.json(); if(j&&Array.isArray(j.roster)) roster=j.roster; if(j&&Array.isArray(j.bets)) bets=j.bets; betServer=true; renderBetting(); } }catch(e){}
+}
+
 function renderBetting(){
   const el=document.getElementById('betting'); if(!el) return;
   const names=Object.keys(OWN);
@@ -1049,9 +1065,9 @@ function renderBetting(){
     el.innerHTML=`<div class="betid"><div class="bq">Who's betting? Everyone starts with <b>${BANK_START}</b> play-money points.</div>
       <div class="bsub" style="margin-top:2px">Pool managers</div>
       <div class="bopts">${names.map(n=>`<button class="btn ghost" onclick="setPunter('${n}')">${n}</button>`).join('')}</div>
-      <div class="bsub">Not in the pool?</div>
+      <div class="bsub">Punters</div>
       <div class="bq" style="font-size:13px;color:var(--mut)">Anyone from the chat can join the book — you don't need six teams to lose points like the rest of them.</div>
-      <div class="bopts"><button class="btn" onclick="setPunterCustom()">Join as a punter</button></div></div>`;
+      <div class="bopts">${punterNames().map(n=>`<button class="btn ghost" onclick="setPunter('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('')}<button class="btn" onclick="setPunterCustom()">＋ New punter</button></div></div>`;
     return;
   }
   const bal=myBalance();
@@ -1100,12 +1116,12 @@ function renderBetting(){
     h+=`<div class="bsub">Your bets</div><div class="mybets">`+
       [...mine].reverse().map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
         const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
-        return `<div class="mybet ${cls}"><span>${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}</span></span>
+        return `<div class="mybet ${cls}"><span>${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.ts?` · placed ${fmtTs(b.ts)}`:''}</span></span>
           <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; }).join('')+`</div>`;
   }
   el.innerHTML=h; updateRet();
 }
-function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} renderBetting(); }
+function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} if(!OWN[n]) registerPunter(n); renderBetting(); }
 function setPunterCustom(){ let n=(prompt('Your name?')||'').trim().slice(0,20); if(!n) return; if(OWN[n]){ alert(n+" is a pool manager - if that's you, tap your name instead."); return; } setPunter(n); }
 function changePunter(){ punter=null; try{localStorage.removeItem('lgm_punter');}catch(e){} slip=null; renderBetting(); }
 function openSlip(o){ slip=o; renderBetting(); const el=document.getElementById('betting'); }
@@ -1126,8 +1142,11 @@ async function placeSlip(){
   catch(e){ try{localStorage.setItem('lgm_bets',JSON.stringify(bets));}catch(_){}; renderBetting(); }
 }
 async function loadBets(){
-  try{ const r=await fetch(BET_URL); if(!r.ok) throw 0; const j=await r.json(); if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; } }
-  catch(e){ try{ bets=JSON.parse(localStorage.getItem('lgm_bets')||'[]'); }catch(_){ bets=[]; } betServer=false; }
+  try{ const r=await fetch(BET_URL); if(!r.ok) throw 0; const j=await r.json();
+    if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; }
+    if(j&&Array.isArray(j.roster)) roster=j.roster; }
+  catch(e){ try{ bets=JSON.parse(localStorage.getItem('lgm_bets')||'[]'); }catch(_){ bets=[]; }
+    try{ roster=JSON.parse(localStorage.getItem('lgm_roster')||'[]'); }catch(_){ roster=[]; } betServer=false; }
   renderBetting();
 }
 
