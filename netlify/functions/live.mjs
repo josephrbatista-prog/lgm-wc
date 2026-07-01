@@ -40,6 +40,37 @@ const toPool = name => !name ? name : (MAP[name] || NORM[norm(name)] || name);
 export default async (req) => {
   const store = getStore('lgm-live');
 
+  // Scout mode: /.netlify/functions/live?scout=1
+  // Probes candidate football APIs FROM NETLIFY to see which are reachable
+  // (JSON = usable; Cloudflare "Just a moment" HTML = blocked, like KickoffAPI was).
+  try {
+    const u0 = new URL(req.url);
+    if (u0.searchParams.get('scout') === '1') {
+      const probe = async (name, url, headers) => {
+        try {
+          const r = await fetch(url, { headers: headers || {} });
+          const text = (await r.text());
+          const looksJson = text.trim().startsWith('{') || text.trim().startsWith('[');
+          const cloudflare = /Just a moment/i.test(text);
+          return { name, status: r.status, looksJson, cloudflare, excerpt: text.slice(0, 220) };
+        } catch (e) { return { name, error: String(e) }; }
+      };
+      const fdToken = (process.env.FOOTBALL_DATA_TOKEN || '').trim();
+      const results = [];
+      results.push(await probe('football-data.org (WC matches)',
+        'https://api.football-data.org/v4/competitions/WC/matches',
+        fdToken ? { 'X-Auth-Token': fdToken } : {}));
+      results.push(await probe('api-football free (status)',
+        'https://v3.football.api-sports.io/status',
+        { 'x-apisports-key': (process.env.APIFOOTBALL_KEY || 'none').trim() }));
+      results.push(await probe('worldcup26.ir (games)',
+        'https://worldcup26.ir/get/games'));
+      return Response.json({ ok:true, mode:'scout',
+        note:'looksJson:true means Netlify can reach it. status 400/401/403 WITH JSON still means reachable (just needs a key). cloudflare:true means blocked like KickoffAPI.',
+        results });
+    }
+  } catch (e) { /* fall through */ }
+
   // Diagnostic mode: /.netlify/functions/live?debug=1
   // Shows what key the function holds (masked) and probes KickoffAPI directly.
   try {
