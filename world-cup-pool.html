@@ -303,6 +303,8 @@ section{margin:26px 0}
 
 .feed{display:flex;flex-direction:column;gap:5px}
 .feed .chip{display:inline-block;border-radius:3px;vertical-align:middle}
+.adminbtn{margin-left:auto;opacity:.6;padding:7px 12px}
+.adminbtn.on{opacity:1}
 </style>
 </head>
 <body>
@@ -327,6 +329,7 @@ section{margin:26px 0}
   <nav class="tabs">
     <button class="tabbtn on" id="tabPool" onclick="setTab('pool')">🏆 Pool</button>
     <button class="tabbtn" id="tabBook" onclick="setTab('book')">🎰 The Book</button>
+    <button class="tabbtn adminbtn" id="tabAdmin" onclick="setTab('admin')" title="Admin">⚙️</button>
   </nav>
 
   <!-- STANDINGS -->
@@ -446,6 +449,14 @@ section{margin:26px 0}
     <div class="h"><span class="disp">The Book</span><span class="tag">group bets · play money</span></div>
     <div class="card"><div id="betting"></div>
       <div class="note" style="padding:0 14px 14px">Bragging-rights points only — no real money. Everyone starts on 1000, pool managers and chat freeloaders alike. Bets settle themselves the moment a result lands. Send the crowd straight here: add <b>#book</b> to the site link.</div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="secAdmin">
+    <div class="h"><span class="disp">Admin</span><span class="tag">commissioner only</span></div>
+    <div class="card"><div id="adminPanel" style="padding:14px"></div>
+      <div class="note" style="padding:0 14px 14px">Deletes are permanent and instant for everyone — no refunds, no questions. Requires the admin word (the <b>BOOK_ADMIN_KEY</b> you set in Netlify).</div>
     </div>
   </section>
 
@@ -1130,7 +1141,7 @@ function renderBetting(){
         return `<div class="mybet ${cls}"><span>${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.ts?` · placed ${fmtTs(b.ts)}`:''}</span></span>
           <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; }).join('')+`</div>`;
   }
-  el.innerHTML=h; updateRet();
+  el.innerHTML=h; updateRet(); if(typeof renderAdmin==='function') renderAdmin();
 }
 function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} if(!OWN[n]) registerPunter(n); renderBetting(); }
 function setPunterCustom(){ let n=(prompt('Your name?')||'').trim().slice(0,20); if(!n) return; if(OWN[n]){ alert(n+" is a pool manager - if that's you, tap your name instead."); return; } setPunter(n); }
@@ -1199,12 +1210,67 @@ async function syncLive(){
 
 /* ---------- TABS ---------- */
 function setTab(t){
-  const book=(t==='book');
-  document.querySelectorAll('section').forEach(s=>{ s.style.display = ((s.id==='secBook')===book)?'':'none'; });
-  const tp=document.getElementById('tabPool'), tb=document.getElementById('tabBook');
-  if(tp) tp.className='tabbtn'+(book?'':' on');
-  if(tb) tb.className='tabbtn'+(book?' on':'');
-  try{ history.replaceState(null,'',book?'#book':location.pathname+location.search); }catch(e){}
+  document.querySelectorAll('section').forEach(s=>{
+    const which = s.id==='secBook' ? 'book' : (s.id==='secAdmin' ? 'admin' : 'pool');
+    s.style.display = (which===t)?'':'none';
+  });
+  const tp=document.getElementById('tabPool'), tb=document.getElementById('tabBook'), ta=document.getElementById('tabAdmin');
+  if(tp) tp.className='tabbtn'+(t==='pool'?' on':'');
+  if(tb) tb.className='tabbtn'+(t==='book'?' on':'');
+  if(ta) ta.className='tabbtn adminbtn'+(t==='admin'?' on':'');
+  try{ history.replaceState(null,'',t==='book'?'#book':(t==='admin'?'#admin':location.pathname+location.search)); }catch(e){}
+  if(t==='admin') ensureAdmin();
+}
+
+/* ---------- ADMIN ---------- */
+let adminKey=(typeof localStorage!=='undefined'&&localStorage.getItem('lgm_adminkey'))||null;
+let adminStatus='locked';
+async function ensureAdmin(){
+  if(!adminKey){ const w=(prompt('Admin word?')||'').trim(); if(!w){ renderAdmin(); return; }
+    adminKey=w; try{localStorage.setItem('lgm_adminkey',w);}catch(e){} }
+  adminStatus='checking'; renderAdmin();
+  try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({admin:true,adminKey,action:'ping'})});
+    const j=await r.json().catch(()=>null);
+    if(r.ok&&j&&j.ok) adminStatus='unlocked';
+    else { const msg=(j&&j.error)||'rejected'; if(msg==='wrong admin key'){ alert('Wrong admin word.'); lockAdmin(); return; } adminStatus=msg; }
+  }catch(e){ adminStatus='local'; }
+  renderAdmin();
+}
+function lockAdmin(){ adminKey=null; try{localStorage.removeItem('lgm_adminkey');}catch(e){} adminStatus='locked'; renderAdmin(); }
+function renderAdmin(){
+  const el=document.getElementById('adminPanel'); if(!el) return;
+  if(!adminKey){ el.innerHTML=`<div class="bq" style="font-size:14px">Locked. <button class="btn" onclick="ensureAdmin()">Enter admin word</button></div>`; return; }
+  const stat= adminStatus==='unlocked'?'<span style="color:#5be3a7">unlocked — deletes apply for everyone</span>'
+    : adminStatus==='local'?'<span style="color:#ffd24a">local mode — server unreachable, deletes only affect this device</span>'
+    : adminStatus==='checking'?'checking…':`<span style="color:#ff9077">${adminStatus}</span>`;
+  let h=`<div class="betbar"><div>Status: ${stat}</div>
+    <div style="display:flex;gap:8px"><button class="btn ghost" onclick="lockAdmin()">Lock</button>
+    <button class="btn ghost" onclick="adminWipe()">Wipe ALL bets</button></div></div>`;
+  const all=[...bets].sort((a,b)=>(b.ts||0)-(a.ts||0));
+  if(!all.length) h+=`<div class="note">No bets on the book.</div>`;
+  else h+=`<div class="feed">`+all.map(b=>{ const mg=OWN[b.punter];
+    return `<div class="mybet bopen"><span><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b> · ${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.a?` · ${b.a} v ${b.b}`:''}${b.ts?` · ${fmtTs(b.ts)}`:''}</span></span>
+      <span class="ms">${b.stake}@${b.odds}</span><button class="btn ghost" onclick="adminDelete('${b.id}')">✕ delete</button></div>`;
+  }).join('')+`</div>`;
+  el.innerHTML=h;
+}
+async function adminDelete(id){
+  try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({admin:true,adminKey,action:'delete',id})});
+    const j=await r.json().catch(()=>null);
+    if(r.ok&&j&&j.ok&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; adminStatus='unlocked'; renderBetting(); return; }
+    if(j&&j.error==='wrong admin key'){ alert('Wrong admin word.'); lockAdmin(); return; }
+    if(j&&j.error){ adminStatus=j.error; renderAdmin(); return; }
+    throw 0;
+  }catch(e){ bets=bets.filter(b=>b.id!==id); try{localStorage.setItem('lgm_bets',JSON.stringify(bets));}catch(_){ } adminStatus='local'; renderBetting(); }
+}
+async function adminWipe(){
+  if(!confirm('Delete EVERY bet on the book? This cannot be undone.')) return;
+  try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({admin:true,adminKey,action:'wipe'})});
+    const j=await r.json().catch(()=>null);
+    if(r.ok&&j&&j.ok){ bets=j.bets||[]; betServer=true; adminStatus='unlocked'; renderBetting(); return; }
+    if(j&&j.error==='wrong admin key'){ alert('Wrong admin word.'); lockAdmin(); return; }
+    throw 0;
+  }catch(e){ bets=[]; try{localStorage.setItem('lgm_bets','[]');}catch(_){ } adminStatus='local'; renderBetting(); }
 }
 
 /* ---------- LIVE TO-THE-MINUTE (KickoffAPI via Netlify function) ---------- */
@@ -1254,7 +1320,7 @@ loadReactions();
 (async()=>{ if(!(await syncLiveAPI())) syncLive(); })();
 loadBets();
 setInterval(loadBets, 60000);
-try{ setTab((typeof location!=='undefined'&&location.hash==='#book')?'book':'pool'); }catch(e){}
+try{ const _h=(typeof location!=='undefined'&&location.hash)||''; setTab(_h==='#admin'?'admin':(_h==='#book'?'book':'pool')); }catch(e){}
 
 </script>
 </body>

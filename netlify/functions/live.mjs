@@ -32,12 +32,39 @@ const toPool = name => !name ? name : (MAP[name] || NORM[norm(name)] || name);
 
 export default async (req) => {
   const store = getStore('lgm-live');
+
+  // Diagnostic mode: /.netlify/functions/live?debug=1
+  // Shows what key the function holds (masked) and probes KickoffAPI directly.
+  try {
+    const u = new URL(req.url);
+    if (u.searchParams.get('debug') === '1') {
+      const raw = process.env.FOOTBALL_API_KEY || '';
+      const key = raw.trim();
+      const info = {
+        keyPresent: !!raw,
+        keyPrefix: key.slice(0, 10),
+        keyLength: key.length,
+        rawHadWhitespace: raw !== key,
+        leagueId: process.env.WC_LEAGUE_ID || '1'
+      };
+      const probe = async (path) => {
+        try { const r = await fetch('https://api.kickoffapi.com' + path, { headers: { 'x-api-key': key } });
+          return { status: r.status, body: (await r.text()).slice(0, 400) }; }
+        catch (e) { return { error: String(e) }; }
+      };
+      const account  = await probe('/api/v1/account/status');
+      const fixtures = await probe(`/api/v1/fixtures?league=${info.leagueId}&season=2026`);
+      const leagues  = await probe('/api/v1/leagues?type=Cup&current=true');
+      return Response.json({ ok:true, mode:'debug', info, account, fixtures, leagues });
+    }
+  } catch (e) { /* fall through to normal path */ }
+
   try {
     const cached = await store.get('cache', { type:'json' }).catch(()=>null);
     if (cached && (Date.now() - cached.ts) < TTL_MS)
       return Response.json({ ok:true, source:'KickoffAPI', cached:true, ts:cached.ts, matches:cached.matches });
 
-    const key = process.env.FOOTBALL_API_KEY;
+    const key = (process.env.FOOTBALL_API_KEY || '').trim();
     if (!key) return Response.json({ ok:false, error:'FOOTBALL_API_KEY not set' });
 
     const league = process.env.WC_LEAGUE_ID || '1';

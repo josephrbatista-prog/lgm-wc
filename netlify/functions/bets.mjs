@@ -16,6 +16,19 @@ export default async (req) => {
     if (req.method === 'POST') {
       const b = await req.json();
 
+      // Admin actions (verified against BOOK_ADMIN_KEY env var)
+      if (b && b.admin === true) {
+        const key = process.env.BOOK_ADMIN_KEY;
+        if (!key) return Response.json({ ok:false, error:'BOOK_ADMIN_KEY not set in Netlify' }, { status:403 });
+        if (b.adminKey !== key) return Response.json({ ok:false, error:'wrong admin key' }, { status:403 });
+        let list = (await store.get(KEY, { type:'json' })) || [];
+        if (b.action === 'delete' && b.id) { list = list.filter(x => x.id !== String(b.id)); await store.setJSON(KEY, list); }
+        else if (b.action === 'wipe') { list = []; await store.setJSON(KEY, list); }
+        else if (b.action !== 'ping') return Response.json({ ok:false, error:'bad admin action' }, { status:400 });
+        const roster = (await store.get(RKEY, { type:'json' })) || [];
+        return Response.json({ ok:true, bets:list, roster });
+      }
+
       // Punter registration
       if (b && b.join === true) {
         const name = s(b.punter,24).trim();

@@ -98,3 +98,13 @@ The betting layer works the same way as Reactions: it stores everyone's bets in 
 `netlify/functions/bets.mjs`. **No API key or env var needed.** It just requires the GitHub deploy
 (so the functions run). Bets are play-money only and settle automatically from whatever results feed
 the site is using. Until deployed (or if opened as a local file) it falls back to per-device storage.
+
+---
+
+## Admin tab (delete bets)
+A small ⚙️ tab sits next to The Book. Anyone can see it, but it only works with the admin word:
+1. Netlify → **Site configuration → Environment variables → Add a variable**:
+   - Key: `BOOK_ADMIN_KEY`   Value: *(pick a secret word — this IS your admin word)*
+2. **Deploys → Trigger deploy → Deploy site** (env vars apply on the next deploy).
+3. Open the site → ⚙️ tab → enter your word. You can now delete any single bet (✕) or wipe the whole book.
+Deletes are checked server-side on every action, apply instantly for everyone, and can't be done without the word. The word is remembered on your device; the Lock button forgets it.
