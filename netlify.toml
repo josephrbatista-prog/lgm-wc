@@ -1,0 +1,12 @@
+# Serves world-cup-pool.html at the site root (lgm-wc.netlify.app)
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/"
+  to = "/world-cup-pool.html"
+  status = 200

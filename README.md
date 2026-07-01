@@ -1,0 +1,64 @@
+# LGM WC Cup — deploy kit (start here)
+
+This folder is the whole site. Putting it on Netlify makes the shared **Reactions** counter work.
+Follow the steps in order. ~10 minutes. You do NOT need to understand any of it.
+
+## What's in here (keep this exact structure)
+```
+deploy-kit/
+├─ world-cup-pool.html      ← the dashboard
+├─ netlify.toml             ← config (don't touch)
+├─ package.json             ← config (don't touch)
+└─ netlify/
+   └─ functions/
+      └─ reactions.mjs       ← the shared-reactions helper
+```
+(There's also `.github/workflows/deploy.yml` for optional auto-deploy, plus `DEPLOY.md` and
+`HANDOFF.md` with more detail. Ignore them unless you want them.)
+
+## Why not just drag-and-drop the HTML?
+Because the reactions counter needs the little `reactions.mjs` helper to ride along and actually
+run on Netlify. Drag-drop only takes the one file. Going through GitHub (below) takes the whole
+folder, so the helper ships too. Everything else on the site works either way — only reactions
+needs this.
+
+---
+
+## Do this in order
+
+**Have two browser tabs open and logged in:** github.com and app.netlify.com
+
+**1. Get these files into one folder on your computer** (keep the `netlify/functions/` sub-folders).
+
+**2. Make a GitHub repo.**
+github.com → click **+** (top-right) → **New repository** → name it `lgm-wc` → **Create repository**.
+
+**3. Upload the files.**
+On the new repo page click the **“uploading an existing file”** link → drag in the *contents* of
+this folder, including the `netlify` folder → scroll down → **Commit changes**.
+✅ Check: in the repo you can click `netlify` → `functions` → and see `reactions.mjs` inside.
+
+**4. Connect Netlify to the repo.**
+Netlify tab → your **lgm-wc** project → **Site configuration** → **Build & deploy** →
+**Continuous deployment** → **Link repository** → **GitHub** → pick your `lgm-wc` repo →
+leave build settings blank/default → **Deploy**. (Netlify reads `netlify.toml` and handles the rest.)
+
+**5. Wait ~2 minutes, then test.**
+Open **lgm-wc.netlify.app** → scroll to **Reactions**. The grey line under it should say
+**“Live and shared,”** not “running locally on this device.” Tap a 👑, then open the site on your
+phone — the count should already be there. Done.
+
+---
+
+## If it still says “running locally”
+99% of the time the `netlify` folder didn't upload with its structure. In the GitHub repo, confirm
+`netlify/functions/reactions.mjs` exists. If not, re-upload just that folder (Step 3).
+
+## If reactions throw an error after deploy
+Netlify dashboard → **Logs → Functions** → copy whatever it shows and send it to me. The function
+is written correctly but I've never been able to test it against a live Netlify, so if anything's
+off I'll fix it fast.
+
+## Updating the site later
+Just replace `world-cup-pool.html` in the GitHub repo (edit → upload new version → commit).
+Netlify redeploys automatically in a minute or two.
