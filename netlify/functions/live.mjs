@@ -1,142 +1,130 @@
 import { getStore } from '@netlify/blobs';
 
-// Live World Cup results via KickoffAPI (https://docs.kickoffapi.com).
-// Proxied so the API key stays server-side, and cached in Netlify Blobs so we
-// stay inside the free 100-requests/day tier. Uses the plain fixtures endpoint
-// (free) rather than live=all (which needs a paid plan) — final results still
-// land within a poll of full time.
+// Live World Cup results, tried in order:
+//   A) football-data.org  (free tier incl. World Cup; set FOOTBALL_DATA_TOKEN in Netlify)
+//   B) worldcup26.ir      (free, no key at all)
+// The page itself falls back to openfootball (daily) if this function returns nothing.
 //
-// Netlify env vars (Site configuration -> Environment variables):
-//   FOOTBALL_API_KEY = <your KickoffAPI key>
-//   WC_LEAGUE_ID     = 1   (optional; World Cup league id. If results come back
-//                           empty, the debug block below tells us the right one.)
+// Modes:
+//   /.netlify/functions/live           -> normalized results {ok, source, ts, matches}
+//   /.netlify/functions/live?debug=1   -> shows config + raw probes of both sources
+//   /.netlify/functions/live?scout=1   -> reachability scan of candidate APIs
+//
+// Normalized match shape: { t1,t2, g1,g2, p1,p2, w, status:'FT' }
+//   t = pool nation names · g = goals (incl. extra time) · p = penalty score · w = explicit winner
 
 const TTL_MS = 60 * 1000;
 
-const apiHeaders = (key) => ({
-  'x-api-key': key,
-  'Accept': 'application/json',
-  'Accept-Language': 'en-GB,en;q=0.9',
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
-});
-
-// KickoffAPI team name -> pool nation name (extend once we see real names in debug)
 const MAP = {
   'Czech Republic':'Czechia','Czechia':'Czechia',
-  'DR Congo':'Congo','Congo DR':'Congo','Congo':'Congo','Democratic Republic of Congo':'Congo',
+  'DR Congo':'Congo','Congo DR':'Congo','Democratic Republic of Congo':'Congo','Democratic Republic of the Congo':'Congo',
   'Bosnia and Herzegovina':'Bosnia','Bosnia & Herzegovina':'Bosnia','Bosnia-Herzegovina':'Bosnia',
   'Turkey':'Turkey','Türkiye':'Turkey','Turkiye':'Turkey',
-  'South Korea':'South Korea','Korea Republic':'South Korea',
+  'South Korea':'South Korea','Korea Republic':'South Korea','Republic of Korea':'South Korea',
   'USA':'USA','United States':'USA','United States of America':'USA',
   'Ivory Coast':'Ivory Coast',"Cote d'Ivoire":'Ivory Coast',"Côte d'Ivoire":'Ivory Coast',
   'Cape Verde':'Cape Verde','Cabo Verde':'Cape Verde','Cape Verde Islands':'Cape Verde',
   'Curacao':'Curacao','Curaçao':'Curacao',
-  'Saudi Arabia':'Saudi Arabia','New Zealand':'New Zealand'
+  'Saudi Arabia':'Saudi Arabia','New Zealand':'New Zealand',
+  'Netherlands':'Netherlands','Holland':'Netherlands','Iran':'Iran','IR Iran':'Iran'
 };
 const norm = s => (s||'').toLowerCase().replace(/[^a-z]/g,'');
 const NORM = {}; for (const [k,v] of Object.entries(MAP)) NORM[norm(k)] = v;
 const toPool = name => !name ? name : (MAP[name] || NORM[norm(name)] || name);
+const N = v => { const x = Number(v); return Number.isFinite(x) ? x : null; };
+
+async function fromFootballData(token){
+  const r = await fetch('https://api.football-data.org/v4/competitions/WC/matches',
+    { headers: { 'X-Auth-Token': token } });
+  if (!r.ok) throw new Error('football-data '+r.status);
+  const j = await r.json();
+  const matches = (j.matches||[]).filter(x=>x.status==='FINISHED').map(x=>{
+    const t1=toPool(x.homeTeam&&x.homeTeam.name), t2=toPool(x.awayTeam&&x.awayTeam.name);
+    const ft=(x.score&&x.score.fullTime)||{}; const pen=(x.score&&x.score.penalties)||null;
+    let w=null;
+    if (x.score&&x.score.winner==='HOME_TEAM') w=t1;
+    else if (x.score&&x.score.winner==='AWAY_TEAM') w=t2;
+    return { t1,t2, g1:N(ft.home), g2:N(ft.away),
+      p1:pen?N(pen.home):null, p2:pen?N(pen.away):null, w, status:'FT' };
+  }).filter(m=>m.t1&&m.t2&&m.g1!=null&&m.g2!=null);
+  if (!matches.length) throw new Error('football-data: no finished matches');
+  return { source:'football-data.org', matches };
+}
+
+async function fromWorldcup26(){
+  const [tr, gr] = await Promise.all([
+    fetch('https://worldcup26.ir/get/teams'),
+    fetch('https://worldcup26.ir/get/games')
+  ]);
+  if (!tr.ok || !gr.ok) throw new Error('worldcup26 '+tr.status+'/'+gr.status);
+  const tj = await tr.json(), gj = await gr.json();
+  const teamsArr = tj.teams || tj.data || (Array.isArray(tj)?tj:[]);
+  const nameOf = {};
+  teamsArr.forEach(t=>{ const id=String(t.id ?? t.team_id ?? t._id ?? '');
+    const nm=t.name || t.title || t.team_name || t.en_name; if(id&&nm) nameOf[id]=nm; });
+  const games = gj.games || gj.data || (Array.isArray(gj)?gj:[]);
+  const matches = games.map(g=>{
+    const t1=toPool(nameOf[String(g.home_team_id)]), t2=toPool(nameOf[String(g.away_team_id)]);
+    const g1=N(g.home_score), g2=N(g.away_score);
+    // status heuristics: skip games flagged live / not finished if such fields exist
+    const st=String(g.status ?? g.state ?? '').toLowerCase();
+    const live = g.is_live===true || g.live===true || /live|1h|2h|ht|playing/.test(st);
+    const done = g.finished===true || /ft|finish|full|ended|played|complete/.test(st) || (!st && g1!=null && g2!=null && !live);
+    let w=null; const wf = g.winner || g.winner_team_id;
+    if (wf!=null && nameOf[String(wf)]) w = toPool(nameOf[String(wf)]);
+    const p1=N(g.home_penalties ?? g.home_pen), p2=N(g.away_penalties ?? g.away_pen);
+    return { t1,t2,g1,g2,p1,p2,w, status: done&&!live ? 'FT' : 'NS' };
+  }).filter(m=>m.t1&&m.t2&&m.g1!=null&&m.g2!=null&&m.status==='FT');
+  if (!matches.length) throw new Error('worldcup26: no finished matches');
+  return { source:'worldcup26.ir', matches };
+}
 
 export default async (req) => {
   const store = getStore('lgm-live');
+  const token = (process.env.FOOTBALL_DATA_TOKEN || '').trim();
 
-  // Scout mode: /.netlify/functions/live?scout=1
-  // Probes candidate football APIs FROM NETLIFY to see which are reachable
-  // (JSON = usable; Cloudflare "Just a moment" HTML = blocked, like KickoffAPI was).
+  // ---- scout mode ----
   try {
-    const u0 = new URL(req.url);
-    if (u0.searchParams.get('scout') === '1') {
+    const u = new URL(req.url);
+    if (u.searchParams.get('scout') === '1') {
       const probe = async (name, url, headers) => {
-        try {
-          const r = await fetch(url, { headers: headers || {} });
-          const text = (await r.text());
-          const looksJson = text.trim().startsWith('{') || text.trim().startsWith('[');
-          const cloudflare = /Just a moment/i.test(text);
-          return { name, status: r.status, looksJson, cloudflare, excerpt: text.slice(0, 220) };
-        } catch (e) { return { name, error: String(e) }; }
+        try { const r = await fetch(url, { headers: headers||{} }); const text = await r.text();
+          return { name, status:r.status, looksJson:/^[\[{]/.test(text.trim()),
+            cloudflare:/Just a moment/i.test(text), excerpt:text.slice(0,220) }; }
+        catch(e){ return { name, error:String(e) }; }
       };
-      const fdToken = (process.env.FOOTBALL_DATA_TOKEN || '').trim();
-      const results = [];
-      results.push(await probe('football-data.org (WC matches)',
-        'https://api.football-data.org/v4/competitions/WC/matches',
-        fdToken ? { 'X-Auth-Token': fdToken } : {}));
-      results.push(await probe('api-football free (status)',
-        'https://v3.football.api-sports.io/status',
-        { 'x-apisports-key': (process.env.APIFOOTBALL_KEY || 'none').trim() }));
-      results.push(await probe('worldcup26.ir (games)',
-        'https://worldcup26.ir/get/games'));
-      return Response.json({ ok:true, mode:'scout',
-        note:'looksJson:true means Netlify can reach it. status 400/401/403 WITH JSON still means reachable (just needs a key). cloudflare:true means blocked like KickoffAPI.',
-        results });
+      return Response.json({ ok:true, mode:'scout', results:[
+        await probe('football-data.org (WC matches)','https://api.football-data.org/v4/competitions/WC/matches', token?{'X-Auth-Token':token}:{}),
+        await probe('worldcup26.ir (games)','https://worldcup26.ir/get/games')
+      ]});
+    }
+    // ---- debug mode ----
+    if (u.searchParams.get('debug') === '1') {
+      const out = { tokenPresent: !!token, tokenLength: token.length };
+      try { const a = await fromFootballData(token||'none'); out.footballData = { ok:true, finished:a.matches.length, sample:a.matches[0] }; }
+      catch(e){ out.footballData = { ok:false, error:String(e) }; }
+      try { const b = await fromWorldcup26(); out.worldcup26 = { ok:true, finished:b.matches.length, sample:b.matches[0] }; }
+      catch(e){ out.worldcup26 = { ok:false, error:String(e) }; }
+      return Response.json({ ok:true, mode:'debug', ...out });
     }
   } catch (e) { /* fall through */ }
 
-  // Diagnostic mode: /.netlify/functions/live?debug=1
-  // Shows what key the function holds (masked) and probes KickoffAPI directly.
-  try {
-    const u = new URL(req.url);
-    if (u.searchParams.get('debug') === '1') {
-      const raw = process.env.FOOTBALL_API_KEY || '';
-      const key = raw.trim();
-      const info = {
-        keyPresent: !!raw,
-        keyPrefix: key.slice(0, 10),
-        keyLength: key.length,
-        rawHadWhitespace: raw !== key,
-        leagueId: process.env.WC_LEAGUE_ID || '1'
-      };
-      const probe = async (path) => {
-        try { const r = await fetch('https://api.kickoffapi.com' + path, { headers: apiHeaders(key) });
-          return { status: r.status, body: (await r.text()).slice(0, 400) }; }
-        catch (e) { return { error: String(e) }; }
-      };
-      const account  = await probe('/api/v1/account/status');
-      const fixtures = await probe(`/api/v1/fixtures?league=${info.leagueId}&season=2026`);
-      const leagues  = await probe('/api/v1/leagues?type=Cup&current=true');
-      return Response.json({ ok:true, mode:'debug', info, account, fixtures, leagues });
-    }
-  } catch (e) { /* fall through to normal path */ }
-
+  // ---- normal path ----
   try {
     const cached = await store.get('cache', { type:'json' }).catch(()=>null);
     if (cached && (Date.now() - cached.ts) < TTL_MS)
-      return Response.json({ ok:true, source:'KickoffAPI', cached:true, ts:cached.ts, matches:cached.matches });
+      return Response.json({ ok:true, source:cached.source, cached:true, ts:cached.ts, matches:cached.matches });
 
-    const key = (process.env.FOOTBALL_API_KEY || '').trim();
-    if (!key) return Response.json({ ok:false, error:'FOOTBALL_API_KEY not set' });
-
-    const league = process.env.WC_LEAGUE_ID || '1';
-    const url = `https://api.kickoffapi.com/api/v1/fixtures?league=${encodeURIComponent(league)}&season=2026`;
-    const r = await fetch(url, { headers: apiHeaders(key) });
-    if (!r.ok) {
-      if (cached) return Response.json({ ok:true, source:'KickoffAPI', stale:true, ts:cached.ts, matches:cached.matches });
-      return Response.json({ ok:false, error:`upstream ${r.status}` });
+    let result = null, errs = [];
+    if (token) { try { result = await fromFootballData(token); } catch(e){ errs.push(String(e)); } }
+    if (!result) { try { result = await fromWorldcup26(); } catch(e){ errs.push(String(e)); } }
+    if (!result) {
+      if (cached) return Response.json({ ok:true, source:cached.source, stale:true, ts:cached.ts, matches:cached.matches });
+      return Response.json({ ok:false, error:errs.join(' | ') || 'no source available' });
     }
-    const j = await r.json();
-    const items = j.response || [];
-
-    const rawTeams = new Set();
-    const matches = items.map(x => {
-      const hn = x.homeTeam?.name ?? x.teams?.home?.name;
-      const an = x.awayTeam?.name ?? x.teams?.away?.name;
-      if (hn) rawTeams.add(hn); if (an) rawTeams.add(an);
-      return {
-        t1: toPool(hn), t2: toPool(an),
-        g1: x.homeTeam?.goals ?? x.goals?.home ?? null,
-        g2: x.awayTeam?.goals ?? x.goals?.away ?? null,
-        // penalty score — exact field unconfirmed; check the likely spots
-        p1: x.homeTeam?.penalties ?? x.penalty?.home ?? x.score?.penalty?.home ?? null,
-        p2: x.awayTeam?.penalties ?? x.penalty?.away ?? x.score?.penalty?.away ?? null,
-        status: x.statusShort ?? x.status ?? null
-      };
-    }).filter(m => m.t1 && m.t2);
-
-    const out = { ts: Date.now(), matches };
+    const out = { ts:Date.now(), source:result.source, matches:result.matches };
     await store.setJSON('cache', out);
-    return Response.json({
-      ok:true, source:'KickoffAPI', ts:out.ts, count:matches.length, matches,
-      debug: { fixtures_returned: items.length, teams: [...rawTeams].sort() }
-    });
+    return Response.json({ ok:true, ...out, count:result.matches.length });
   } catch (e) {
     return Response.json({ ok:false, error:String(e) });
   }
