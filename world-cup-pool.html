@@ -246,6 +246,61 @@ section{margin:26px 0}
 .cardimg{width:100%;max-width:340px;border-radius:14px;border:1px solid var(--line);display:block;margin:6px 0}
 .cardacts{display:flex;gap:8px}
 
+
+/* ===== BETTING ===== */
+/* ===== the book / betting ===== */
+#betting{padding:14px}
+.betid .bq{font-size:14px;margin-bottom:10px}
+.bopts{display:flex;flex-wrap:wrap;gap:8px}
+.betbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px;font-size:14px}
+.balpill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px}
+.slip{background:rgba(76,141,255,.10);border:1px solid rgba(76,141,255,.45);border-radius:12px;padding:12px;margin-bottom:14px}
+.sliphd{font-size:14px;margin-bottom:9px}
+.slipin{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.slipin input{width:90px;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:7px 9px;font-family:inherit;font-size:14px}
+.slipin .ret{color:var(--mut);font-size:12.5px;margin:0 4px}
+.bsub{font-family:var(--disp,'Barlow Condensed');font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  font-size:15px;color:var(--mut);margin:16px 0 8px}
+.blead{display:flex;flex-direction:column;gap:5px}
+.brow{display:grid;grid-template-columns:26px 1fr auto auto;gap:10px;align-items:center;
+  background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13px}
+.brow .bpos{color:var(--dim);font-weight:700;text-align:center}
+.brow .bnmx{font-weight:700} .brow .bnmx.me{color:#8fd0ff}
+.brow .brec{color:var(--dim);font-size:12px}
+.brow .bbal{font-weight:800;font-variant-numeric:tabular-nums} .brow .bbal small{font-size:10px;color:var(--dim);margin-left:2px}
+.bmatch{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin-bottom:9px}
+.bmh{font-weight:700;font-size:13.5px;margin-bottom:8px}
+.bmk{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:5px 0;border-top:1px solid var(--line)}
+.bmk:first-of-type{border-top:0}
+.bmkl{font-size:12px;color:var(--mut);min-width:150px}
+.bopt{display:flex;gap:6px;flex-wrap:wrap}
+.oddbtn{cursor:pointer;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:6px 11px;font-family:inherit;font-size:12.5px;transition:all .12s}
+.oddbtn:hover{border-color:#4C8DFF;background:rgba(76,141,255,.12)}
+.oddbtn b{color:#8fd0ff;margin-left:3px}
+.mybets{display:flex;flex-direction:column;gap:5px}
+.mybet{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;font-size:12.5px;
+  background:var(--panel2);border:1px solid var(--line);border-left-width:3px;border-radius:8px;padding:7px 11px}
+.mybet .ms{color:var(--dim)}
+.mybet .bst{font-weight:700;font-size:12px}
+.mybet.bwon{border-left-color:#22D3A0} .mybet.bwon .bst{color:#5be3a7}
+.mybet.blost{border-left-color:#FF5D3B;opacity:.7} .mybet.blost .bst{color:#ff9077}
+.mybet.bopen{border-left-color:#FFD24A} .mybet.bopen .bst{color:#ffd24a}
+
+
+/* ===== tabs ===== */
+.tabs{position:sticky;top:0;z-index:60;background:rgba(10,15,26,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);margin:0 -20px;padding:9px 20px;display:flex;gap:8px}
+.tabbtn{cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:999px;
+  padding:7px 16px;font-family:inherit;font-size:13.5px;font-weight:700;transition:all .12s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn.on{background:var(--panel2);color:var(--ink);border-color:#4C8DFF}
+.bnmx{display:inline-flex;align-items:center;gap:7px}
+.crowdtag{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8fd0ff;
+  background:rgba(76,141,255,.14);border:1px solid rgba(76,141,255,.4);border-radius:6px;padding:1px 6px;margin-left:6px}
+
 </style>
 </head>
 <body>
@@ -266,6 +321,11 @@ section{margin:26px 0}
       </div>
     </div>
   </div>
+
+  <nav class="tabs">
+    <button class="tabbtn on" id="tabPool" onclick="setTab('pool')">🏆 Pool</button>
+    <button class="tabbtn" id="tabBook" onclick="setTab('book')">🎰 The Book</button>
+  </nav>
 
   <!-- STANDINGS -->
   <section>
@@ -376,6 +436,14 @@ section{margin:26px 0}
     <div class="h"><span class="disp">Story Cards</span><span class="tag">shareable · one tap</span></div>
     <div class="card"><div class="cards" id="cards"></div>
       <div id="cardPreview" style="padding:0 14px 14px"></div>
+    </div>
+  </section>
+
+    <!-- THE BOOK (betting) -->
+  <section id="secBook">
+    <div class="h"><span class="disp">The Book</span><span class="tag">group bets · play money</span></div>
+    <div class="card"><div id="betting"></div>
+      <div class="note" style="padding:0 14px 14px">Bragging-rights points only — no real money. Everyone starts on 1000, pool managers and chat freeloaders alike. Bets settle themselves the moment a result lands. Send the crowd straight here: add <b>#book</b> to the site link.</div>
     </div>
   </section>
 
@@ -672,6 +740,7 @@ function renderAll(){
 
   // Re-run sim to reflect scenario
   runSim();
+  if(typeof renderBetting==='function') renderBetting();
   window.__MGRS = MGRS; // for story cards / roasts
 }
 
@@ -908,6 +977,161 @@ function renderAwards(){
     `<div class="aw"><div class="em">${a[0]}</div><div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div></div>`).join('');
 }
 
+/* ---------- THE BOOK · group betting (play money) ---------- */
+const BANK_START=1000;
+const RESULTS={};                 // matchKey -> {a,b,g1,g2,p1,p2,winner}  (filled by the live feed)
+const keyOf=(a,b)=>[a,b].sort().join('|');
+const round2=x=>Math.round(x*100)/100;
+function recordResult(a,b,g1,g2,p1,p2,winner){ RESULTS[keyOf(a,b)]={a,b,g1,g2,p1,p2,winner}; }
+
+let punter=(typeof localStorage!=='undefined' && localStorage.getItem('lgm_punter'))||null;
+let bets=[];
+let slip=null;
+let betServer=false;
+const BET_URL='/.netlify/functions/bets';
+
+function advOdds(a,b){ const sa=strength(a),sb=strength(b),pa=sa/(sa+sb);
+  return [Math.max(1.08,round2(1/pa*0.9)), Math.max(1.08,round2(1/(1-pa)*0.9))]; }
+function marketsFor(m){
+  const [oa,ob]=advOdds(m.a,m.b);
+  return [
+    {id:'win',  label:'To go through',       opts:[{sel:m.a,label:m.a,odds:oa},{sel:m.b,label:m.b,odds:ob}]},
+    {id:'btts', label:'Both teams to score',  opts:[{sel:'Yes',label:'Yes',odds:2.05},{sel:'No',label:'No',odds:1.75}]},
+    {id:'goals',label:'Total goals',          opts:[{sel:'0-1',label:'0–1',odds:3.2},{sel:'2-3',label:'2–3',odds:1.9},{sel:'4+',label:'4+',odds:3.8}]},
+    {id:'pens', label:'Decided on penalties', opts:[{sel:'Yes',label:'Yes',odds:4.5},{sel:'No',label:'No',odds:1.15}]}
+  ];
+}
+
+// Resolve the real knockout bracket (ignores what-if toggles) into a list of matches
+function knockoutMatches(){
+  const out=[];
+  const wof=(a,b)=>{ if(!a||!b) return null; const r=RESULTS[keyOf(a,b)]; return r?r.winner:null; };
+  const add=(round,a,b)=>{ if(!a||!b) return; const r=RESULTS[keyOf(a,b)]; out.push({round,key:keyOf(a,b),a,b,finished:!!r,winner:r?r.winner:null}); };
+  const r32w=R32.map(r=>r[2]);
+  R32.forEach(r=>add('Round of 32', r[0], r[1]));
+  const r16pairs=R16.map(([i,j])=>[r32w[i],r32w[j]]); r16pairs.forEach(([a,b])=>add('Round of 16',a,b));
+  const r16w=r16pairs.map(([a,b])=>wof(a,b));
+  const qfpairs=QF.map(([i,j])=>[r16w[i],r16w[j]]); qfpairs.forEach(([a,b])=>add('Quarter-final',a,b));
+  const qfw=qfpairs.map(([a,b])=>wof(a,b));
+  const sfpairs=SF.map(([i,j])=>[qfw[i],qfw[j]]); sfpairs.forEach(([a,b])=>add('Semi-final',a,b));
+  const sfw=sfpairs.map(([a,b])=>wof(a,b));
+  add('Final', sfw[0], sfw[1]);
+  return out;
+}
+
+function betResult(b){
+  const res=RESULTS[b.key]; if(!res) return 'open';
+  const {g1,g2,p1,p2,winner}=res; const total=(g1||0)+(g2||0); const pens=(p1!=null&&p2!=null);
+  let won=false;
+  if(b.market==='win')       won = b.selection===winner;
+  else if(b.market==='btts') won = ((g1>0&&g2>0)===(b.selection==='Yes'));
+  else if(b.market==='goals')won = b.selection==='0-1'?total<=1 : b.selection==='2-3'?(total>=2&&total<=3) : total>=4;
+  else if(b.market==='pens') won = (pens===(b.selection==='Yes'));
+  return won?'won':'lost';
+}
+function balances(){
+  const map={};
+  const ensure=p=>{ if(!map[p]) map[p]={punter:p,bal:BANK_START,atRisk:0,won:0,lost:0,open:0}; return map[p]; };
+  bets.forEach(b=>{ const m=ensure(b.punter); m.bal-=b.stake;
+    const r=betResult(b);
+    if(r==='won'){ m.bal+=round2(b.stake*b.odds); m.won++; }
+    else if(r==='lost'){ m.lost++; }
+    else { m.atRisk+=b.stake; m.open++; }
+  });
+  return Object.values(map).sort((a,b)=>b.bal-a.bal || b.won-a.won);
+}
+function myBalance(){ if(!punter) return BANK_START; const b=balances().find(x=>x.punter===punter); return b?b.bal:BANK_START; }
+
+function renderBetting(){
+  const el=document.getElementById('betting'); if(!el) return;
+  const names=Object.keys(OWN);
+  if(!punter){
+    el.innerHTML=`<div class="betid"><div class="bq">Who's betting? Everyone starts with <b>${BANK_START}</b> play-money points.</div>
+      <div class="bsub" style="margin-top:2px">Pool managers</div>
+      <div class="bopts">${names.map(n=>`<button class="btn ghost" onclick="setPunter('${n}')">${n}</button>`).join('')}</div>
+      <div class="bsub">Not in the pool?</div>
+      <div class="bq" style="font-size:13px;color:var(--mut)">Anyone from the chat can join the book — you don't need six teams to lose points like the rest of them.</div>
+      <div class="bopts"><button class="btn" onclick="setPunterCustom()">Join as a punter</button></div></div>`;
+    return;
+  }
+  const bal=myBalance();
+  const mine=bets.filter(b=>b.punter===punter);
+  const atRisk=mine.filter(b=>betResult(b)==='open').reduce((s,b)=>s+b.stake,0);
+  let h=`<div class="betbar">
+    <div>Betting as <b>${punter}</b> · <a href="#" onclick="changePunter();return false" style="color:var(--mut)">change</a></div>
+    <div class="balpill">Balance <b>${Math.round(bal)}</b> pts${atRisk?` · <span style="color:var(--mut)">${atRisk} at risk</span>`:''}</div>
+    <div class="tag">${betServer?'shared live':'local only'}</div></div>`;
+  if(slip){
+    h+=`<div class="slip">
+      <div class="sliphd">${FLAG[slip.a]||''} ${slip.a} <span class="vs">v</span> ${slip.b} ${FLAG[slip.b]||''} — <b>${slip.mlabel}</b>: ${slip.sellabel} @ <b>${slip.odds}</b></div>
+      <div class="slipin">
+        <span>Stake</span>
+        <input id="stakeInput" type="number" min="1" value="100" oninput="updateRet()">
+        ${[50,100,250].map(v=>`<button class="btn ghost" onclick="setStake(${v})">${v}</button>`).join('')}
+        <button class="btn ghost" onclick="setStake(${Math.floor(bal)})">Max</button>
+        <span class="ret" id="retLbl"></span>
+        <button class="btn" onclick="placeSlip()">Place bet</button>
+        <button class="btn ghost" onclick="cancelSlip()">✕</button>
+      </div></div>`;
+  }
+  const bd=balances();
+  if(bd.length){
+    h+=`<div class="bsub">Book standings</div><div class="blead">`+
+      bd.map((p,i)=>{ const mg=OWN[p.punter];
+        return `<div class="brow"><span class="bpos">${i+1}</span>
+        <span class="bnmx ${p.punter===punter?'me':''}"><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'}"></span>${p.punter}${mg?'':'<span class="crowdtag">crowd</span>'}</span>
+        <span class="brec">${p.won}W-${p.lost}L${p.open?` · ${p.open} open`:''}</span>
+        <span class="bbal">${Math.round(p.bal)}<small>pts</small></span></div>`;}).join('')+`</div>`;
+  }
+  const open=knockoutMatches().filter(m=>!m.finished);
+  h+=`<div class="bsub">Open matches</div>`;
+  if(!open.length) h+=`<div class="note" style="padding:2px 0 8px">Nothing to bet on this second — new matches open the moment the next round's teams are decided.</div>`;
+  open.forEach(m=>{
+    h+=`<div class="bmatch"><div class="bmh">${m.round} · ${FLAG[m.a]||''} ${m.a} <span class="vs">v</span> ${FLAG[m.b]||''} ${m.b}</div>`;
+    marketsFor(m).forEach(mk=>{
+      h+=`<div class="bmk"><span class="bmkl">${mk.label}</span><span class="bopt">`+
+        mk.opts.map(o=>{ const data={key:m.key,a:m.a,b:m.b,round:m.round,market:mk.id,mlabel:mk.label,selection:o.sel,sellabel:o.label,odds:o.odds};
+          return `<button class="oddbtn" onclick='openSlip(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${o.label} <b>${o.odds}</b></button>`; }).join('')+
+        `</span></div>`;
+    });
+    h+=`</div>`;
+  });
+  if(mine.length){
+    h+=`<div class="bsub">Your bets</div><div class="mybets">`+
+      [...mine].reverse().map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
+        const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
+        return `<div class="mybet ${cls}"><span>${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}</span></span>
+          <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; }).join('')+`</div>`;
+  }
+  el.innerHTML=h; updateRet();
+}
+function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} renderBetting(); }
+function setPunterCustom(){ let n=(prompt('Your name?')||'').trim().slice(0,20); if(!n) return; if(OWN[n]){ alert(n+" is a pool manager - if that's you, tap your name instead."); return; } setPunter(n); }
+function changePunter(){ punter=null; try{localStorage.removeItem('lgm_punter');}catch(e){} slip=null; renderBetting(); }
+function openSlip(o){ slip=o; renderBetting(); const el=document.getElementById('betting'); }
+function cancelSlip(){ slip=null; renderBetting(); }
+function setStake(v){ const i=document.getElementById('stakeInput'); if(i){ i.value=v; updateRet(); } }
+function updateRet(){ const i=document.getElementById('stakeInput'),l=document.getElementById('retLbl'); if(!i||!l||!slip) return;
+  const s=Math.max(0,parseInt(i.value)||0); l.textContent='returns '+Math.round(s*slip.odds)+' pts'; }
+async function placeSlip(){
+  if(!slip||!punter) return;
+  const i=document.getElementById('stakeInput'); const stake=Math.floor(parseInt(i&&i.value)||0); const bal=myBalance();
+  if(stake<1){ alert('Enter a stake.'); return; }
+  if(stake>bal){ alert('You only have '+Math.round(bal)+' pts.'); return; }
+  const bet={id:'b'+Date.now()+Math.random().toString(36).slice(2,6),punter,key:slip.key,a:slip.a,b:slip.b,round:slip.round,
+    market:slip.market,mlabel:slip.mlabel,selection:slip.selection,sellabel:slip.sellabel,odds:slip.odds,stake,ts:Date.now()};
+  bets.push(bet); slip=null; renderBetting();
+  try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bet)});
+    if(!r.ok) throw 0; const j=await r.json(); if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; } renderBetting(); }
+  catch(e){ try{localStorage.setItem('lgm_bets',JSON.stringify(bets));}catch(_){}; renderBetting(); }
+}
+async function loadBets(){
+  try{ const r=await fetch(BET_URL); if(!r.ok) throw 0; const j=await r.json(); if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; } }
+  catch(e){ try{ bets=JSON.parse(localStorage.getItem('lgm_bets')||'[]'); }catch(_){ bets=[]; } betServer=false; }
+  renderBetting();
+}
+
+
 /* ---------- LIVE RESULTS (openfootball · no API key) ---------- */
 const OF_URL='https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 const OF_MAP={'Czech Republic':'Czechia','DR Congo':'Congo','Bosnia & Herzegovina':'Bosnia','Curaçao':'Curacao'};
@@ -923,6 +1147,7 @@ function applyLive(data){
     let win=null;
     if(s.p) win = s.p[0]>s.p[1]?t1:t2;                                // penalty shootout
     else if(f[0]>f[1]) win=t1; else if(f[1]>f[0]) win=t2;             // else draw
+    recordResult(t1,t2,f[0],f[1], s.p?s.p[0]:null, s.p?s.p[1]:null, win);
     pair[[t1,t2].sort().join('|')]={win, note: s.p?`${s.p[0]}-${s.p[1]} pens`:''};
   });
   R32.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r){ row[2]=r.win; if(r.note&&!row[4]) row[4]=r.note; } });
@@ -941,6 +1166,17 @@ async function syncLive(){
   renderAll();
 }
 
+
+/* ---------- TABS ---------- */
+function setTab(t){
+  const book=(t==='book');
+  document.querySelectorAll('section').forEach(s=>{ s.style.display = ((s.id==='secBook')===book)?'':'none'; });
+  const tp=document.getElementById('tabPool'), tb=document.getElementById('tabBook');
+  if(tp) tp.className='tabbtn'+(book?'':' on');
+  if(tb) tb.className='tabbtn'+(book?' on':'');
+  try{ history.replaceState(null,'',book?'#book':location.pathname+location.search); }catch(e){}
+}
+
 /* ---------- LIVE TO-THE-MINUTE (KickoffAPI via Netlify function) ---------- */
 // The function returns matches already mapped to our nation names:
 //   [{t1,t2,g1,g2,p1,p2}]  (g=goals incl. extra time, p=penalty score or null)
@@ -955,6 +1191,7 @@ function applyMatches(rows){
     let win=null;
     if(m.p1!=null&&m.p2!=null) win = m.p1>m.p2?t1:t2;                  // penalty shootout
     else if(g1>g2) win=t1; else if(g2>g1) win=t2;                     // else draw
+    recordResult(t1,t2,g1,g2,m.p1,m.p2,win);
     pair[[t1,t2].sort().join('|')]={win, note:(m.p1!=null)?`${m.p1}-${m.p2} pens`:''};
   });
   // knockouts: only overwrite with a definite winner — never wipe a known result to a draw
@@ -985,6 +1222,9 @@ renderCardButtons();
 loadReactions();
 // Results: try the to-the-minute API first, fall back to openfootball (daily, no key), else built-in.
 (async()=>{ if(!(await syncLiveAPI())) syncLive(); })();
+loadBets();
+setInterval(loadBets, 60000);
+try{ setTab((typeof location!=='undefined'&&location.hash==='#book')?'book':'pool'); }catch(e){}
 
 </script>
 </body>
