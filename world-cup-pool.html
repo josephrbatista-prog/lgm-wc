@@ -198,7 +198,7 @@ section{margin:26px 0}
 
 /* ===== grudge matrix ===== */
 .gwrap{padding:14px;overflow-x:auto}
-.gtab{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+.gtab{border-collapse:collapse;width:100%;font-size:12.5px;min-width:660px}
 .gtab th,.gtab td{border:1px solid var(--line);text-align:center;padding:7px 6px;font-variant-numeric:tabular-nums}
 .gtab thead th{background:var(--panel2)}
 .gtab .gname{text-align:left;font-weight:700;white-space:nowrap}
@@ -343,9 +343,9 @@ section{margin:26px 0}
 
     <!-- GRUDGE MATRIX -->
   <section>
-    <div class="h"><span class="disp">Grudge Matrix</span><span class="tag">head-to-head knockout record</span></div>
+    <div class="h"><span class="disp">Grudge Matrix</span><span class="tag">head-to-head · group + knockout</span></div>
     <div class="card"><div id="grudge"></div>
-      <div class="note" style="padding:0 14px 14px">Every knockout tie pits two managers against each other. This is the running ledger of who's knocked out whom — read as wins-losses (row beats column). Real results only.</div>
+      <div class="note" style="padding:0 14px 14px">Every competitive meeting between two managers' nations — group stage <b>and</b> knockouts — tallied as wins-draws-losses (row vs column). Real results only.</div>
     </div>
   </section>
 
@@ -403,7 +403,7 @@ const OWN = {
   Jordan:{color:"#22D3A0",teams:[["Germany",2,0,1,2.4],["Netherlands",2,1,0,2.0],["Sweden",1,1,1,.9],["Canada",1,1,1,.9],["Congo",1,1,1,.2],["Saudi Arabia",0,2,1,.2]]},
   Jake:{color:"#FF9F45",teams:[["Brazil",2,1,0,2.6],["Belgium",1,2,0,1.6],["Austria",1,1,1,.7],["Egypt",1,2,0,.6],["South Africa",1,1,1,.4],["Jordan",0,0,3,.2]]},
   Eric:{color:"#4C8DFF",teams:[["USA",2,0,1,1.5],["Norway",3,0,0,1.0],["South Korea",1,0,2,.8],["Ivory Coast",2,0,1,.6],["New Zealand",0,1,2,.1],["Uzbekistan",0,0,3,.2]]},
-  Fink:{color:"#34E5C0",teams:[["Argentina",3,0,0,2.6],["Colombia",2,1,0,1.5],["Turkey",1,0,2,.7],["Algeria",1,1,1,.5],["Australia",1,1,1,.5],["Curacao",0,0,3,.05]]},
+  Fink:{color:"#84CC16",teams:[["Argentina",3,0,0,2.6],["Colombia",2,1,0,1.5],["Turkey",1,0,2,.7],["Algeria",1,1,1,.5],["Australia",1,1,1,.5],["Curacao",0,0,3,.05]]},
   Chris:{color:"#B36BFF",teams:[["France",2,0,1,2.5],["Japan",1,2,0,1.2],["Uruguay",0,2,1,1.6],["Scotland",1,0,2,.5],["Tunisia",0,0,3,.3],["Haiti",0,0,3,.05]]},
   Vinny:{color:"#FF5DA2",teams:[["England",2,1,0,2.5],["Croatia",2,0,1,1.5],["Senegal",1,0,2,1.1],["Czechia",0,1,2,.7],["Iran",0,3,0,.4],["Iraq",0,0,3,.15]]}
 };
@@ -417,7 +417,7 @@ const R32 = [
   ["Norway","Ivory Coast","Norway","Jun 30",""],
   ["France","Sweden","France","Jun 30",""],
   ["Mexico","Ecuador","Mexico","Jun 30",""],
-  ["England","Congo",null,"Wed Jul 1",""],
+  ["England","Congo","England","Jul 1","2-1"],
   ["Belgium","Senegal",null,"Wed Jul 1",""],
   ["USA","Bosnia",null,"Wed Jul 1",""],
   ["Spain","Austria",null,"Thu Jul 2",""],
@@ -426,6 +426,46 @@ const R32 = [
   ["Australia","Egypt",null,"Fri Jul 3",""],
   ["Argentina","Cape Verde",null,"Fri Jul 3",""],
   ["Colombia","Ghana",null,"Fri Jul 3",""]
+];
+
+// Group-stage results: [teamA, teamB, winner|null]  (null = draw)
+const GROUPS = [
+  // A
+  ["Mexico","South Africa","Mexico"],["South Korea","Czechia","South Korea"],["Czechia","South Africa",null],
+  ["Mexico","South Korea","Mexico"],["Mexico","Czechia","Mexico"],["South Africa","South Korea","South Africa"],
+  // B
+  ["Canada","Bosnia",null],["Switzerland","Qatar",null],["Switzerland","Bosnia","Switzerland"],
+  ["Canada","Qatar","Canada"],["Switzerland","Canada","Switzerland"],["Bosnia","Qatar","Bosnia"],
+  // C
+  ["Brazil","Morocco",null],["Scotland","Haiti","Scotland"],["Scotland","Morocco","Morocco"],
+  ["Brazil","Haiti","Brazil"],["Scotland","Brazil","Brazil"],["Morocco","Haiti","Morocco"],
+  // D
+  ["USA","Paraguay","USA"],["Australia","Turkey","Australia"],["USA","Australia","USA"],
+  ["Turkey","Paraguay","Paraguay"],["Turkey","USA","Turkey"],["Paraguay","Australia",null],
+  // E
+  ["Germany","Curacao","Germany"],["Ivory Coast","Ecuador","Ivory Coast"],["Germany","Ivory Coast","Germany"],
+  ["Ecuador","Curacao","Ecuador"],["Ivory Coast","Curacao","Ivory Coast"],["Ecuador","Germany","Ecuador"],
+  // F
+  ["Netherlands","Japan",null],["Sweden","Tunisia","Sweden"],["Netherlands","Sweden","Netherlands"],
+  ["Japan","Tunisia","Japan"],["Japan","Sweden",null],["Tunisia","Netherlands","Netherlands"],
+  // G
+  ["Belgium","Egypt",null],["Iran","New Zealand",null],["Belgium","Iran",null],
+  ["Egypt","New Zealand","Egypt"],["Egypt","Iran",null],["Belgium","New Zealand","Belgium"],
+  // H
+  ["Spain","Cape Verde",null],["Saudi Arabia","Uruguay",null],["Spain","Saudi Arabia","Spain"],
+  ["Uruguay","Cape Verde",null],["Cape Verde","Saudi Arabia",null],["Spain","Uruguay","Spain"],
+  // I
+  ["France","Senegal","France"],["Norway","Iraq","Norway"],["France","Iraq","France"],
+  ["Norway","Senegal","Norway"],["Norway","France","Norway"],["Senegal","Iraq","Senegal"],
+  // J
+  ["Argentina","Algeria","Argentina"],["Austria","Jordan","Austria"],["Argentina","Austria","Argentina"],
+  ["Algeria","Jordan","Algeria"],["Austria","Algeria",null],["Argentina","Jordan","Argentina"],
+  // K
+  ["Portugal","Congo",null],["Uzbekistan","Colombia","Colombia"],["Portugal","Uzbekistan","Portugal"],
+  ["Colombia","Congo","Colombia"],["Colombia","Portugal",null],["Congo","Uzbekistan","Congo"],
+  // L
+  ["England","Croatia","England"],["Ghana","Panama","Ghana"],["England","Ghana",null],
+  ["Panama","Croatia","Croatia"],["England","Panama","England"],["Croatia","Ghana","Croatia"]
 ];
 
 const FLAG = {Spain:"🇪🇸",Mexico:"🇲🇽",Switzerland:"🇨🇭",Ghana:"🇬🇭",Bosnia:"🇧🇦","Cape Verde":"🇨🇻",
@@ -466,15 +506,16 @@ const DERBY_LINE={
 };
 
 const ROASTS={
- Harris:["29 points and the personality of a man who reminds you he's 29 points clear.","Six teams alive and still finds something to moan about.","Leading so hard it's basically a group-chat dictatorship now.","Peaked in a fantasy pool. Get it framed."],
- Ray:["Two penalty shootouts, zero actual football. King of the coin-flip.","Back-doored into 2nd and struts like he planned it.","Morocco and Paraguay carried him; Ray took the credit.","'Jammy' doesn't begin to cover it."],
- Jordan:["Drafted Germany, Netherlands AND Sweden — all gone in one round. Scout of the year.","Two teams left and one's Congo. Living the dream.","Contender to comedy in three penalty kicks.","His bracket looks like a crime scene."],
- Jake:["Shirt off in the photo, brain off in the draft.","4th place and somehow the main character.","Belgium drew twice and he still calls them 'a banker'.","The abs are doing more work than the squad."],
- Eric:["One of his big wins was Norway knocking out his own Ivory Coast.","Beat himself in the Round of 32 and logged it as a W.","Two teams alive, both on life support.","Playing 4D chess against himself and losing."],
- Fink:["Owns the favourite and is STILL 6th. Impressive, in a way.","Argentina's dragging him toward relevance kicking and screaming.","All the firepower, none of the points.","Four teams alive and going backwards."],
- Chris:["Five teams dead. Just him, France, and hope.","One-man band, and the man's on holiday.","When France go out, someone do a welfare check.","All-in on Les Bleus like it's a personality trait."],
- Vinny:["Dead last and still talking. Respect the confidence.","Bottom of the table, top of the excuses.","England or bust — and we've all seen England.","Three teams alive purely because the bar's on the floor."]
+ Harris:["29 fucking points and still whinging like he's getting relegated. Shut it, you smug prick.","All six teams alive and he won't stop banging on about it. Absolute bellend.","Leading the pool and topping the league of people nobody wants to sit next to.","Peaked in a fantasy World Cup pool. Get it framed, you sad bastard.","So far ahead he's basically tossing himself off in the group chat every night."],
+ Ray:["Two penalty shootouts, zero actual footballing brain. Jammy little shit.","Back-doored into 2nd like the tosser who wins the raffle and acts like he earned it.","Morocco and Paraguay dragged your sorry arse up the table. You did fuck all.","Won on pens twice and struts about like Beckham. Sit down, you fraud.","Luckiest bastard in the chat and somehow the smuggest too."],
+ Jordan:["Drafted Germany, Netherlands AND Sweden — all binned in one round. What a fucking scout.","Title contender to laughing stock in 90 minutes. Twice, you plum.","Two teams left and one's Congo. Grim as fuck, mate.","His bracket's a crime scene and he's the prime suspect.","Blew the whole draft on big names and got dumpstered. Pillock."],
+ Jake:["Shirt off, tie on, brain nowhere to be found. Put some clothes on, you bellend.","That photo's a cry for help and so's his squad.","Belgium drew twice and this knobhead still calls them 'a banker'.","4th place and the most punchable man in the chat.","Abs out, points down. Do one, you gym-mirror wanker."],
+ Eric:["One of his big wins was Norway knocking out his OWN Ivory Coast. Beat himself, the daft prick.","Playing 4D chess against himself and STILL losing. Embarrassing.","Two teams alive, both on life support — like his draft.","Logged a self-inflicted result as a W. Delusional shithouse.","Eric's masterplan: eliminate your own teams. Genius, you muppet."],
+ Fink:["Owns the tournament favourite and is STILL sixth. How do you fuck that up?","Argentina are dragging your lazy arse toward relevance and even they've had enough.","All the firepower, fuck all the points. Classic all-gob-no-goals.","Messi's lot doing the work while this prick takes the credit.","Four teams alive and going backwards. Take up knitting, mate."],
+ Chris:["Five teams dead. Just him, France, and a shitload of misplaced hope.","One-man band and the one man's on the piss.","When France go out, do a welfare check — he's got fuck all left.","All-in on Les Bleus like it's a personality. Get a grip, you sad sack.","His whole tournament rides on France. Bold, you absolute donut."],
+ Vinny:["Dead last and STILL running his mouth. Read the room, you bellend.","Bottom of the table, top of the excuses. Shut it, Vinny.","England or bust — and we've all watched England, so it's bust, you muppet.","Three teams alive purely because the bar's on the fucking floor.","Propping up the whole pool like the wonky leg of a shite table."]
 };
+
 
 /* ---------- SCENARIO OVERLAY (what-if toggles) ---------- */
 let scenario = {};                       // r32 index -> forced winner (pending matches only)
@@ -637,13 +678,15 @@ function renderAll(){
 /* ---------- GRUDGE MATRIX (real completed KO ties only) ---------- */
 function renderGrudge(){
   const names=Object.keys(OWN);
-  const rec={}; names.forEach(a=>{rec[a]={};names.forEach(b=>rec[a][b]={w:0,l:0});});
-  const wins={}; names.forEach(n=>wins[n]={w:0,l:0});
-  R32.filter(r=>r[2]!==null).forEach(([a,b,w])=>{
-    const loser=(w===a)?b:a, ow=ownerOf(w), ol=ownerOf(loser);
-    if(ow===ol) return; // internal
-    rec[ow][ol].w++; rec[ol][ow].l++; wins[ow].w++; wins[ol].l++;
-  });
+  const rec={}; names.forEach(a=>{rec[a]={};names.forEach(b=>rec[a][b]={w:0,d:0,l:0});});
+  const tot={}; names.forEach(n=>tot[n]={w:0,d:0,l:0});
+  function add(a,b,winner){
+    const oa=ownerOf(a), ob=ownerOf(b); if(!oa||!ob||oa===ob) return; // skip internal
+    if(winner===null){ rec[oa][ob].d++; rec[ob][oa].d++; tot[oa].d++; tot[ob].d++; }
+    else { const wo=ownerOf(winner), lo=(wo===oa)?ob:oa; rec[wo][lo].w++; rec[lo][wo].l++; tot[wo].w++; tot[lo].l++; }
+  }
+  GROUPS.forEach(([a,b,w])=>add(a,b,w));                 // group stage
+  R32.forEach(m=>{ if(m[2]!==null) add(m[0],m[1],m[2]); }); // knockouts (advancer = win)
   const col=n=>OWN[n].color;
   let h='<div class="gwrap"><table class="gtab"><thead><tr><th></th>';
   names.forEach(n=>h+=`<th title="${n}"><span class="gdot" style="background:${col(n)}"></span></th>`);
@@ -654,11 +697,11 @@ function renderGrudge(){
       if(a===b){ h+='<td class="gself">—</td>'; return; }
       const r=rec[a][b];
       let cell='·', cls='';
-      if(r.w||r.l){ cell=`${r.w}-${r.l}`; cls = r.w>r.l?'gwin':(r.l>r.w?'gloss':'gdraw'); }
+      if(r.w||r.d||r.l){ cell=`${r.w}-${r.d}-${r.l}`; cls = r.w>r.l?'gwin':(r.l>r.w?'gloss':'gdraw'); }
       h+=`<td class="${cls}">${cell}</td>`;
     });
-    const tot=wins[a];
-    h+=`<td class="grec">${tot.w}-${tot.l}</td></tr>`;
+    const t=tot[a];
+    h+=`<td class="grec">${t.w}-${t.d}-${t.l}</td></tr>`;
   });
   h+='</tbody></table></div>';
   document.getElementById('grudge').innerHTML=h;
@@ -849,8 +892,25 @@ async function toggleReaction(o,e){
   catch(err){ localStorage.setItem('lgm_react',JSON.stringify(reactState)); }
 }
 
+/* ---------- SUPERLATIVES ---------- */
+const AWARDS=[
+  ["👑","Insufferable Front-Runner","Harris — 29 points, all six teams alive, and he will NOT shut up about it. Someone bin him before the group chat becomes unliveable."],
+  ["🩲","Group Chat Hall of Fame","Jake — shirt off, tie on, dignity long gone. 4th on the leaderboard, undisputed champion of poor life decisions."],
+  ["💀","Absolute Shitshow","Jordan — Germany, Netherlands AND Sweden all skipped town in one round. Drafted like a genius, detonated like a bin fire. Two left."],
+  ["🐴","One-Trick Pony","Chris — five teams dead, clinging to France like an ex who can't read the room. When Les Bleus go, so does he."],
+  ["🚽","Bottom Feeder","Vinny — dead last, yet somehow three teams alive. Says less about Vinny and more about how low the bar's been set. England or bust."],
+  ["🎰","Jammy Git","Ray — won two shootouts he had no business winning and back-doored into 2nd. Pure luck in a trench coat, and he knows it."],
+  ["🤡","Played Himself","Eric — one of his \u201cbig\u201d R32 wins was Norway knocking out his own Ivory Coast. Beat himself and stuck it on the CV."],
+  ["🐌","All Gas, No Points","Fink — owns the tournament FAVOURITE and is STILL marooned in 6th. Argentina's dragging you, mate, and even they look knackered."]
+];
+function renderAwards(){
+  document.getElementById('awards').innerHTML = AWARDS.map(a=>
+    `<div class="aw"><div class="em">${a[0]}</div><div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div></div>`).join('');
+}
+
 /* ---------- BOOT ---------- */
 renderAll();
+renderAwards();
 renderRoasts();
 renderCardButtons();
 loadReactions();
