@@ -43,19 +43,34 @@ export default async (req) => {
         return Response.json({ ok:true, bets:list, roster });
       }
 
-      // Bet placement
-      if (!b || !b.punter || !b.key || !b.market || !b.selection || typeof b.stake !== 'number')
+      // Bet placement — single or accumulator
+      const isAcca = b && b.acca === true && Array.isArray(b.legs) && b.legs.length >= 2;
+      if (isAcca) {
+        if (!b.punter || typeof b.stake !== 'number')
+          return Response.json({ ok:false, error:'bad acca' }, { status:400 });
+      } else if (!b || !b.punter || !b.key || !b.market || !b.selection || typeof b.stake !== 'number') {
         return Response.json({ ok:false, error:'bad bet' }, { status:400 });
+      }
       const list = (await store.get(KEY, { type:'json' })) || [];
-      list.push({
+      const rec = {
         id: b.id || ('b'+Date.now()),
-        punter: s(b.punter,24), key: s(b.key,64),
-        a: s(b.a,32), b: s(b.b,32), round: s(b.round,24),
-        market: s(b.market,16), mlabel: s(b.mlabel,40),
-        selection: s(b.selection,32), sellabel: s(b.sellabel,32),
+        punter: s(b.punter,24),
         odds: Number(b.odds) || 1, stake: Math.max(1, Math.floor(b.stake)),
+        sellabel: s(b.sellabel,32), mlabel: s(b.mlabel,40),
         ts: Date.now()
-      });
+      };
+      if (isAcca) {
+        rec.acca = true;
+        rec.legs = b.legs.slice(0,8).map(l => ({
+          key: s(l.key,64), a: s(l.a,32), b: s(l.b,32), round: s(l.round,24),
+          market: s(l.market,16), mlabel: s(l.mlabel,40),
+          selection: s(l.selection,32), sellabel: s(l.sellabel,32), odds: Number(l.odds)||1
+        }));
+      } else {
+        rec.key = s(b.key,64); rec.a = s(b.a,32); rec.b = s(b.b,32); rec.round = s(b.round,24);
+        rec.market = s(b.market,16); rec.selection = s(b.selection,32);
+      }
+      list.push(rec);
       if (list.length > 2000) list.splice(0, list.length - 2000);
       await store.setJSON(KEY, list);
       // any better who isn't a manager lands on the roster too

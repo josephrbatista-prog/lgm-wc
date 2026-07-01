@@ -320,6 +320,42 @@ section{margin:26px 0}
 .inplayrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel2);border:1px solid rgba(255,93,59,.4);border-radius:9px;padding:8px 11px;font-size:13px}
 .inplayrow b{color:#fff;font-variant-numeric:tabular-nums}
 .locktag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#ff9077}
+
+/* ===== accumulators / slip ===== */
+.sliplegs{display:flex;flex-direction:column;gap:5px;margin:8px 0}
+.leg{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px}
+.accapill{background:rgba(132,204,22,.15);border:1px solid rgba(132,204,22,.5);color:#bef264;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:6px}
+/* ===== round movers ===== */
+.movers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+@media(max-width:520px){.movers{grid-template-columns:1fr}}
+.mover{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.mover.up{border-left:3px solid #22D3A0} .mover.down{border-left:3px solid #FF5D3B}
+.mover .ml{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);font-weight:700}
+.mover .mv{font-size:15px;font-weight:800;margin-top:3px} .mover .mn{font-variant-numeric:tabular-nums}
+/* ===== honours / badges ===== */
+.honours{display:flex;flex-direction:column;gap:7px;padding:14px}
+.hrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.hrow .hn{min-width:74px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.badge2{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px}
+.badge2 .be{font-size:13px}
+.hnone{color:var(--dim);font-size:12px;font-style:italic}
+/* ===== live swing ===== */
+.swingWrap{max-width:1120px;margin:8px auto 0;padding:0 20px}
+.swingIn{background:var(--panel2);border:1px dashed rgba(255,93,59,.5);border-radius:11px;padding:9px 13px;font-size:13px;display:flex;flex-direction:column;gap:5px}
+.swingHd{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#ff9077;font-weight:800}
+.swingRow .up{color:#5be3a7;font-weight:700} .swingRow .dn{color:#ff9077;font-weight:700}
+/* ===== wrapped ===== */
+#secWrapped .card{padding:0}
+.wrap-hero{text-align:center;padding:26px 18px 10px}
+.wrap-hero .wt{font-family:var(--disp,'Barlow Condensed');font-weight:800;font-size:34px;letter-spacing:.02em}
+.wrap-hero .ws{color:var(--mut);font-size:13px;margin-top:2px}
+.wcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}
+@media(max-width:640px){.wcards{grid-template-columns:1fr}}
+.wcard{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;position:relative;overflow:hidden}
+.wcard .wl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--dim);font-weight:700}
+.wcard .wbig{font-family:var(--disp,'Barlow Condensed');font-weight:800;font-size:30px;line-height:1.05;margin-top:6px}
+.wcard .wsub{color:var(--mut);font-size:12.5px;margin-top:5px}
+.wcard .wchip{width:11px;height:15px;border-radius:3px;display:inline-block;vertical-align:middle;margin-right:6px}
 </style>
 </head>
 <body>
@@ -342,10 +378,12 @@ section{margin:26px 0}
   </div>
 
   <div id="liveStrip" class="liveStrip" style="display:none"></div>
+  <div id="liveSwing" class="swingWrap" style="display:none"></div>
 
   <nav class="tabs">
     <button class="tabbtn on" id="tabPool" onclick="setTab('pool')">🏆 Pool</button>
     <button class="tabbtn" id="tabBook" onclick="setTab('book')">🎰 The Book</button>
+    <button class="tabbtn" id="tabWrapped" onclick="setTab('wrapped')">🎬 Wrapped</button>
     <button class="tabbtn adminbtn" id="tabAdmin" onclick="setTab('admin')" title="Admin">⚙️</button>
   </nav>
 
@@ -461,7 +499,19 @@ section{margin:26px 0}
     </div>
   </section>
 
-    <!-- THE BOOK (betting) -->
+    <!-- HONOURS -->
+  <section>
+    <div class="h"><span class="disp">Honours</span><span class="tag">auto-awarded from real results</span></div>
+    <div class="card"><div id="honours" class="honours"></div></div>
+  </section>
+
+  <!-- WRAPPED -->
+  <section id="secWrapped">
+    <div class="h"><span class="disp">Wrapped</span><span class="tag">the story so far</span></div>
+    <div class="card"><div id="wrapped"></div></div>
+  </section>
+
+  <!-- THE BOOK (betting) -->
   <section id="secBook">
     <div class="h"><span class="disp">The Book</span><span class="tag">group bets · play money</span></div>
     <div class="card"><div id="betting"></div>
@@ -634,6 +684,69 @@ function buildStatus(useScenario){
 function ownerOf(team){ for(const o in OWN){ if(OWN[o].teams.some(t=>t[0]===team)) return o; } return null; }
 function isLivePair(a,b){ return LIVE_NOW.some(x=>[x.t1,x.t2].sort().join('|')===[a,b].sort().join('|')); }
 function liveScore(a,b){ return LIVE_NOW.find(x=>[x.t1,x.t2].sort().join('|')===[a,b].sort().join('|'))||null; }
+function renderSwing(){
+  const el=document.getElementById('liveSwing'); if(!el) return;
+  const PTS={'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12};
+  const km=knockoutMatches();
+  const rows=[];
+  LIVE_NOW.forEach(m=>{
+    if(m.g1===m.g2) return;                              // level: no swing yet
+    const km_=km.find(x=>x.key===[m.t1,m.t2].sort().join('|')); if(!km_) return;
+    const lead = m.g1>m.g2 ? m.t1 : m.t2;
+    const trail = m.g1>m.g2 ? m.t2 : m.t1;
+    const ow=ownerOf(lead), ol=ownerOf(trail); const pts=PTS[km_.round]||4;
+    rows.push({lead,trail,ow,ol,pts,round:km_.round});
+  });
+  if(!rows.length){ el.style.display='none'; el.innerHTML=''; return; }
+  // projected standings: real banked + provisional advance points
+  const real=deriveMgrs(buildStatus(false));
+  const baseRank={}; real.forEach((m,i)=>baseRank[m.name]=i+1);
+  const proj=real.map(m=>({name:m.name,pts:m.pts}));
+  rows.forEach(r=>{ if(r.ow){ const p=proj.find(x=>x.name===r.ow); if(p) p.pts+=r.pts; } });
+  proj.sort((a,b)=>b.pts-a.pts); const projRank={}; proj.forEach((m,i)=>projRank[m.name]=i+1);
+  const arrow=n=>{ const d=baseRank[n]-projRank[n]; return d>0?`<span class="up">▲${d}</span>`:d<0?`<span class="dn">▼${-d}</span>`:''; };
+  el.style.display='';
+  el.innerHTML='<div class="swingIn"><div class="swingHd">If it ended right now</div>'+
+    rows.map(r=>`<div class="swingRow">${FLAG[r.lead]||''} <b>${r.lead}</b> through (+${r.pts} for <b>${r.ow||'—'}</b> ${arrow(r.ow)}) · ${r.trail} out${r.ol?` (<b>${r.ol}</b> ${arrow(r.ol)})`:''}</div>`).join('')+
+    '</div>';
+}
+function renderHonours(){
+  const el=document.getElementById('honours'); if(!el) return;
+  const mb=computeManagerBadges();
+  el.innerHTML=Object.keys(OWN).map(o=>{ const mg=OWN[o]; const list=mb[o]||[];
+    return `<div class="hrow"><span class="hn"><span class="chip" style="width:9px;height:13px;background:${mg.color}"></span>${o}</span>`+
+      (list.length?list.map(x=>`<span class="badge2"><span class="be">${x[0]}</span>${x[1]}</span>`).join(''):'<span class="hnone">no honours yet</span>')+`</div>`;
+  }).join('');
+}
+function renderWrapped(){
+  const el=document.getElementById('wrapped'); if(!el) return;
+  const real=deriveMgrs(buildStatus(false));
+  const leader=real[0], last=real[real.length-1];
+  const done=R32.filter(r=>r[2]).length;
+  const totalPts=real.reduce((s,m)=>s+m.pts,0);
+  // grudge king: most opponents' teams knocked out (owner of winners over other owners' teams)
+  const ko={}; R32.forEach(([a,b,w])=>{ if(!w) return; const l=(w===a)?b:a; const ow=ownerOf(w),ol=ownerOf(l); if(ow&&ol&&ow!==ol){ ko[ow]=(ko[ow]||0)+1; } });
+  const grudge=Object.entries(ko).sort((a,b)=>b[1]-a[1])[0];
+  // golden boot manager (most goals across teams)
+  const gfM={}; Object.keys(OWN).forEach(o=>{ gfM[o]=OWN[o].teams.reduce((s,t)=>s+(GF[t[0]]||0),0); });
+  const boot=Object.entries(gfM).sort((a,b)=>b[1]-a[1])[0];
+  // book: leader + biggest single win
+  const bd=balances(); const bookTop=bd[0];
+  let bigWin=null; bets.forEach(b=>{ if(betResult(b)==='won'){ const p=b.stake*b.odds-b.stake; if(!bigWin||p>bigWin.p) bigWin={p:Math.round(p),punter:b.punter,desc:betDesc(b),odds:b.odds}; } });
+  const alive=real.reduce((s,m)=>s+m.alive,0);
+  const chip=c=>`<span class="wchip" style="background:${c}"></span>`;
+  const card=(l,big,sub)=>`<div class="wcard"><div class="wl">${l}</div><div class="wbig">${big}</div>${sub?`<div class="wsub">${sub}</div>`:''}</div>`;
+  let cards='';
+  cards+=card('Top of the table', `${chip(leader.color)}${leader.name}`, `${leader.pts} pts · ${leader.pts-real[1].pts} clear of ${real[1].name}`);
+  if(grudge){ const g=OWN[grudge[0]]; cards+=card('Grudge king', `${chip(g?g.color:'#888')}${grudge[0]}`, `knocked out ${grudge[1]} of the others' teams in the R32`); }
+  if(boot){ const g=OWN[boot[0]]; cards+=card('Golden boot', `${chip(g?g.color:'#888')}${boot[0]}`, `${boot[1]} goals across his teams`); }
+  cards+=card('Still standing', `${alive} teams`, `${done} of 16 last-32 ties done`);
+  if(bookTop){ const g=OWN[bookTop.punter]; cards+=card('The Book leader', `${chip(g?g.color:'#5E687E')}${bookTop.punter}`, `${Math.round(bookTop.bal)} pts · ${bookTop.won}W-${bookTop.lost}L`); }
+  if(bigWin){ const g=OWN[bigWin.punter]; cards+=card('Bet of the tournament', `+${bigWin.p} pts`, `${chip(g?g.color:'#5E687E')}${bigWin.punter} · ${bigWin.desc} @ ${bigWin.odds}`); }
+  cards+=card('Wooden spoon', `${chip(last.color)}${last.name}`, `${last.pts} pts · someone has to prop up the table`);
+  cards+=card('On the board', `${totalPts} pts`, `banked across all eight managers so far`);
+  el.innerHTML=`<div class="wrap-hero"><div class="wt">LGM WC Cup — Wrapped</div><div class="ws">The story so far · updates live · becomes the full recap at the final whistle</div></div><div class="wcards">${cards}</div>`;
+}
 function renderLiveStrip(){
   const el=document.getElementById('liveStrip'); if(!el) return;
   if(!LIVE_NOW||!LIVE_NOW.length){ el.style.display='none'; el.innerHTML=''; return; }
@@ -783,6 +896,9 @@ function renderAll(){
   // Re-run sim to reflect scenario
   runSim();
   if(typeof renderLiveStrip==='function') renderLiveStrip();
+  if(typeof renderSwing==='function') renderSwing();
+  if(typeof renderHonours==='function') renderHonours();
+  if(typeof renderWrapped==='function') renderWrapped();
   if(typeof renderBetting==='function') renderBetting();
   window.__MGRS = MGRS; // for story cards / roasts
 }
@@ -1031,7 +1147,7 @@ function recordResult(a,b,g1,g2,p1,p2,winner){ RESULTS[keyOf(a,b)]={a,b,g1,g2,p1
 let punter=(typeof localStorage!=='undefined' && localStorage.getItem('lgm_punter'))||null;
 let bets=[];
 let roster=[];
-let slip=null;
+let legs=[];   // bet slip: 1 leg = single, 2+ = accumulator
 let betServer=false;
 const BET_URL='/.netlify/functions/bets';
 
@@ -1064,7 +1180,7 @@ function knockoutMatches(){
   return out;
 }
 
-function betResult(b){
+function legResult(b){
   const res=RESULTS[b.key]; if(!res) return 'open';
   const {g1,g2,p1,p2,winner}=res; const total=(g1||0)+(g2||0); const pens=(p1!=null&&p2!=null);
   let won=false;
@@ -1073,6 +1189,16 @@ function betResult(b){
   else if(b.market==='goals')won = b.selection==='0-1'?total<=1 : b.selection==='2-3'?(total>=2&&total<=3) : total>=4;
   else if(b.market==='pens') won = (pens===(b.selection==='Yes'));
   return won?'won':'lost';
+}
+function betResult(b){
+  if(b.legs&&b.legs.length){ let open=false;
+    for(const lg of b.legs){ const r=legResult(lg); if(r==='lost') return 'lost'; if(r==='open') open=true; }
+    return open?'open':'won'; }
+  return legResult(b);
+}
+function betDesc(b){
+  if(b.acca) return `ACCA · ${b.legs.length} legs: ${b.legs.map(l=>l.sellabel).join(' + ')}`;
+  return `${b.sellabel||b.selection} · ${b.mlabel||b.market}${b.a?` · ${b.a} v ${b.b}`:''}`;
 }
 function balances(){
   const map={};
@@ -1086,6 +1212,50 @@ function balances(){
   return Object.values(map).sort((a,b)=>b.bal-a.bal || b.won-a.won);
 }
 function myBalance(){ if(!punter) return BANK_START; const b=balances().find(x=>x.punter===punter); return b?b.bal:BANK_START; }
+
+const RORDER={'Round of 32':1,'Round of 16':2,'Quarter-final':3,'Semi-final':4,'Final':5};
+function betRound(b){ if(b.legs&&b.legs.length) return b.legs.reduce((mx,l)=>Math.max(mx,RORDER[l.round]||0),0); return RORDER[b.round]||0; }
+function betNet(b){ const r=betResult(b); return r==='won'?round2(b.stake*b.odds-b.stake):r==='lost'?-b.stake:0; }
+function roundMovers(){
+  const settled=bets.filter(b=>{const r=betResult(b);return r==='won'||r==='lost';});
+  if(!settled.length) return null;
+  const cur=settled.reduce((mx,b)=>Math.max(mx,betRound(b)),0);
+  const inRound=settled.filter(b=>betRound(b)===cur);
+  const net={}; inRound.forEach(b=>{ net[b.punter]=(net[b.punter]||0)+betNet(b); });
+  const arr=Object.entries(net).map(([p,n])=>({p,n:Math.round(n)})).filter(x=>x.n!==0).sort((a,b)=>b.n-a.n);
+  if(!arr.length) return null;
+  const roundName=Object.keys(RORDER).find(k=>RORDER[k]===cur)||'';
+  return {roundName, top:arr[0], bottom:arr[arr.length-1]};
+}
+function computeBookBadges(){
+  const badges={}; const add=(p,e,l)=>{ (badges[p]=badges[p]||[]).push([e,l]); };
+  const bd=balances();
+  const settledP=new Set(bets.filter(b=>betResult(b)!=='open').map(b=>b.punter));
+  if(bd.length){ const top=bd[0]; if(settledP.has(top.punter)&&top.won>0) add(top.punter,'💰','Book Leader');
+    if(bd.length>1){ const bot=bd[bd.length-1]; add(bot.punter,'📉','Rock Bottom'); } }
+  bets.forEach(b=>{ if(betResult(b)==='won'){
+      if((b.odds||0)>=4) add(b.punter,'🐎','Longshot '+b.odds);
+      if(!b.acca&&b.market==='pens'&&b.selection==='Yes') add(b.punter,'🎯','Penalty Prophet');
+      if(b.acca&&b.legs.length>=3) add(b.punter,'🎲','Acca Hero');
+    }
+    if(b.stake>=400) add(b.punter,'🧊','High Roller'); });
+  Object.keys(badges).forEach(p=>{ const seen=new Set(); badges[p]=badges[p].filter(x=>{const k=x[1].replace(/ .*/,''); if(seen.has(k))return false; seen.add(k); return true;}); });
+  return badges;
+}
+function computeManagerBadges(){
+  const real=deriveMgrs(buildStatus(false));
+  const badges={}; Object.keys(OWN).forEach(o=>badges[o]=[]);
+  const n=real.length;
+  badges[real[0].name].push(['👑','Top of the Table']);
+  if(n>1) badges[real[n-1].name].push(['🥄','Wooden Spoon']);
+  const maxAlive=Math.max(...real.map(m=>m.alive));
+  real.filter(m=>m.alive===maxAlive).forEach(m=>badges[m.name].push(['🛡️','Survivor · '+maxAlive+' alive']));
+  const gk=new Set();
+  R32.forEach(([a,b,w])=>{ if(!w) return; const l=(w===a)?b:a; const ow=ownerOf(w);
+    if(ow && ODDS[l]!=null && ODDS[w]!=null && ODDS[l] < ODDS[w] && !gk.has(ow)){ badges[ow].push(['💀','Giant Killer']); gk.add(ow); } });
+  return badges;
+}
+
 
 
 function fmtTs(t){ try{ const d=new Date(t);
@@ -1121,25 +1291,37 @@ function renderBetting(){
     <div>Betting as <b>${punter}</b> · <a href="#" onclick="changePunter();return false" style="color:var(--mut)">change</a></div>
     <div class="balpill">Balance <b>${Math.round(bal)}</b> pts${atRisk?` · <span style="color:var(--mut)">${atRisk} at risk</span>`:''}</div>
     <div class="tag">${betServer?'shared live':'local only'}</div></div>`;
-  if(slip){
+  const mv=roundMovers();
+  if(mv){
+    const g=OWN[mv.top.p], l=OWN[mv.bottom.p];
+    h+=`<div class="bsub">Round movers — ${mv.roundName}</div><div class="movers">
+      <div class="mover up"><div class="ml">📈 Biggest winner</div><div class="mv"><span class="chip" style="width:9px;height:13px;background:${g?g.color:'#5E687E'};display:inline-block;vertical-align:middle;margin-right:6px"></span>${mv.top.p} <span class="mn">+${mv.top.n}</span></div></div>
+      <div class="mover down"><div class="ml">📉 Biggest loser</div><div class="mv"><span class="chip" style="width:9px;height:13px;background:${l?l.color:'#5E687E'};display:inline-block;vertical-align:middle;margin-right:6px"></span>${mv.bottom.p} <span class="mn">${mv.bottom.n}</span></div></div>
+    </div>`;
+  }
+  if(legs.length){
+    const co=combinedOdds();
     h+=`<div class="slip">
-      <div class="sliphd">${FLAG[slip.a]||''} ${slip.a} <span class="vs">v</span> ${slip.b} ${FLAG[slip.b]||''} — <b>${slip.mlabel}</b>: ${slip.sellabel} @ <b>${slip.odds}</b></div>
+      <div class="sliphd">${legs.length>1?`<b>Accumulator</b><span class="accapill">${legs.length} legs</span> combined odds <b>${co}</b>`:'Bet slip'}</div>
+      <div class="sliplegs">`+legs.map((l,i)=>`<div class="leg"><span>${FLAG[l.a]||''} ${l.a} v ${l.b} ${FLAG[l.b]||''} — <b>${l.mlabel}</b>: ${l.sellabel} @ ${l.odds}</span><button class="btn ghost" onclick="removeLeg(${i})">✕</button></div>`).join('')+`</div>
       <div class="slipin">
         <span>Stake</span>
         <input id="stakeInput" type="number" min="1" value="100" oninput="updateRet()">
         ${[50,100,250].map(v=>`<button class="btn ghost" onclick="setStake(${v})">${v}</button>`).join('')}
         <button class="btn ghost" onclick="setStake(${Math.floor(bal)})">Max</button>
         <span class="ret" id="retLbl"></span>
-        <button class="btn" onclick="placeSlip()">Place bet</button>
-        <button class="btn ghost" onclick="cancelSlip()">✕</button>
-      </div></div>`;
+        <button class="btn" onclick="placeSlip()">${legs.length>1?'Place acca':'Place bet'}</button>
+        <button class="btn ghost" onclick="clearSlip()">clear</button>
+      </div>
+      ${legs.length===1?`<div class="note" style="padding:6px 0 0">Tap more odds to build an accumulator — every leg must land, but the odds multiply.</div>`:''}
+    </div>`;
   }
   const feed=[...bets].sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,15);
   h+=`<div class="bsub">Live bets — the whole book</div>`;
   if(!feed.length) h+=`<div class="note" style="padding:2px 0 8px">No bets on the board yet — be the first.</div>`;
   else h+=`<div class="feed">`+feed.map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
     const mg=OWN[b.punter]; const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
-    return `<div class="mybet ${cls}"><span><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b>${mg?'':'<span class="crowdtag">crowd</span>'} <span style="color:var(--dim)">·</span> ${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.a?` · ${b.a} v ${b.b}`:''}${b.ts?` · ${fmtTs(b.ts)}`:''}</span></span>
+    return `<div class="mybet ${cls}"><span><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b>${mg?'':'<span class="crowdtag">crowd</span>'} <span style="color:var(--dim)">·</span> ${betDesc(b)}${b.ts?` <span style="color:var(--dim)">· ${fmtTs(b.ts)}</span>`:''}</span>
       <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`;
   }).join('')+`</div>`;
 
@@ -1151,6 +1333,11 @@ function renderBetting(){
         <span class="bnmx ${p.punter===punter?'me':''}"><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'}"></span>${p.punter}${mg?'':'<span class="crowdtag">crowd</span>'}</span>
         <span class="brec">${p.won}W-${p.lost}L${p.open?` · ${p.open} open`:''}</span>
         <span class="bbal">${Math.round(p.bal)}<small>pts</small></span></div>`;}).join('')+`</div>`;
+    const bb=computeBookBadges();
+    const withB=Object.keys(bb).filter(p=>bb[p]&&bb[p].length);
+    if(withB.length){ h+=`<div class="bsub">Book honours</div><div class="honours" style="padding:0">`+
+      withB.map(p=>{ const mg=OWN[p]; return `<div class="hrow"><span class="hn"><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'}"></span>${p}</span>`+
+        bb[p].map(x=>`<span class="badge2"><span class="be">${x[0]}</span>${x[1]}</span>`).join('')+`</div>`; }).join('')+`</div>`; }
   }
   const km=knockoutMatches();
   const inplay=km.filter(m=>!m.finished&&m.live);
@@ -1167,7 +1354,7 @@ function renderBetting(){
     marketsFor(m).forEach(mk=>{
       h+=`<div class="bmk"><span class="bmkl">${mk.label}</span><span class="bopt">`+
         mk.opts.map(o=>{ const data={key:m.key,a:m.a,b:m.b,round:m.round,market:mk.id,mlabel:mk.label,selection:o.sel,sellabel:o.label,odds:o.odds};
-          return `<button class="oddbtn" onclick='openSlip(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${o.label} <b>${o.odds}</b></button>`; }).join('')+
+          return `<button class="oddbtn" onclick='addLeg(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${o.label} <b>${o.odds}</b></button>`; }).join('')+
         `</span></div>`;
     });
     h+=`</div>`;
@@ -1176,7 +1363,7 @@ function renderBetting(){
     h+=`<div class="bsub">Your bets</div><div class="mybets">`+
       [...mine].reverse().map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
         const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
-        return `<div class="mybet ${cls}"><span>${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.ts?` · placed ${fmtTs(b.ts)}`:''}</span></span>
+        return `<div class="mybet ${cls}"><span>${betDesc(b)}${b.ts?` <span style="color:var(--dim)">· placed ${fmtTs(b.ts)}</span>`:''}</span>
           <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; }).join('')+`</div>`;
   }
   el.innerHTML=h; updateRet(); if(typeof renderAdmin==='function') renderAdmin();
@@ -1184,20 +1371,35 @@ function renderBetting(){
 function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} if(!OWN[n]) registerPunter(n); renderBetting(); }
 function setPunterCustom(){ let n=(prompt('Your name?')||'').trim().slice(0,20); if(!n) return; if(OWN[n]){ alert(n+" is a pool manager - if that's you, tap your name instead."); return; } setPunter(n); }
 function changePunter(){ punter=null; try{localStorage.removeItem('lgm_punter');}catch(e){} slip=null; renderBetting(); }
-function openSlip(o){ slip=o; renderBetting(); const el=document.getElementById('betting'); }
-function cancelSlip(){ slip=null; renderBetting(); }
+function combinedOdds(){ return round2(legs.reduce((p,l)=>p*(l.odds||1),1)); }
+function addLeg(o){
+  if(isLivePair(o.a,o.b)){ alert('That match has kicked off — bets are closed.'); return; }
+  if(RESULTS[o.key]){ alert('That match is already finished.'); return; }
+  const idx=legs.findIndex(l=>l.key===o.key&&l.market===o.market);
+  if(idx>=0) legs[idx]=o;                      // switch selection within the same market
+  else legs.push(o);
+  renderBetting();
+}
+function removeLeg(i){ legs.splice(i,1); renderBetting(); }
+function clearSlip(){ legs=[]; renderBetting(); }
 function setStake(v){ const i=document.getElementById('stakeInput'); if(i){ i.value=v; updateRet(); } }
-function updateRet(){ const i=document.getElementById('stakeInput'),l=document.getElementById('retLbl'); if(!i||!l||!slip) return;
-  const s=Math.max(0,parseInt(i.value)||0); l.textContent='returns '+Math.round(s*slip.odds)+' pts'; }
+function updateRet(){ const i=document.getElementById('stakeInput'),l=document.getElementById('retLbl'); if(!i||!l||!legs.length) return;
+  const s=Math.max(0,parseInt(i.value)||0); l.textContent='returns '+Math.round(s*combinedOdds())+' pts'; }
 async function placeSlip(){
-  if(!slip||!punter) return;
+  if(!legs.length||!punter) return;
   const i=document.getElementById('stakeInput'); const stake=Math.floor(parseInt(i&&i.value)||0); const bal=myBalance();
   if(stake<1){ alert('Enter a stake.'); return; }
   if(stake>bal){ alert('You only have '+Math.round(bal)+' pts.'); return; }
-  if(isLivePair(slip.a,slip.b)){ alert('That match has kicked off — bets are closed.'); slip=null; renderBetting(); return; }
-  const bet={id:'b'+Date.now()+Math.random().toString(36).slice(2,6),punter,key:slip.key,a:slip.a,b:slip.b,round:slip.round,
-    market:slip.market,mlabel:slip.mlabel,selection:slip.selection,sellabel:slip.sellabel,odds:slip.odds,stake,ts:Date.now()};
-  bets.push(bet); slip=null; renderBetting();
+  for(const l of legs){ if(isLivePair(l.a,l.b)||RESULTS[l.key]){ alert('A pick in your slip has kicked off — remove it before placing.'); return; } }
+  const id='b'+Date.now()+Math.random().toString(36).slice(2,6);
+  let bet;
+  if(legs.length===1){ const l=legs[0];
+    bet={id,punter,key:l.key,a:l.a,b:l.b,round:l.round,market:l.market,mlabel:l.mlabel,selection:l.selection,sellabel:l.sellabel,odds:l.odds,stake,ts:Date.now()};
+  } else {
+    bet={id,punter,acca:true,odds:combinedOdds(),stake,ts:Date.now(),sellabel:'ACCA',mlabel:legs.length+'-leg acca',
+      legs:legs.map(l=>({key:l.key,a:l.a,b:l.b,round:l.round,market:l.market,mlabel:l.mlabel,selection:l.selection,sellabel:l.sellabel,odds:l.odds}))};
+  }
+  bets.push(bet); legs=[]; renderBetting();
   try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bet)});
     if(!r.ok) throw 0; const j=await r.json(); if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; } renderBetting(); }
   catch(e){ try{localStorage.setItem('lgm_bets',JSON.stringify(bets));}catch(_){}; renderBetting(); }
@@ -1209,6 +1411,7 @@ async function loadBets(){
   catch(e){ try{ bets=JSON.parse(localStorage.getItem('lgm_bets')||'[]'); }catch(_){ bets=[]; }
     try{ roster=JSON.parse(localStorage.getItem('lgm_roster')||'[]'); }catch(_){ roster=[]; } betServer=false; }
   renderBetting();
+  if(typeof renderWrapped==='function') renderWrapped();   // book cards depend on bets
 }
 
 
@@ -1251,14 +1454,16 @@ async function syncLive(){
 /* ---------- TABS ---------- */
 function setTab(t){
   document.querySelectorAll('section').forEach(s=>{
-    const which = s.id==='secBook' ? 'book' : (s.id==='secAdmin' ? 'admin' : 'pool');
+    const which = s.id==='secBook' ? 'book' : (s.id==='secAdmin' ? 'admin' : (s.id==='secWrapped' ? 'wrapped' : 'pool'));
     s.style.display = (which===t)?'':'none';
   });
-  const tp=document.getElementById('tabPool'), tb=document.getElementById('tabBook'), ta=document.getElementById('tabAdmin');
+  const tp=document.getElementById('tabPool'), tb=document.getElementById('tabBook'), ta=document.getElementById('tabAdmin'), tw=document.getElementById('tabWrapped');
   if(tp) tp.className='tabbtn'+(t==='pool'?' on':'');
   if(tb) tb.className='tabbtn'+(t==='book'?' on':'');
+  if(tw) tw.className='tabbtn'+(t==='wrapped'?' on':'');
   if(ta) ta.className='tabbtn adminbtn'+(t==='admin'?' on':'');
-  try{ history.replaceState(null,'',t==='book'?'#book':(t==='admin'?'#admin':location.pathname+location.search)); }catch(e){}
+  const hash=t==='book'?'#book':t==='admin'?'#admin':t==='wrapped'?'#wrapped':location.pathname+location.search;
+  try{ history.replaceState(null,'',hash); }catch(e){}
   if(t==='admin') ensureAdmin();
 }
 
@@ -1363,7 +1568,7 @@ loadReactions();
 (async()=>{ if(!(await syncLiveAPI())) syncLive(); })();
 loadBets();
 setInterval(loadBets, 60000);
-try{ const _h=(typeof location!=='undefined'&&location.hash)||''; setTab(_h==='#admin'?'admin':(_h==='#book'?'book':'pool')); }catch(e){}
+try{ const _h=(typeof location!=='undefined'&&location.hash)||''; setTab(_h==='#admin'?'admin':_h==='#book'?'book':_h==='#wrapped'?'wrapped':'pool'); }catch(e){}
 
 </script>
 </body>

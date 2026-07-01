@@ -113,14 +113,34 @@ export default async (req) => {
     if (cached && (Date.now() - cached.ts) < TTL_MS)
       return Response.json({ ok:true, source:cached.source, cached:true, ts:cached.ts, matches:cached.matches });
 
-    let result = null, errs = [];
-    if (token) { try { result = await fromFootballData(token); } catch(e){ errs.push(String(e)); } }
-    if (!result) { try { result = await fromWorldcup26(); } catch(e){ errs.push(String(e)); } }
-    if (!result) {
+    // Fetch both in parallel. worldcup26 tends to be FRESHER for in-play scores;
+    // football-data is authoritative for FINISHED matches (clean penalty-shootout winners).
+    let fd = null, wc = null; const errs = [];
+    const [fdR, wcR] = await Promise.allSettled([
+      token ? fromFootballData(token) : Promise.reject(new Error('no token')),
+      fromWorldcup26()
+    ]);
+    if (fdR.status === 'fulfilled') fd = fdR.value; else errs.push('fd:'+fdR.reason);
+    if (wcR.status === 'fulfilled') wc = wcR.value; else errs.push('wc:'+wcR.reason);
+
+    if (!fd && !wc) {
       if (cached) return Response.json({ ok:true, source:cached.source, stale:true, ts:cached.ts, matches:cached.matches });
       return Response.json({ ok:false, error:errs.join(' | ') || 'no source available' });
     }
-    const out = { ts:Date.now(), source:result.source, matches:result.matches };
+
+    // Merge by match. Seed with worldcup26 (fresh live + FT), then let football-data
+    // FINISHED results override (authoritative); football-data LIVE only fills gaps.
+    const K = (a,b) => [a,b].sort().join('|');
+    const byKey = new Map();
+    if (wc) wc.matches.forEach(m => byKey.set(K(m.t1,m.t2), m));
+    if (fd) fd.matches.forEach(m => {
+      const k = K(m.t1,m.t2), ex = byKey.get(k);
+      if (m.status === 'FT') byKey.set(k, m);        // finished: football-data wins (pens)
+      else if (!ex) byKey.set(k, m);                 // live/only-in-fd: fill gap
+    });
+    const matches = [...byKey.values()];
+    const source = (fd && wc) ? 'football-data.org + worldcup26.ir' : (fd ? 'football-data.org' : 'worldcup26.ir');
+    const out = { ts:Date.now(), source, matches };
     await store.setJSON('cache', out);
     return Response.json({ ok:true, ...out, count:result.matches.length });
   } catch (e) {
