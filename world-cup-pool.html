@@ -301,6 +301,8 @@ section{margin:26px 0}
 .crowdtag{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8fd0ff;
   background:rgba(76,141,255,.14);border:1px solid rgba(76,141,255,.4);border-radius:6px;padding:1px 6px;margin-left:6px}
 
+.feed{display:flex;flex-direction:column;gap:5px}
+.feed .chip{display:inline-block;border-radius:3px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -1090,6 +1092,15 @@ function renderBetting(){
         <button class="btn ghost" onclick="cancelSlip()">✕</button>
       </div></div>`;
   }
+  const feed=[...bets].sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,15);
+  h+=`<div class="bsub">Live bets — the whole book</div>`;
+  if(!feed.length) h+=`<div class="note" style="padding:2px 0 8px">No bets on the board yet — be the first.</div>`;
+  else h+=`<div class="feed">`+feed.map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
+    const mg=OWN[b.punter]; const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
+    return `<div class="mybet ${cls}"><span><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b>${mg?'':'<span class="crowdtag">crowd</span>'} <span style="color:var(--dim)">·</span> ${b.sellabel||b.selection} <span style="color:var(--dim)">· ${b.mlabel||b.market}${b.a?` · ${b.a} v ${b.b}`:''}${b.ts?` · ${fmtTs(b.ts)}`:''}</span></span>
+      <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`;
+  }).join('')+`</div>`;
+
   const bd=balances();
   if(bd.length){
     h+=`<div class="bsub">Book standings</div><div class="blead">`+
