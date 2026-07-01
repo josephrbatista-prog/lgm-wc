@@ -90,3 +90,11 @@ Visit **lgm-wc.netlify.app/.netlify/functions/live** directly — you'll see raw
   league id. (I can't test the live API from my end, so this one-time check is where we confirm it.)
 
 Either way, if anything's off it just keeps using openfootball, so the site stays working.
+
+---
+
+## The Book (group betting) — nothing extra to set up
+The betting layer works the same way as Reactions: it stores everyone's bets in Netlify Blobs via
+`netlify/functions/bets.mjs`. **No API key or env var needed.** It just requires the GitHub deploy
+(so the functions run). Bets are play-money only and settle automatically from whatever results feed
+the site is using. Until deployed (or if opened as a local file) it falls back to per-device storage.
