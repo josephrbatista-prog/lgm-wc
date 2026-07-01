@@ -305,6 +305,21 @@ section{margin:26px 0}
 .feed .chip{display:inline-block;border-radius:3px;vertical-align:middle}
 .adminbtn{margin-left:auto;opacity:.6;padding:7px 12px}
 .adminbtn.on{opacity:1}
+
+/* ===== live layer ===== */
+.liveStrip{max-width:1120px;margin:12px auto 0;padding:0 20px}
+.liveWrap{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;background:linear-gradient(90deg,rgba(255,77,77,.16),rgba(255,77,77,.03));border:1px solid rgba(255,93,59,.5);border-radius:12px;padding:10px 14px}
+.liveLead{display:inline-flex;align-items:center;gap:7px;font-family:var(--disp,'Barlow Condensed');font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#ff7a5c;font-size:14px}
+.liveMatch{font-size:14px} .liveMatch b{color:#fff;font-variant-numeric:tabular-nums;margin:0 3px}
+.pulse{width:9px;height:9px;border-radius:50%;background:#ff3b3b;animation:pl 1.4s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(255,59,59,.6)}70%{box-shadow:0 0 0 7px rgba(255,59,59,0)}100%{box-shadow:0 0 0 0 rgba(255,59,59,0)}}
+.derby.live{border-color:rgba(255,93,59,.55)}
+.derbyLive{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#ff7a5c;margin-bottom:7px}
+.derbyLive b{color:#fff;font-variant-numeric:tabular-nums}
+.inplay{display:flex;flex-direction:column;gap:5px;margin-bottom:6px}
+.inplayrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel2);border:1px solid rgba(255,93,59,.4);border-radius:9px;padding:8px 11px;font-size:13px}
+.inplayrow b{color:#fff;font-variant-numeric:tabular-nums}
+.locktag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#ff9077}
 </style>
 </head>
 <body>
@@ -325,6 +340,8 @@ section{margin:26px 0}
       </div>
     </div>
   </div>
+
+  <div id="liveStrip" class="liveStrip" style="display:none"></div>
 
   <nav class="tabs">
     <button class="tabbtn on" id="tabPool" onclick="setTab('pool')">🏆 Pool</button>
@@ -615,6 +632,16 @@ function buildStatus(useScenario){
   return st;
 }
 function ownerOf(team){ for(const o in OWN){ if(OWN[o].teams.some(t=>t[0]===team)) return o; } return null; }
+function isLivePair(a,b){ return LIVE_NOW.some(x=>[x.t1,x.t2].sort().join('|')===[a,b].sort().join('|')); }
+function liveScore(a,b){ return LIVE_NOW.find(x=>[x.t1,x.t2].sort().join('|')===[a,b].sort().join('|'))||null; }
+function renderLiveStrip(){
+  const el=document.getElementById('liveStrip'); if(!el) return;
+  if(!LIVE_NOW||!LIVE_NOW.length){ el.style.display='none'; el.innerHTML=''; return; }
+  el.style.display='';
+  el.innerHTML='<div class="liveWrap"><span class="liveLead"><span class="pulse"></span>Live now</span>'+
+    LIVE_NOW.map(m=>`<span class="liveMatch">${FLAG[m.t1]||''} ${m.t1} <b>${m.g1}–${m.g2}</b> ${m.t2} ${FLAG[m.t2]||''}</span>`).join('')+
+    '</div>';
+}
 function teamRec(team){ for(const o in OWN){ const t=OWN[o].teams.find(x=>x[0]===team); if(t) return t; } return null; }
 function groupPts(t){ return 2*t[1]+t[2]; }
 function stStageIn(status,name){ const s=status[name]; return s?s.st:'group'; }
@@ -702,8 +729,10 @@ function renderAll(){
     if(m[2]!==null) return;
     const [a,b,,d]=m; const oa=ownerOf(a), ob=ownerOf(b), ca=OWN[oa].color, cb=OWN[ob].color;
     const pick=scenario[i]||null;
+    const lv=liveScore(a,b);
     const btn=(team,c)=>`<button class="pickbtn ${pick===team?'on':''}" style="--pc:${c}" onclick="setPick(${i},'${team.replace(/'/g,"\\'")}')">${pick===team?'✓ ':''}${team} through</button>`;
-    db+=`<div class="derby ${pick?'decided':''}">
+    db+=`<div class="derby ${pick?'decided':''} ${lv?'live':''}">
+      ${lv?`<div class="derbyLive"><span class="pulse"></span>LIVE · ${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}</div>`:''}
       <div class="when">${d} · +4 &amp; last 16 on the line</div>
       <div class="side ${pick===a?'winr':pick&&pick!==a?'losr':''}"><span class="fl">${FLAG[a]}</span><span class="tn">${a}</span>
         <span class="ow"><span class="miniChip" style="background:${ca}"></span>${oa}</span></div>
@@ -753,6 +782,7 @@ function renderAll(){
 
   // Re-run sim to reflect scenario
   runSim();
+  if(typeof renderLiveStrip==='function') renderLiveStrip();
   if(typeof renderBetting==='function') renderBetting();
   window.__MGRS = MGRS; // for story cards / roasts
 }
@@ -993,6 +1023,7 @@ function renderAwards(){
 /* ---------- THE BOOK · group betting (play money) ---------- */
 const BANK_START=1000;
 const RESULTS={};                 // matchKey -> {a,b,g1,g2,p1,p2,winner}  (filled by the live feed)
+let LIVE_NOW=[];                   // in-progress matches (display only; never settles anything)
 const keyOf=(a,b)=>[a,b].sort().join('|');
 const round2=x=>Math.round(x*100)/100;
 function recordResult(a,b,g1,g2,p1,p2,winner){ RESULTS[keyOf(a,b)]={a,b,g1,g2,p1,p2,winner}; }
@@ -1020,7 +1051,7 @@ function marketsFor(m){
 function knockoutMatches(){
   const out=[];
   const wof=(a,b)=>{ if(!a||!b) return null; const r=RESULTS[keyOf(a,b)]; return r?r.winner:null; };
-  const add=(round,a,b)=>{ if(!a||!b) return; const r=RESULTS[keyOf(a,b)]; out.push({round,key:keyOf(a,b),a,b,finished:!!r,winner:r?r.winner:null}); };
+  const add=(round,a,b)=>{ if(!a||!b) return; const r=RESULTS[keyOf(a,b)]; out.push({round,key:keyOf(a,b),a,b,finished:!!r,winner:r?r.winner:null,live:isLivePair(a,b)}); };
   const r32w=R32.map(r=>r[2]);
   R32.forEach(r=>add('Round of 32', r[0], r[1]));
   const r16pairs=R16.map(([i,j])=>[r32w[i],r32w[j]]); r16pairs.forEach(([a,b])=>add('Round of 16',a,b));
@@ -1121,7 +1152,14 @@ function renderBetting(){
         <span class="brec">${p.won}W-${p.lost}L${p.open?` · ${p.open} open`:''}</span>
         <span class="bbal">${Math.round(p.bal)}<small>pts</small></span></div>`;}).join('')+`</div>`;
   }
-  const open=knockoutMatches().filter(m=>!m.finished);
+  const km=knockoutMatches();
+  const inplay=km.filter(m=>!m.finished&&m.live);
+  const open=km.filter(m=>!m.finished&&!m.live);
+  if(inplay.length){
+    h+=`<div class="bsub">In play — bets locked</div><div class="inplay">`+
+      inplay.map(m=>{ const lv=liveScore(m.a,m.b); const sc=lv?`${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}`:`${m.a} v ${m.b}`;
+        return `<div class="inplayrow"><span><span class="pulse" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>${m.round} · ${sc}</span><span class="locktag">🔒 locked · settles at FT</span></div>`; }).join('')+`</div>`;
+  }
   h+=`<div class="bsub">Open matches</div>`;
   if(!open.length) h+=`<div class="note" style="padding:2px 0 8px">Nothing to bet on this second — new matches open the moment the next round's teams are decided.</div>`;
   open.forEach(m=>{
@@ -1156,6 +1194,7 @@ async function placeSlip(){
   const i=document.getElementById('stakeInput'); const stake=Math.floor(parseInt(i&&i.value)||0); const bal=myBalance();
   if(stake<1){ alert('Enter a stake.'); return; }
   if(stake>bal){ alert('You only have '+Math.round(bal)+' pts.'); return; }
+  if(isLivePair(slip.a,slip.b)){ alert('That match has kicked off — bets are closed.'); slip=null; renderBetting(); return; }
   const bet={id:'b'+Date.now()+Math.random().toString(36).slice(2,6),punter,key:slip.key,a:slip.a,b:slip.b,round:slip.round,
     market:slip.market,mlabel:slip.mlabel,selection:slip.selection,sellabel:slip.sellabel,odds:slip.odds,stake,ts:Date.now()};
   bets.push(bet); slip=null; renderBetting();
@@ -1194,6 +1233,7 @@ function applyLive(data){
   R32.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r){ row[2]=r.win; if(r.note&&!row[4]) row[4]=r.note; } });
   GROUPS.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r) row[2]=r.win; });
   Object.keys(GF).forEach(k=>{ if(k in tg) GF[k]=tg[k]; });
+  LIVE_NOW = [];
   return Object.keys(pair).length;
 }
 async function syncLive(){
@@ -1278,10 +1318,11 @@ async function adminWipe(){
 //   [{t1,t2,g1,g2,p1,p2}]  (g=goals incl. extra time, p=penalty score or null)
 function applyMatches(rows){
   const FINAL={FT:1,AET:1,PEN:1,AWD:1,WO:1};                          // only count finished matches
-  const pair={}, tg={};
+  const pair={}, tg={}, live=[];
   rows.forEach(m=>{
     const t1=m.t1, t2=m.t2; if(!(t1 in FLAG)||!(t2 in FLAG)) return;
-    if(m.status && !FINAL[m.status]) return;                          // ignore in-progress / scheduled
+    if(m.status==='LIVE'){ if(m.g1!=null&&m.g2!=null) live.push({t1,t2,g1:m.g1,g2:m.g2}); return; }  // display only
+    if(m.status && !FINAL[m.status]) return;                          // ignore scheduled
     const g1=m.g1, g2=m.g2; if(g1==null||g2==null) return;            // not played yet
     tg[t1]=(tg[t1]||0)+g1; tg[t2]=(tg[t2]||0)+g2;
     let win=null;
@@ -1295,6 +1336,7 @@ function applyMatches(rows){
   R32.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r&&r.win){ row[2]=r.win; if(r.note&&!row[4]) row[4]=r.note; } });
   GROUPS.forEach(row=>{ const r=pair[[row[0],row[1]].sort().join('|')]; if(r) row[2]=r.win; });
   Object.keys(GF).forEach(k=>{ if(k in tg) GF[k]=tg[k]; });
+  LIVE_NOW = live;
   return Object.keys(pair).length;
 }
 let POLL=null;
@@ -1306,7 +1348,7 @@ async function syncLiveAPI(){
     const tag=document.getElementById('liveTag');
     if(tag) tag.textContent=`· LIVE · ${j.source||'live feed'} · updated ${LIVE_AT.toLocaleTimeString()}`;
     renderAll();
-    if(!POLL) POLL=setInterval(syncLiveAPI, 60000);   // refresh ~every minute
+    if(!POLL) POLL=setInterval(syncLiveAPI, 30000);   // refresh ~every 30s for live scores
     return true;
   }catch(e){ return false; }
 }

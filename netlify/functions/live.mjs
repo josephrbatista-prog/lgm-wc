@@ -13,7 +13,7 @@ import { getStore } from '@netlify/blobs';
 // Normalized match shape: { t1,t2, g1,g2, p1,p2, w, status:'FT' }
 //   t = pool nation names · g = goals (incl. extra time) · p = penalty score · w = explicit winner
 
-const TTL_MS = 60 * 1000;
+const TTL_MS = 30 * 1000;
 
 const MAP = {
   'Czech Republic':'Czechia','Czechia':'Czechia',
@@ -38,16 +38,19 @@ async function fromFootballData(token){
     { headers: { 'X-Auth-Token': token } });
   if (!r.ok) throw new Error('football-data '+r.status);
   const j = await r.json();
-  const matches = (j.matches||[]).filter(x=>x.status==='FINISHED').map(x=>{
+  const matches = (j.matches||[]).map(x=>{
+    const isFT = x.status==='FINISHED';
+    const isLive = x.status==='IN_PLAY' || x.status==='PAUSED';
+    if (!isFT && !isLive) return null;
     const t1=toPool(x.homeTeam&&x.homeTeam.name), t2=toPool(x.awayTeam&&x.awayTeam.name);
     const ft=(x.score&&x.score.fullTime)||{}; const pen=(x.score&&x.score.penalties)||null;
     let w=null;
-    if (x.score&&x.score.winner==='HOME_TEAM') w=t1;
-    else if (x.score&&x.score.winner==='AWAY_TEAM') w=t2;
+    if (isFT && x.score&&x.score.winner==='HOME_TEAM') w=t1;
+    else if (isFT && x.score&&x.score.winner==='AWAY_TEAM') w=t2;
     return { t1,t2, g1:N(ft.home), g2:N(ft.away),
-      p1:pen?N(pen.home):null, p2:pen?N(pen.away):null, w, status:'FT' };
-  }).filter(m=>m.t1&&m.t2&&m.g1!=null&&m.g2!=null);
-  if (!matches.length) throw new Error('football-data: no finished matches');
+      p1:isFT&&pen?N(pen.home):null, p2:isFT&&pen?N(pen.away):null, w, status: isFT?'FT':'LIVE' };
+  }).filter(m=>m&&m.t1&&m.t2&&m.g1!=null&&m.g2!=null);
+  if (!matches.length) throw new Error('football-data: no matches');
   return { source:'football-data.org', matches };
 }
 
@@ -56,17 +59,21 @@ async function fromWorldcup26(){
   if (!r.ok) throw new Error('worldcup26 '+r.status);
   const j = await r.json();
   const games = j.games || j.data || (Array.isArray(j)?j:[]);
-  const isFin = x => String(x.finished).toUpperCase() === 'TRUE';
-  const matches = games.filter(isFin).map(g=>{
+  const isFin  = x => String(x.finished).toUpperCase() === 'TRUE';
+  const isLive = x => !isFin(x) && String(x.time_elapsed||'').toLowerCase() === 'live';
+  const matches = games.filter(g=>isFin(g)||isLive(g)).map(g=>{
+    const ft = isFin(g);
     const t1 = toPool(g.home_team_name_en), t2 = toPool(g.away_team_name_en);
     const g1 = N(g.home_score), g2 = N(g.away_score);
-    const p1 = N(g.home_penalty_score), p2 = N(g.away_penalty_score);
+    const p1 = ft?N(g.home_penalty_score):null, p2 = ft?N(g.away_penalty_score):null;
     let w = null;
-    if (p1!=null && p2!=null && p1!==p2) w = p1>p2 ? t1 : t2;   // shootout winner
-    else if (g1!=null && g2!=null) { if (g1>g2) w=t1; else if (g2>g1) w=t2; }
-    return { t1, t2, g1, g2, p1, p2, w, status:'FT' };
+    if (ft) {
+      if (p1!=null && p2!=null && p1!==p2) w = p1>p2 ? t1 : t2;   // shootout winner
+      else if (g1!=null && g2!=null) { if (g1>g2) w=t1; else if (g2>g1) w=t2; }
+    }
+    return { t1, t2, g1, g2, p1, p2, w, status: ft?'FT':'LIVE' };
   }).filter(m => m.t1 && m.t2 && m.g1!=null && m.g2!=null);
-  if (!matches.length) throw new Error('worldcup26: no finished matches');
+  if (!matches.length) throw new Error('worldcup26: no matches');
   return { source:'worldcup26.ir', matches };
 }
 
