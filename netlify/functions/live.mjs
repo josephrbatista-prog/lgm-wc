@@ -32,9 +32,15 @@ const norm = s => (s||'').toLowerCase().replace(/[^a-z]/g,'');
 const NORM = {}; for (const [k,v] of Object.entries(MAP)) NORM[norm(k)] = v;
 const toPool = name => !name ? name : (MAP[name] || NORM[norm(name)] || name);
 const N = v => { const x = Number(v); return Number.isFinite(x) ? x : null; };
+// Bounded fetch so one slow/hanging source can never stall the whole function.
+async function fetchT(url, opts={}, ms=6000){
+  const ac = new AbortController(); const t = setTimeout(()=>ac.abort(), ms);
+  try { return await fetch(url, { ...opts, signal: ac.signal }); }
+  finally { clearTimeout(t); }
+}
 
 async function fromFootballData(token){
-  const r = await fetch('https://api.football-data.org/v4/competitions/WC/matches',
+  const r = await fetchT('https://api.football-data.org/v4/competitions/WC/matches',
     { headers: { 'X-Auth-Token': token } });
   if (!r.ok) throw new Error('football-data '+r.status);
   const j = await r.json();
@@ -55,7 +61,7 @@ async function fromFootballData(token){
 }
 
 async function fromWorldcup26(){
-  const r = await fetch('https://worldcup26.ir/get/games');
+  const r = await fetchT('https://worldcup26.ir/get/games');
   if (!r.ok) throw new Error('worldcup26 '+r.status);
   const j = await r.json();
   const games = j.games || j.data || (Array.isArray(j)?j:[]);
