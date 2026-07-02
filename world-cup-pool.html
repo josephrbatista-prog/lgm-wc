@@ -62,15 +62,15 @@ section{margin:26px 0}
 .row.lead .pos{color:var(--gold)}
 .mgr{display:flex;align-items:center;gap:9px;min-width:0}
 .chip{width:12px;height:26px;border-radius:4px;flex:0 0 auto}
-.mgr .nm{font-weight:700;font-size:17px}
+.mgr .nm{font-weight:700;font-size:17px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .mgr .meta{color:var(--mut);font-size:12px}
 .pts{text-align:right}.pts .big{font-weight:700;font-size:22px}
 .pts .u{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px}
 .alivebadge{display:inline-block;font-size:11px;font-weight:700;color:#bff0d0;
   background:rgba(31,143,78,.2);border:1px solid rgba(31,143,78,.5);
   padding:1px 7px;border-radius:999px;margin-left:6px}
-.jakepic{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:0 0 auto;
-  border:2px solid #FF9F45;box-shadow:0 2px 10px rgba(0,0,0,.55)}
+.jakepic{width:28px;height:28px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  border:2px solid #FF9F45;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .roster{display:none;padding:4px 14px 14px;background:var(--panel2)}
 .roster.open{display:block}
 .tm{display:grid;grid-template-columns:26px 1fr auto auto;align-items:center;gap:8px;
@@ -85,13 +85,25 @@ section{margin:26px 0}
 .st.outg{color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line)}
 
 /* R32 swing games */
-.recap{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px}
-@media(max-width:620px){.recap{grid-template-columns:1fr}}
-.rc{display:flex;align-items:center;gap:8px;font-size:13px;padding:9px 11px;
-  background:var(--panel2);border:1px solid var(--line);border-radius:10px}
-.rc .w{font-weight:700}.rc .adv{color:#8be0a8;font-weight:700}
-.rc .x{color:var(--dim);text-decoration:line-through}
+.recap{padding:14px}
+.recapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.recapRound{grid-column:1/-1;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:14px;color:var(--gold);margin:12px 0 8px;display:flex;align-items:center;gap:8px}
+.recapRound:first-child{margin-top:0}
+.recapRound span{font-family:inherit;font-weight:600;font-size:10px;color:var(--dim);letter-spacing:.5px}
+@media(max-width:620px){.recapGrid{grid-template-columns:1fr}}
+.rc{display:flex;flex-direction:column;gap:9px;font-size:13px;padding:12px 13px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:12px}
+.rc .rchd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc .w{font-weight:800}.rc .adv{color:#8be0a8;font-weight:700}
+.rc .x{color:var(--dim)}
+.rc .rcsc{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.02em;padding:0 3px}
+.rc .pens{font-size:9.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(212,160,23,.4);border-radius:6px;padding:1px 5px;white-space:nowrap}
 .rc .tagi{margin-left:auto;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+.punds{display:flex;flex-direction:column;gap:7px;border-top:1px dashed var(--line);padding-top:9px}
+.pund{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.34;color:var(--ink)}
+.pav{flex:0 0 auto;width:30px;height:30px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.pav svg{display:block;width:30px;height:30px}
+.pq b{color:var(--gold)}
 .derbies{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:14px}
 @media(max-width:820px){.derbies{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.derbies{grid-template-columns:1fr}}
@@ -164,6 +176,32 @@ section{margin:26px 0}
 
 .awards{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
 @media(max-width:620px){.awards{grid-template-columns:1fr}}
+.zpr{padding:14px;display:flex;flex-direction:column;gap:8px}
+.zrow{display:grid;grid-template-columns:30px 40px 1fr;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+.zrow.zking{background:linear-gradient(90deg,rgba(255,210,74,.15),rgba(255,210,74,.02));border-color:rgba(255,210,74,.55)}
+.zpos{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;text-align:center;color:var(--mut);line-height:1}
+.zrow.zking .zpos{color:var(--gold)}
+.zav{width:40px;height:40px}.zav svg{width:40px;height:40px;display:block}
+.zchip{width:12px;height:34px;border-radius:4px;justify-self:center}
+.zbody{min-width:0}
+.zname{font-weight:700;font-size:17px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.zrow.zking .zname{color:#ffe7a3}
+.zpts{font-size:12px;color:var(--mut);font-weight:600}
+.ztag{font-size:10.5px;font-weight:800;color:var(--gold);border:1px solid rgba(255,210,74,.5);border-radius:999px;padding:1px 8px;text-transform:uppercase;letter-spacing:.05em}
+.zmv{font-size:12px;font-weight:800;border-radius:999px;padding:1px 7px}
+.zmv.up{color:#22D3A0;background:rgba(34,211,160,.13)}
+.zmv.down{color:#ff6b6b;background:rgba(255,107,107,.13)}
+.zmv.flat{color:var(--dim)}
+.zcom{margin-top:3px;color:var(--mut);font-size:13.5px;line-height:1.45;font-style:italic}
+.booktabs{display:flex;gap:6px;margin:10px 0 12px}
+.bktab{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--mut);font-weight:700;font-size:14px;cursor:pointer;text-align:center}
+.bktab.on{background:var(--gold);color:#1a1200;border-color:var(--gold)}
+.betgrouphd{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:12.5px;color:var(--mut);margin:14px 0 6px;display:flex;align-items:center;gap:8px}
+.betgrouphd .cnt{color:var(--dim);font-weight:700}
+.mybet.me{box-shadow:inset 3px 0 0 var(--gold)}
+.melpre{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(44,62,99,.18);border:1px solid rgba(44,62,99,.55)}
+.melhd{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:11.5px;color:#9db4e6;margin-bottom:2px}
+.melbody{font-size:13px;line-height:1.45;color:var(--mut);font-style:italic}
 .aw{display:flex;gap:11px;align-items:flex-start;background:var(--panel2);
   border:1px solid var(--line);border-radius:11px;padding:11px}
 .aw .em{font-size:26px;line-height:1}
@@ -356,6 +394,56 @@ section{margin:26px 0}
 .wcard .wbig{font-family:var(--disp,'Barlow Condensed');font-weight:800;font-size:30px;line-height:1.05;margin-top:6px}
 .wcard .wsub{color:var(--mut);font-size:12.5px;margin-top:5px}
 .wcard .wchip{width:11px;height:15px;border-radius:3px;display:inline-block;vertical-align:middle;margin-right:6px}
+
+/* floating bet slip */
+.betslip-float{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:calc(100% - 14px);max-width:544px;z-index:120;
+  background:rgba(13,18,30,.975);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(76,141,255,.55);border-bottom:0;border-radius:16px 16px 0 0;
+  box-shadow:0 -12px 34px rgba(0,0,0,.5);padding:10px 14px calc(12px + env(safe-area-inset-bottom,0px))}
+.betslip-float .sliphead{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;user-select:none}
+.betslip-float .slipl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.betslip-float .slipdot{width:8px;height:8px;border-radius:50%;background:#22D3A0;animation:slippulse 1.8s infinite}
+@keyframes slippulse{0%{box-shadow:0 0 0 0 rgba(34,211,160,.55)}70%{box-shadow:0 0 0 7px rgba(34,211,160,0)}100%{box-shadow:0 0 0 0 rgba(34,211,160,0)}}
+.betslip-float .sliptitle{font-weight:800;font-size:15px}
+.betslip-float .slipmeta{color:var(--mut);font-size:12.5px}
+.betslip-float .slipchev{transition:transform .18s;color:var(--mut);font-size:18px}
+.betslip-float.collapsed .slipchev{transform:rotate(180deg)}
+.betslip-float .slipbody{margin-top:10px;max-height:min(46vh,340px);overflow:auto}
+.betslip-float.collapsed .slipbody{display:none}
+.betslip-float .sliplegs{display:flex;flex-direction:column;gap:5px}
+.betslip-float .leg{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;background:rgba(255,255,255,.045);border-radius:8px;padding:6px 8px}
+.betslip-float .slipx{padding:2px 7px;font-size:12px}
+.betslip-float .slipin{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px}
+.betslip-float .slipin input{width:80px;background:#0c1220;border:1px solid #24314c;color:#fff;border-radius:8px;padding:7px 9px;font-size:14px}
+.betslip-float .slipact{display:flex;gap:8px;margin-top:9px}
+.betslip-float .slipplace{flex:1;font-weight:800}
+.betslip-float .slipnote{padding:7px 0 0}
+body.has-slip #secBook{padding-bottom:360px}
+body.has-slip-min #secBook{padding-bottom:80px}
+
+/* recap accordion */
+details.rc>summary{list-style:none;cursor:pointer}
+details.rc>summary::-webkit-details-marker{display:none}
+details.rc>summary::marker{content:''}
+.rc .rcchev{margin-left:auto;color:var(--dim);font-size:15px;transition:transform .18s;flex:0 0 auto}
+details.rc[open] .rcchev{transform:rotate(180deg)}
+details.rc .punds{margin-top:9px}
+
+/* in-table reactions */
+.mgrreacts{display:inline-flex;align-items:center;gap:5px;font-weight:400;flex-wrap:wrap}
+.rcounts{display:inline-flex;gap:4px;flex-wrap:wrap}
+.rct{font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:20px;padding:1px 7px;line-height:1.6}
+.rct.mine{border-color:var(--gold);color:var(--gold)}
+.reactpick{position:relative;display:inline-flex}
+.reactadd{height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;border-radius:20px;border:1px dashed var(--line);background:transparent;color:var(--mut);cursor:pointer;padding:0 7px;opacity:.75}
+.reactadd span{font-size:9px;margin-left:1px}
+.reactadd:hover{color:var(--ink);border-color:var(--mut)}
+.reactpick:hover .reactpop,.reactpick.open .reactpop{display:flex}
+.reactpop{display:none;position:absolute;top:calc(100% + 6px);right:0;left:auto;z-index:60;background:rgba(13,18,30,.98);border:1px solid var(--line);border-radius:12px;padding:5px;gap:2px;box-shadow:0 10px 26px rgba(0,0,0,.55)}
+.reactopt{font-size:17px;background:transparent;border:0;border-radius:9px;padding:4px 6px;cursor:pointer;display:inline-flex;align-items:center;gap:2px;color:var(--ink)}
+.reactopt b{font-size:10px;color:var(--mut);font-weight:700}
+.reactopt.mine{background:rgba(212,160,23,.2)}
+.reactopt:hover{background:rgba(255,255,255,.08)}
 </style>
 </head>
 <body>
@@ -393,13 +481,13 @@ section{margin:26px 0}
     <div class="card" id="tableCard"></div>
   </section>
 
-  <!-- ROUND OF 32 -->
+  <!-- KNOCKOUTS -->
   <section>
-    <div class="h"><span class="disp">Round of 32</span><span class="tag">7 of 16 played</span></div>
+    <div class="h"><span class="disp">Knockouts</span><span class="tag" id="koTag">the bracket, live</span></div>
     <div class="card">
-      <div style="padding:14px 14px 2px" class="note"><b style="color:var(--ink)">Done and dusted.</b> Winners banked +4 and march on; losers are out.</div>
+      <div style="padding:14px 14px 2px" class="note"><b style="color:var(--ink)">Done and dusted.</b> Every settled knockout tie — the score, who banked the points, and the punditry. Updates itself as each round is played.</div>
       <div class="recap" id="recap"></div>
-      <div style="padding:6px 14px 2px" class="note"><b style="color:var(--gold)">Still to come — and every single tie is a manager derby.</b> Nine games left, and in each one two of you own the teams. One survives with a live shot at the whole thing; the other's team goes home.</div>
+      <div style="padding:6px 14px 2px" class="note"><b style="color:var(--gold)">Still to come — every tie a manager derby.</b> The current round's fixtures, live. Two of you own the teams in each one; the winner banks the points and marches on, the loser's out. The bracket advances itself all the way to the final.</div>
       <div id="scenarioBar"></div>
       <div class="derbies" id="derbies"></div>
     </div>
@@ -430,7 +518,7 @@ section{margin:26px 0}
         <div class="fav" id="simFav">Press run to play out the rest of the World Cup thousands of times.</div>
       </div>
       <div class="note" style="padding:0 14px 14px">
-        The nine remaining Round-of-32 ties — and every round after — are played on the <b>real, fixed bracket</b> (no redraws; France's side, Argentina's side, all locked). Each match is decided by the teams' current <b>bookmakers' odds to win the tournament</b>, so the favourites carry their real market edge all the way to the final.
+        Every remaining knockout tie — every round through the final — is played on the <b>real, fixed bracket</b> (no redraws; France's side, Argentina's side, all locked). Each match is decided by the teams' current <b>bookmakers' odds to win the tournament</b>, so the favourites carry their real market edge all the way to the final.
       </div>
     </div>
   </section>
@@ -461,6 +549,12 @@ section{margin:26px 0}
     <div class="card"><div class="awards" id="awards"></div></div>
   </section>
 
+  <!-- ZLATAN POWER RANKINGS -->
+  <section>
+    <div class="h"><span class="disp">Zlatan's Power Rankings</span><span class="tag">by Zlatan</span></div>
+    <div class="card"><div class="zpr" id="zpr"></div></div>
+  </section>
+
     <!-- GRUDGE MATRIX -->
   <section>
     <div class="h"><span class="disp">Grudge Matrix</span><span class="tag">head-to-head · group + knockout</span></div>
@@ -474,14 +568,6 @@ section{margin:26px 0}
     <div class="h"><span class="disp">Golden Boot</span><span class="tag">side pool · total goals</span></div>
     <div class="card"><div class="boot" id="boot"></div>
       <div class="note" style="padding:0 14px 14px">Total goals scored by each manager's six nations, <b>auto-updated from the live results feed</b>. (Falls back to a manual count if the feed can't be reached.)</div>
-    </div>
-  </section>
-
-  <!-- REACTIONS -->
-  <section>
-    <div class="h"><span class="disp">Reactions</span><span class="tag">tap to vote</span></div>
-    <div class="card"><div class="reacts" id="reactions"></div>
-      <div class="note" id="reactNote" style="padding:0 14px 14px"></div>
     </div>
   </section>
 
@@ -652,6 +738,37 @@ const DERBY_LINE={
  "Argentina":"The tournament FAVOURITE (Fink) vs Harris's plucky Cape Verde. If the minnows win, it's the greatest day in this group chat's history.",
  "Colombia":"Fink vs Harris, the sequel. Harris can lose Ghana and yawn; Fink needs Colombia deep or his season flatlines in mid-table."
 };
+/* ---------- MEL'S PREGAME ANALYSIS (Benjamin Martin, The Patriot — any tie) ---------- */
+const MEL_PRE=[
+ "Two lines will form on that field. {a} for {oa}, {b} for {ob}. When the smoke clears, one owner marches on with {pts} points and one goes home to bury the dead. Aim small, {oa}. Aim small, {ob}.",
+ "{oa} sends {a} into the clearing; {ob} answers with {b}. This is not a fixture, son — it is a duel at {pts} paces. The steady hand advances; the flincher does not.",
+ "Before this one I would tell both men what I told my boys: aim small, miss small. {a} and {b} each have it in them to win. Only one of them wants it like a man who has lost something.",
+ "A {round} tie, {pts} on the table, a place in the next round. {oa}'s {a} against {ob}'s {b}. Somewhere a barn is already burning — I just do not yet know whose.",
+ "{ob} believes {b} will march in, straight lines, drums beating, and take the field from {a}. That is how redcoats think. Ask {oa} how that tends to end.",
+ "This is ambush country. {a} and {b} both know these woods. {oa} and {ob} will tell you it is only a game — right up until the first shot, when they remember it never was.",
+ "Freedom is not given, it is taken — usually in a {round}, usually for {pts} points. {a} or {b}. {oa} or {ob}. One takes it; the other learns what taking feels like from the wrong end.",
+ "I have buried men who defended better than {b} will have to today — and better than {a}, if we are honest. {pts} points to the survivor. God be with the fool who hesitates.",
+ "{oa} carries {a}; {ob} carries {b}. Two flags, one field, one place in the next round. When it is done, one mends his flag and marches. The other folds it and goes home.",
+ "Stay the course, I would tell {a}. Stay the course, {b}. But courses end, and in a {round} they end for one of you today. {pts} points and a long walk home is the wager.",
+ "They will call this a match. I call it {oa} against {ob}, muskets loaded, {pts} points between them and the boat back to England. Aim small — both of you.",
+ "The favourite means nothing in the woods. {a} may be the stronger; {b} may want it the more. In a {round}, son, wanting it more has won more fields than strength ever did. {oa}, {ob} — we shall see."
+];
+const MEL_SELF=[
+ "A strange battle, this: {oa} owns both {a} and {b}. A man cannot lose a war he wages against himself — but he cannot win it clean, either. {pts} points move from {oa}'s left pocket to his right.",
+ "{oa} sends {a} to fight {b}, and both are his own. I have seen brother against brother, son, and it ends the same way every time — {oa} wins, {oa} loses, and someone still carries the bodies.",
+ "Both banners on that field belong to {oa}. There is no enemy here, only a mirror with {pts} points behind it. Aim small, {oa} — you are the redcoat and the militia both."
+];
+function melPregame(m){
+  const a=m.a,b=m.b,oa=ownerOf(a),ob=ownerOf(b);
+  const pts=({'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12})[m.round]||4;
+  const pool=(oa===ob)?MEL_SELF:MEL_PRE;
+  const key=m.key||(a+'|'+b); let h=0; for(let i=0;i<key.length;i++){ h=(h*31+key.charCodeAt(i))>>>0; }
+  return pool[h%pool.length]
+    .replace(/\{a\}/g,a).replace(/\{b\}/g,b)
+    .replace(/\{oa\}/g,oa||'someone').replace(/\{ob\}/g,ob||'someone')
+    .replace(/\{pts\}/g,pts).replace(/\{round\}/g,m.round);
+}
+
 
 const ROASTS={
  Harris:{reg:[
@@ -752,16 +869,39 @@ let scenario = {};                       // r32 index -> forced winner (pending 
 const isPending = i => R32[i][2]===null;
 const effWinner = i => R32[i][2]!==null ? R32[i][2] : (scenario[i]||null);
 
-/* ---------- DERIVE ---------- */
+/* ---------- DERIVE (full knockout progression — live-driven, self-advancing) ---------- */
+const ROUND_PTS=[4,6,8,10,12];   // R32, R16, QF, SF, Final
+// Resolve the whole bracket from a set of R32 winners (real or what-if); later-round winners
+// come from live RESULTS keyed by the two teams that actually reached that tie.
+function resolveBracket(r32winners){
+  const wof=(a,b)=>{ if(!a||!b) return null; const r=RESULTS[keyOf(a,b)]; return r?r.winner:null; };
+  const rounds=[];
+  rounds.push({name:'Round of 32',pts:ROUND_PTS[0],matches:R32.map((r,i)=>({a:r[0],b:r[1],w:r32winners[i]||null}))});
+  const p16=R16.map(([i,j])=>[r32winners[i]||null,r32winners[j]||null]); const w16=p16.map(([a,b])=>wof(a,b));
+  rounds.push({name:'Round of 16',pts:ROUND_PTS[1],matches:p16.map(([a,b],k)=>({a,b,w:w16[k]}))});
+  const pqf=QF.map(([i,j])=>[w16[i]||null,w16[j]||null]); const wqf=pqf.map(([a,b])=>wof(a,b));
+  rounds.push({name:'Quarter-final',pts:ROUND_PTS[2],matches:pqf.map(([a,b],k)=>({a,b,w:wqf[k]}))});
+  const psf=SF.map(([i,j])=>[wqf[i]||null,wqf[j]||null]); const wsf=psf.map(([a,b])=>wof(a,b));
+  rounds.push({name:'Semi-final',pts:ROUND_PTS[3],matches:psf.map(([a,b],k)=>({a,b,w:wsf[k]}))});
+  const champ=wof(wsf[0],wsf[1]);
+  rounds.push({name:'Final',pts:ROUND_PTS[4],matches:[{a:wsf[0]||null,b:wsf[1]||null,w:champ||null}]});
+  return rounds;
+}
+function koFromRounds(rounds){
+  const pts={}, out={}, wonIdx={}, pend={};
+  rounds.forEach((rd,ri)=>{ rd.matches.forEach(m=>{
+    if(!m.a||!m.b) return;
+    if(m.w){ pts[m.w]=(pts[m.w]||0)+rd.pts; wonIdx[m.w]=ri; const l=(m.w===m.a)?m.b:m.a; out[l]=rd.name; }
+    else { if(!out[m.a]) pend[m.a]=rd.name; if(!out[m.b]) pend[m.b]=rd.name; }
+  }); });
+  return {pts,out,wonIdx,pend};
+}
 function buildStatus(useScenario){
-  const st={};
-  R32.forEach((m,i)=>{
-    const [a,b]=m;
-    const w = useScenario ? effWinner(i) : (R32[i][2]);
-    if(w===null){ st[a]={st:'pending',opp:b,i}; st[b]={st:'pending',opp:a,i}; }
-    else { const l=(w===a)?b:a; st[w]={st:'won',opp:l,i}; st[l]={st:'lost',opp:w,i}; }
-  });
-  return st;
+  const r32w = R32.map((r,i)=> useScenario ? effWinner(i) : r[2]);
+  const rounds = resolveBracket(r32w);
+  const ko = koFromRounds(rounds);
+  const inR32 = new Set(); R32.forEach(r=>{ inR32.add(r[0]); inR32.add(r[1]); });
+  return { rounds, inR32, pts:ko.pts, out:ko.out, wonIdx:ko.wonIdx, pend:ko.pend };
 }
 function ownerOf(team){ for(const o in OWN){ if(OWN[o].teams.some(t=>t[0]===team)) return o; } return null; }
 function isLivePair(a,b){ return LIVE_NOW.some(x=>[x.t1,x.t2].sort().join('|')===[a,b].sort().join('|')); }
@@ -839,10 +979,40 @@ function renderLiveStrip(){
 }
 function teamRec(team){ for(const o in OWN){ const t=OWN[o].teams.find(x=>x[0]===team); if(t) return t; } return null; }
 function groupPts(t){ return 2*t[1]+t[2]; }
-function stStageIn(status,name){ const s=status[name]; return s?s.st:'group'; }
-function teamPtsIn(status,t){ return groupPts(t) + (stStageIn(status,t[0])==='won'?4:0); }
-function aliveIn(status,name){ const s=stStageIn(status,name); return s==='won'||s==='pending'; }
-function maxRemainIn(status,name){ const s=stStageIn(status,name); if(s==='won') return 6+8+10+12; if(s==='pending') return 4+6+8+10+12; return 0; }
+function stStageIn(status,name){
+  if(!status.inR32.has(name)) return 'group';
+  if(status.out[name]) return 'lost';
+  if(status.wonIdx[name]!=null) return 'won';
+  return 'pending';
+}
+function teamPtsIn(status,t){ return groupPts(t) + (status.pts[t[0]]||0); }
+function aliveIn(status,name){ return status.inR32.has(name) && !status.out[name]; }
+function maxRemainIn(status,name){
+  if(!status.inR32.has(name) || status.out[name]) return 0;
+  const wi=status.wonIdx[name]; let s=0; for(let k=(wi==null?0:wi+1);k<ROUND_PTS.length;k++) s+=ROUND_PTS[k]; return s;
+}
+const ROUND_SHORT={'Round of 32':'R32','Round of 16':'last 16','Quarter-final':'QF','Semi-final':'SF','Final':'final'};
+function stageInfo(status,name){
+  if(!status.inR32.has(name)) return {kind:'group'};
+  if(status.out[name]) return {kind:'out',round:status.out[name]};
+  const wi=status.wonIdx[name];
+  const nextRound = status.pend[name] || (wi!=null && wi<4 ? status.rounds[wi+1].name : null);
+  return {kind: wi==null?'pending':'through', nextRound, champion: wi===4};
+}
+function phaseNote(status){
+  let cur=null, lastComplete=null;
+  for(const rd of status.rounds){
+    const known=rd.matches.filter(m=>m.a&&m.b); if(!known.length) break;
+    const played=known.filter(m=>m.w).length;
+    if(played<known.length){ cur={rd,played,total:known.length}; break; }
+    lastComplete=rd;
+  }
+  if(!cur){ const champ=status.rounds[4].matches[0].w;
+    if(champ) return champ+' — your world champions'; 
+    return (lastComplete?lastComplete.name+' complete':'Knockouts')+' — next round to come'; }
+  if(cur.rd.name==='Round of 32') return cur.played+' of 16 last-32 ties in the books';
+  return cur.rd.name+' · '+cur.played+' of '+cur.total+' played';
+}
 
 function deriveMgrs(status){
   return Object.keys(OWN).map(o=>{
@@ -868,25 +1038,29 @@ function renderAll(){
   document.getElementById('kLeadPts').textContent = "+"+(MGRS[0].pts-MGRS[1].pts);
   document.getElementById('kAlive').textContent = ALIVE;
   document.getElementById('kBoard').textContent = TOTAL;
-  document.getElementById('stageNote').textContent = playedR32+" of 16 last-32 ties in the books";
+  document.getElementById('stageNote').textContent = phaseNote(status);
+  { const kt=document.getElementById('koTag'); if(kt) kt.textContent = phaseNote(status); }
 
   // Standings table
   const dateShort = d => d.replace('Wed ','').replace('Thu ','').replace('Fri ','');
   const stChip = (name)=>{
-    const s=stStageIn(status,name);
-    if(s==='won')   return '<span class="st r16">✓ in last 16</span>';
-    if(s==='pending')return '<span class="st pend">• R32 '+dateShort(R32[status[name].i][3])+'</span>';
-    if(s==='lost')  return '<span class="st outk">✕ out (R32)</span>';
-    return '<span class="st outg">out</span>';
+    const L=stageInfo(status,name);
+    if(L.kind==='group') return '<span class="st outg">out</span>';
+    if(L.kind==='out')   return '<span class="st outk">✕ out ('+(ROUND_SHORT[L.round]||L.round)+')</span>';
+    if(L.kind==='pending'){
+      if(L.nextRound==='Round of 32'){ const idx=R32.findIndex(r=>r[0]===name||r[1]===name); return '<span class="st pend">• R32 '+dateShort(R32[idx][3])+'</span>'; }
+      return '<span class="st pend">• '+(ROUND_SHORT[L.nextRound]||L.nextRound)+'</span>';
+    }
+    if(L.champion) return '<span class="st r16">🏆 champions</span>';
+    return '<span class="st r16">✓ into '+(ROUND_SHORT[L.nextRound]||L.nextRound)+'</span>';
   };
   let th='';
   MGRS.forEach((m,i)=>{
     th+=`<div class="row ${i===0?'lead':''}" onclick="this.nextElementSibling.classList.toggle('open')">
       <div class="pos">${i+1}</div>
       <div class="mgr"><span class="chip" style="background:${m.color}"></span>
-        <div><div class="nm">${m.name}<span class="alivebadge">${m.alive} alive</span></div>
-        <div class="meta">group ${m.W}-${m.D}-${m.L}</div></div>
-        ${m.name==='Jake'?`<img class="jakepic" src="${JAKE_PIC}" alt="Jake">`:''}</div>
+        <div><div class="nm">${m.name}<span class="alivebadge">${m.alive} alive</span>${m.name==='Jake'?`<img class="jakepic" src="${JAKE_PIC}" alt="Jake">`:''}<span class="mgrreacts" data-mgr="${m.name}" onclick="event.stopPropagation()">${reactionHTML(m.name)}</span></div>
+        <div class="meta">group ${m.W}-${m.D}-${m.L}</div></div></div>
       <div class="pts"><div class="big">${m.pts}</div><div class="u">pts</div></div>
     </div>
     <div class="roster">`;
@@ -908,36 +1082,60 @@ function renderAll(){
       <button class="btn ghost" onclick="resetScenario()">Reset to real results</button></div>`;
   } else { bar.innerHTML=''; }
 
-  // R32 recap (real results)
+  // Recap — ONLY the latest round with results (previous rounds drop off as the bracket advances).
+  // Each tie is an accordion: score always visible, pundit takes expand on tap.
+  const _RB = buildStatus(false).rounds;
+  let _showRi=-1;
+  for(let ri=0; ri<_RB.length; ri++){ if(_RB[ri].matches.some(m=>m.a&&m.b&&m.w)) _showRi=ri; }
   let rc='';
-  R32.filter(r=>r[2]!==null).forEach(([a,b,w,d,n])=>{
-    const loser=(w===a)?b:a, ow=ownerOf(w), ol=ownerOf(loser); const internal=ow===ol;
-    rc+=`<div class="rc">${FLAG[w]} <span class="w">${w}</span> <span class="adv">▲</span>
-      <span style="color:var(--dim)">bt</span> ${FLAG[loser]} <span class="x">${loser}</span>
-      <span class="tagi">${internal?ow+' (both)':ow+' ▸ '+ol}${n?' · '+n:''}</span></div>`;
-  });
+  if(_showRi<0){
+    rc=`<div class="note" style="padding:2px 0">No knockout ties settled yet — the first result lands here with the score and the pundit takes.</div>`;
+  } else {
+    const rd=_RB[_showRi];
+    const played=rd.matches.filter(m=>m.a&&m.b&&m.w);
+    rc+=`<div class="recapRound">${rd.name} <span>${played.length} settled${_showRi>0?' · earlier rounds in the books':''}</span></div><div class="recapGrid">`;
+    rd.matches.forEach((m,i)=>{
+      if(!(m.a&&m.b&&m.w)) return;
+      const a=m.a,b=m.b,w=m.w; const loser=(w===a)?b:a; const ow=ownerOf(w),ol=ownerOf(loser); const internal=ow===ol;
+      const gw=goalsFor(a,b,w),gl=goalsFor(a,b,loser),pw=pensFor(a,b,w),pl=pensFor(a,b,loser);
+      const pens=(pw!=null&&pl!=null),haveScore=(gw!=null&&gl!=null);
+      const head=haveScore?`${FLAG[w]} <span class="w">${w}</span> <span class="rcsc">${gw}–${gl}</span> <span class="x">${loser}</span> ${FLAG[loser]}${pens?` <span class="pens">${pw}–${pl} pens</span>`:''}`
+        :`${FLAG[w]} <span class="w">${w}</span> <span class="adv">▲</span> <span style="color:var(--dim)">bt</span> ${FLAG[loser]} <span class="x">${loser}</span>`;
+      const key=keyOf(a,b); const ek=key.replace(/'/g,"\\'"); const isOpen=RECAP_OPEN.has(key)?' open':'';
+      const idx=i + _showRi*7;
+      rc+=`<details class="rc"${isOpen} ontoggle="recapToggle('${ek}',this.open)">
+        <summary class="rchd">${head}<span class="tagi">${internal?(ow||'—')+' (both)':(ow||'—')+' ▸ '+(ol||'—')}</span><span class="rcchev">▾</span></summary>
+        ${punditRow(idx,w,loser,pens)}</details>`;
+    });
+    rc+=`</div>`;
+  }
   document.getElementById('recap').innerHTML=rc;
 
-  // Derbies with what-if toggles
-  let db='';
-  R32.forEach((m,i)=>{
-    if(m[2]!==null) return;
-    const [a,b,,d]=m; const oa=ownerOf(a), ob=ownerOf(b), ca=OWN[oa].color, cb=OWN[ob].color;
-    const pick=scenario[i]||null;
-    const lv=liveScore(a,b);
-    const btn=(team,c)=>`<button class="pickbtn ${pick===team?'on':''}" style="--pc:${c}" onclick="setPick(${i},'${team.replace(/'/g,"\\'")}')">${pick===team?'✓ ':''}${team} through</button>`;
+  // Still to come — the current round's ties (auto-advances R32 -> Final). What-if picks on R32.
+  let db=''; const PTS_LINE={'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12};
+  knockoutMatches().filter(m=>!m.finished).forEach(m=>{
+    const a=m.a,b=m.b; const oa=ownerOf(a), ob=ownerOf(b); if(!oa||!ob) return;
+    const ca=OWN[oa].color, cb=OWN[ob].color; const lv=liveScore(a,b);
+    const pts=PTS_LINE[m.round]||4;
+    const r32i = m.round==='Round of 32' ? R32.findIndex(r=>keyOf(r[0],r[1])===m.key) : -1;
+    const pick = r32i>=0 ? (scenario[r32i]||null) : null;
+    const dnote = r32i>=0 ? (R32[r32i][3]+' · ') : '';
+    const btn=(team,c)=> r32i>=0?`<button class="pickbtn ${pick===team?'on':''}" style="--pc:${c}" onclick="setPick(${r32i},'${team.replace(/'/g,"\\'")}')">${pick===team?'✓ ':''}${team} through</button>`:'';
+    const framing = oa===ob ? (oa+' owns both — a guaranteed points-mover') : (DERBY_LINE[a]||(oa+' vs '+ob+' — winner survives, loser out.'));
     db+=`<div class="derby ${pick?'decided':''} ${lv?'live':''}">
       ${lv?`<div class="derbyLive"><span class="pulse"></span>LIVE · ${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}</div>`:''}
-      <div class="when">${d} · +4 &amp; last 16 on the line</div>
+      <div class="when">${dnote}${m.round} · +${pts} &amp; a place in the next round</div>
       <div class="side ${pick===a?'winr':pick&&pick!==a?'losr':''}"><span class="fl">${FLAG[a]}</span><span class="tn">${a}</span>
         <span class="ow"><span class="miniChip" style="background:${ca}"></span>${oa}</span></div>
       <div class="vs">— vs —</div>
       <div class="side ${pick===b?'winr':pick&&pick!==b?'losr':''}"><span class="fl">${FLAG[b]}</span><span class="tn">${b}</span>
         <span class="ow"><span class="miniChip" style="background:${cb}"></span>${ob}</span></div>
-      <div class="picks">${btn(a,ca)}${btn(b,cb)}</div>
-      <div class="stake">${DERBY_LINE[a]||(oa+' vs '+ob+' — winner survives, loser out.')}</div>
+      ${r32i>=0?`<div class="picks">${btn(a,ca)}${btn(b,cb)}</div>`:''}
+      <div class="stake">${framing}</div>
+      <div class="melpre"><span class="melhd">🪓 Mel's pregame analysis</span><span class="melbody">${melPregame(m)}</span></div>
     </div>`;
   });
+  if(!db) db=`<div class="note" style="padding:2px 0">No ties teed up right now — the next round's fixtures appear here the moment their teams are decided.</div>`;
   document.getElementById('derbies').innerHTML=db;
 
   // Full potential
@@ -982,6 +1180,7 @@ function renderAll(){
   if(typeof renderHonours==='function') renderHonours();
   if(typeof renderWrapped==='function') renderWrapped();
   if(typeof renderBetting==='function') renderBetting();
+  renderZPR();
   window.__MGRS = MGRS; // for story cards / roasts
 }
 
@@ -1046,7 +1245,7 @@ const R16=[[2,5],[0,3],[1,4],[6,7],[11,10],[9,8],[14,13],[12,15]];
 const QF=[[0,1],[4,5],[2,3],[6,7]];
 const SF=[[0,1],[2,3]];
 
-function bankedBase(){ // real banked points only (group + real R32 wins)
+function bankedBase(){ // real banked points only (group + all real knockout wins, every round)
   const status=buildStatus(false); const base={};
   Object.keys(OWN).forEach(o=>{ base[o]=OWN[o].teams.reduce((s,t)=>s+teamPtsIn(status,t),0); });
   return base;
@@ -1057,15 +1256,16 @@ function simulate(N){
   const base=bankedBase();
   for(let s=0;s<N;s++){
     const add={}; names.forEach(m=>add[m]=0);
+    const rw=(a,b)=>{ if(!a||!b) return null; const r=RESULTS[keyOf(a,b)]; return r?r.winner:null; };
     const r32w=R32.map((mt,i)=>{
       if(mt[2]!==null) return mt[2];              // real winner (already in base)
       if(scenario[i]){ add[ownerOf(scenario[i])]+=4; return scenario[i]; } // forced what-if (+4)
       const w=match(mt[0],mt[1]); add[ownerOf(w)]+=4; return w;            // simulate (+4)
     });
-    const r16w=R16.map(([x,y])=>{ const w=match(r32w[x],r32w[y]); add[ownerOf(w)]+=6; return w; });
-    const qfw =QF.map(([x,y])=>{ const w=match(r16w[x],r16w[y]); add[ownerOf(w)]+=8; return w; });
-    const sfw =SF.map(([x,y])=>{ const w=match(qfw[x],qfw[y]); add[ownerOf(w)]+=10; return w; });
-    const king=match(sfw[0],sfw[1]); add[ownerOf(king)]+=12;
+    const r16w=R16.map(([x,y])=>{ const a=r32w[x],b=r32w[y]; const real=rw(a,b); if(real) return real; const w=match(a,b); add[ownerOf(w)]+=6; return w; });
+    const qfw =QF.map(([x,y])=>{ const a=r16w[x],b=r16w[y]; const real=rw(a,b); if(real) return real; const w=match(a,b); add[ownerOf(w)]+=8; return w; });
+    const sfw =SF.map(([x,y])=>{ const a=qfw[x],b=qfw[y]; const real=rw(a,b); if(real) return real; const w=match(a,b); add[ownerOf(w)]+=10; return w; });
+    const fa=sfw[0],fb=sfw[1]; const rk=rw(fa,fb); const king = rk?rk:match(fa,fb); if(!rk) add[ownerOf(king)]+=12;
     champ[king]=(champ[king]||0)+1;
     let bestv=-1; names.forEach(m=>{ const tot=base[m]+add[m]; sumPts[m]+=tot; if(tot>bestv)bestv=tot; });
     const leaders=names.filter(m=>base[m]+add[m]===bestv);
@@ -1144,7 +1344,7 @@ function makeCard(o){
   const order=t=>{const s=stStageIn(status,t[0]);return s==='won'?0:s==='pending'?1:s==='lost'?2:3;};
   [...m.teams].sort((a,b)=>order(a)-order(b)).forEach(t=>{
     const s=stStageIn(status,t[0]);
-    const badge=s==='won'?'✓ R16':s==='pending'?'• alive':s==='lost'?'✕ out':'out';
+    const badge=s==='won'?'✓ thru':s==='pending'?'• alive':s==='lost'?'✕ out':'out';
     const col=s==='won'?'#22D3A0':s==='pending'?'#ffd24a':'#5c6f92';
     x.fillStyle='#eef4ff'; x.fillText(t[0],70,y);
     x.fillStyle=col; x.textAlign='right'; x.font='700 34px Arial'; x.fillText(badge,W-70,y); x.textAlign='left'; x.font='600 40px Arial';
@@ -1175,30 +1375,34 @@ const EMOJIS=['👑','🔥','💀','🤡','🐐'];
 let reactState={}; let usingServer=false;
 let myVotes=JSON.parse(localStorage.getItem('lgm_votes')||'{}');
 async function loadReactions(){
-  try{ const r=await fetch(REACT_URL); if(!r.ok) throw 0; reactState=await r.json(); usingServer=true; }
-  catch(e){ reactState=JSON.parse(localStorage.getItem('lgm_react')||'{}'); usingServer=false; }
-  renderReactions();
+  return (async()=>{
+    try{ const r=await fetch(REACT_URL); if(!r.ok) throw 0; reactState=await r.json(); usingServer=true; }
+    catch(e){ reactState=JSON.parse(localStorage.getItem('lgm_react')||'{}'); usingServer=false; }
+    paintReactions();
+  })();
 }
-function renderReactions(){
-  document.getElementById('reactions').innerHTML = Object.keys(OWN).map(o=>{
-    const row=reactState[o]||{};
-    const chips=EMOJIS.map(e=>{ const n=row[e]||0; const mine=myVotes[o+'|'+e]?'mine':'';
-      return `<button class="react ${mine}" onclick="toggleReaction('${o}','${e}')">${e}<span>${n}</span></button>`;}).join('');
-    return `<div class="reactrow"><div class="rnm"><span class="chip" style="width:10px;height:15px;background:${OWN[o].color}"></span>${o}</div>
-      <div class="rchips">${chips}</div></div>`;
-  }).join('');
-  document.getElementById('reactNote').innerHTML = usingServer
-    ? 'Live and shared — everyone who opens the site sees the same tally.'
-    : 'Running locally on this device — the shared tally switches on once it is deployed to Netlify with the reactions function.';
+// Inner HTML for one manager's reaction area (counts + hover/tap emoji picker).
+function reactionHTML(o){
+  const row=reactState[o]||{};
+  const active=EMOJIS.filter(e=>(row[e]||0)>0);
+  const summary=active.map(e=>`<span class="rct ${myVotes[o+'|'+e]?'mine':''}">${e}${row[e]}</span>`).join('');
+  const opts=EMOJIS.map(e=>{ const n=row[e]||0; const mine=myVotes[o+'|'+e]?'mine':'';
+    return `<button class="reactopt ${mine}" onclick="event.stopPropagation();toggleReaction('${o}','${e}')">${e}${n?`<b>${n}</b>`:''}</button>`;}).join('');
+  return `<span class="rcounts">${summary}</span>`
+    +`<span class="reactpick"><button class="reactadd" title="React" onclick="event.stopPropagation();this.parentNode.classList.toggle('open')">☺<span>＋</span></button>`
+    +`<span class="reactpop">${opts}</span></span>`;
+}
+function paintReactions(){
+  Object.keys(OWN).forEach(o=>{ const el=document.querySelector(`.mgrreacts[data-mgr="${o}"]`); if(el) el.innerHTML=reactionHTML(o); });
 }
 async function toggleReaction(o,e){
   const key=o+'|'+e; const on=myVotes[key]; const delta=on?-1:1;
   reactState[o]=reactState[o]||{}; reactState[o][e]=Math.max(0,(reactState[o][e]||0)+delta);
   if(on) delete myVotes[key]; else myVotes[key]=true;
   localStorage.setItem('lgm_votes',JSON.stringify(myVotes));
-  renderReactions();
+  paintReactions();
   try{ const r=await fetch(REACT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({manager:o,emoji:e,delta})});
-    if(!r.ok) throw 0; reactState=await r.json(); usingServer=true; renderReactions(); }
+    if(!r.ok) throw 0; reactState=await r.json(); usingServer=true; paintReactions(); }
   catch(err){ localStorage.setItem('lgm_react',JSON.stringify(reactState)); }
 }
 
@@ -1218,6 +1422,150 @@ function renderAwards(){
     `<div class="aw"><div class="em">${a[0]}</div><div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div></div>`).join('');
 }
 
+/* ---------- ZLATAN'S POWER RANKINGS (live opinion — deliberately NOT the table) ---------- */
+let ZPR_LAST=null, ZPR_MOVE={}, ZPR_COM={}, ZPR_SELF='';
+const zpick = a => a[Math.floor(Math.random()*a.length)];
+const ZSELF=[
+  "Number one is Zlatan. You did not need a ranking to know this, but now it is written down, for the doubters and the dreamers.",
+  "At the summit, as at the dawn of all things, stands Zlatan. Everything below is simply weather.",
+  "Zlatan is first. Zlatan is always first. The day Zlatan retires, they will retire the number one alongside him, out of respect.",
+  "People ask how Zlatan stays at the top. Zlatan asks them how it feels to ask a question like that.",
+  "Zlatan does not enter power rankings. Zlatan is the power. The rankings merely arrange themselves beneath him.",
+  "First place: Zlatan. He is not in your little pool. He is above it, looking down, mildly amused, sipping something you cannot afford.",
+  "Rankings change. Weather changes. Zlatan does not change. Zlatan is the fixed point around which this little pool spins.",
+  "They asked Zlatan to rank himself. Zlatan wrote 'one' and left. The rest of this list is other people's problem."
+];
+const ZTOP=[
+  "Second is {n}. The finest of the mortals. First among all who are not Zlatan — a proud and tragic little kingdom.",
+  "{n} leads the humans. Somebody must be the tallest child. Zlatan salutes you warmly, from the adults' table.",
+  "Best of the rest is {n}. So near to Zlatan, and yet an entire universe away. Enjoy the view of his back.",
+  "{n} sits at number two — the silver medal of a race Zlatan was not required to run.",
+  "Number two, {n}. Impressive, for a man breathing Zlatan's exhaust and calling it fresh air.",
+  "{n} is second, which in this pool means first among the disappointed. A crown made of participation. Zlatan waves."
+];
+const ZLAST=[
+  "And last, {n}. Someone must hold the door for the others. Zlatan thanks you for your service to the group.",
+  "{n} sits at the very bottom. Rock bottom is a solid foundation, they say. They are being kind. Zlatan is not.",
+  "Dead last is {n}. Do not quit. Quitting is for men with somewhere better to be, and you do not have that.",
+  "{n} occupies the floor. Every cathedral needs one. Zlatan admires the floor — briefly, from the ceiling.",
+  "Last place, {n}. In the darkness one can see the stars. Look up. That light is Zlatan, and it is very far away.",
+  "{n} brings up the rear. Every parade needs someone to sweep the street behind Zlatan. Thank you, {n}."
+];
+const ZSAME=[
+  "{n} does not move. Neither does a mountain. Both are admired from a safe distance, then forgotten by lunch.",
+  "No change for {n}. Consistency — the virtue of men without the legs to climb. Zlatan has the legs.",
+  "{n} holds station. A statue holds station too. People take a photograph and leave. So it is with {n}.",
+  "{n} stays put. Zlatan respects a man who knows his place, mostly because Zlatan chose it for him.",
+  "Steady, {n}. The tide does not move the harbour wall. It does not move Zlatan either, for different reasons.",
+  "{n} holds firm. So does a traffic cone. Both serve a purpose, and both are calmly stepped around by Zlatan.",
+  "No movement from {n}. The needle does not twitch. Zlatan checked twice, out of a courtesy he rarely extends.",
+  "{n} remains exactly where {n} was. Reliable — the way a Tuesday is reliable, and about as thrilling.",
+  "Same spot for {n}. Some men plant a flag and call it a summit. Zlatan calls it a nap on a small hill.",
+  "{n} does not budge. Zlatan admires a man rooted in place; it makes him so much easier to walk past."
+];
+const ZUP=[
+  "{n} moves up one. Zlatan noticed. Zlatan notices everything, including the things not worth noticing.",
+  "Up a place for {n}. A small step for a man. For Zlatan it would have been a light nap.",
+  "{n} rises. Even the moon reflects a little light. It is not the sun. Zlatan is the sun.",
+  "One place higher, {n}. Progress — the way a snail makes progress, and Zlatan finds it just as thrilling.",
+  "{n} climbs a rung. Careful — Zlatan built this ladder, and Zlatan decides how tall it is.",
+  "{n} inches upward. A promotion of one. Zlatan has scored goals that travelled further than {n}'s entire ascent.",
+  "Up goes {n}, by a single place, wearing the proud face of a man who found a parking spot slightly closer.",
+  "{n} gains a rung. Zlatan would applaud, but Zlatan reserves his hands for lifting things heavier than {n}'s achievements."
+];
+const ZBIGUP=[
+  "{n} has surged. Zlatan approves, the way a lion approves of a smaller lion doing its very best.",
+  "A great leap by {n}. From a great height it would even look impressive. Zlatan is at that height; from here it is fine.",
+  "{n} rockets upward, fast and reckless. Careful — the air is thin up here, and Zlatan owns every breath of it.",
+  "{n} climbs like Zlatan's legend — though obviously not at the same altitude, nor with the same soundtrack.",
+  "Big jump for {n}. Somewhere a scout is impressed. Zlatan is not a scout. Zlatan is the thing scouts dream about.",
+  "{n} explodes up the board. Impressive — for about as long as it takes Zlatan to remember he does this every week.",
+  "A serious climb from {n}. The kind of leap that earns a lesser man a headline, and earns Zlatan a light chuckle.",
+  "{n} vaults several places. Careful, {n} — thin air makes men dizzy. Zlatan was born at this altitude."
+];
+const ZDOWN=[
+  "{n} slips a place. It happens. Gravity is real — unlike, increasingly, {n}'s title hopes.",
+  "Down one for {n}. Do not be sad. Sadness is for people Zlatan can still see, and you are getting smaller.",
+  "{n} drops a rung. The ladder Zlatan built has splinters, and today they found {n}.",
+  "A step back for {n}. In football they call this a 'transition phase.' Zlatan calls it what it is.",
+  "{n} descends one place. Do not worry — there is plenty of room down there. Zlatan made sure of it.",
+  "{n} eases down a place. Not a fall, {n} would say — a 'tactical descent.' Zlatan would just say a fall.",
+  "Down a rung for {n}. The universe corrects itself, gently, in Zlatan's general favour, as it tends to.",
+  "{n} loses a place. Somewhere lower, a seat was being kept warm. It has {n}'s name on it now."
+];
+const ZBIGDOWN=[
+  "{n} is falling. Zlatan would offer a hand, but Zlatan is using both to carry his trophies.",
+  "A collapse from {n}. Beautiful, in the way a controlled demolition is beautiful. Please stand back.",
+  "{n} drops like a stone. Stones do not have title dreams — and as of today, neither do you.",
+  "{n} plummets. Zlatan has watched many things fall: empires, egos, {n}. He remembers them all fondly.",
+  "Freefall for {n}. Zlatan admires the commitment. When {n} does something, {n} does it completely.",
+  "{n} tumbles down the board. Zlatan watches the way one watches a firework fail — with interest, then pity.",
+  "A steep drop for {n}. Gravity, it turns out, has no favourites — unlike this ranking, which has Zlatan.",
+  "{n} sinks several places at once. Efficient. When {n} fails, {n} does not waste anyone's time about it."
+];
+// Jake's line is ALWAYS about his shirtless / flag-bandana / middle-finger profile photo
+const ZJAKE=[
+  "Jake poses shirtless, flag bandana on the head, middle finger to the camera — a man declaring war on humility. Zlatan respects the ambition, pities the delts.",
+  "Ah, Jake. The bare chest, the stars-and-stripes bandana, the raised middle finger. He dresses like a firework and finishes like a wet match.",
+  "Jake removed his shirt, tied an American flag round his skull, and flipped off the lens. Bold. Zlatan wins trophies with his shirt ON.",
+  "The photo tells you everything: Jake, oiled, bandana'd, middle finger high. A man at war with a mirror — and the mirror is winning.",
+  "Jake shows the world his chest, his flag bandana, and one defiant finger. Zlatan shows the world silverware. Different men, different photographs.",
+  "Somewhere Jake is shirtless in a flag bandana, giving the camera the finger. Zlatan does not need to pose. Zlatan simply is.",
+  "Jake's profile picture — no shirt, flag bandana, middle finger raised — remains the single most confident thing about his entire campaign.",
+  "That bandana. That bare chest. That middle finger. Jake built a whole personality in one photograph and forgot to build a squad.",
+  "Jake flexes topless beneath a flag bandana, saluting the camera with one finger. The abs are undefeated. The results, tragically, are not.",
+  "Zlatan has seen the photo: Jake, shirtless, flag on the head, middle finger out. A war cry from a man losing the war very quietly.",
+  "Jake greets the world bare-chested, bandana blazing, middle finger cocked. All gas, no shirt, no trophies — a truly American tragedy.",
+  "The flag bandana, the naked torso, the middle finger. Jake curates himself like a monument. To what, nobody — including Jake — can say.",
+  "Jake, shirtless again, flag knotted round the brow, finger aimed at the lens. He photographs like a champion and finishes like Jake.",
+  "Only Jake could move on this board and still be shirtless in a flag bandana flipping off a camera. Consistency of a kind. Zlatan salutes it, briefly.",
+  "Jake's whole brand is one picture: no shirt, flag bandana, middle finger. Zlatan's brand is one word. Guess which one wins pools.",
+  "Behold Jake — pectorals out, flag on the brow, middle finger to the heavens. A gladiator costume worn to a spelling bee."
+];
+// pick a line not already shown this render, so no two rows ever repeat a joke
+function zpickUnique(pool, used){
+  const avail = pool.filter(t=>!used.has(t));
+  const src = avail.length ? avail : pool;
+  const pick = src[Math.floor(Math.random()*src.length)];
+  used.add(pick);
+  return pick;
+}
+function zprQuip(n,pos,move,isLast,used){
+  let pool;
+  if(n==='Jake') pool=ZJAKE;                       // Jake is always roasted about the photo
+  else if(move>=2) pool=ZBIGUP; else if(move===1) pool=ZUP;
+  else if(move<=-2) pool=ZBIGDOWN; else if(move===-1) pool=ZDOWN;
+  else pool = (pos===2)?ZTOP : (isLast?ZLAST:ZSAME);
+  return zpickUnique(pool,used).replace(/\{n\}/g,n);
+}
+function zmoveBadge(mv){
+  if(mv>0) return `<span class="zmv up">▲${mv}</span>`;
+  if(mv<0) return `<span class="zmv down">▼${-mv}</span>`;
+  return `<span class="zmv flat">—</span>`;
+}
+// power score: rewards momentum in the knockouts, teams still alive, and remaining upside — NOT raw points
+function zprScore(m,groupTot){ const ko=m.pts-(groupTot[m.name]||0); return m.pts + 1.2*m.remain + 5*m.alive + 4*ko; }
+function renderZPR(){
+  const el=document.getElementById('zpr'); if(!el) return;
+  const st=buildStatus(false);                 // REAL results only — ignores the what-if simulator
+  const mgrs=deriveMgrs(st);
+  const groupTot={}; mgrs.forEach(m=>{ groupTot[m.name]=m.teams.reduce((s,t)=>s+groupPts(t),0); });
+  const ranked=[...mgrs].sort((a,b)=> zprScore(b,groupTot)-zprScore(a,groupTot) || b.ceiling-a.ceiling || b.pts-a.pts || a.name.localeCompare(b.name));
+  const order=ranked.map(m=>m.name);
+  const changed = !ZPR_LAST || order.length!==ZPR_LAST.length || order.some((n,i)=>ZPR_LAST[i]!==n);
+  if(changed){
+    order.forEach((n,i)=>{ const prev=ZPR_LAST?ZPR_LAST.indexOf(n):-1; ZPR_MOVE[n]=(ZPR_LAST&&prev>=0)?(prev-i):0; });
+    ZPR_SELF=zpick(ZSELF);
+    const used=new Set(); order.forEach((n,i)=>{ ZPR_COM[n]=zprQuip(n,i+2,ZPR_MOVE[n],i===order.length-1,used); });
+    ZPR_LAST=order.slice();
+  }
+  let h=`<div class="zrow zking"><div class="zpos">1</div><div class="zav">${AV_ZLATAN}</div><div class="zbody"><div class="zname">Zlatan<span class="ztag">eternal #1</span></div><div class="zcom">${ZPR_SELF}</div></div></div>`;
+  ranked.forEach((m,i)=>{
+    h+=`<div class="zrow"><div class="zpos">${i+2}</div><div class="zchip" style="background:${m.color}"></div><div class="zbody"><div class="zname">${m.name}<span class="zpts">${m.pts} pts · ${m.alive} alive</span>${zmoveBadge(ZPR_MOVE[m.name]||0)}</div><div class="zcom">${ZPR_COM[m.name]||''}</div></div></div>`;
+  });
+  el.innerHTML=h;
+}
+
 /* ---------- THE BOOK · group betting (play money) ---------- */
 const BANK_START=1000;
 const RESULTS={};                 // matchKey -> {a,b,g1,g2,p1,p2,winner}  (filled by the live feed)
@@ -1226,10 +1574,120 @@ const keyOf=(a,b)=>[a,b].sort().join('|');
 const round2=x=>Math.round(x*100)/100;
 function recordResult(a,b,g1,g2,p1,p2,winner){ RESULTS[keyOf(a,b)]={a,b,g1,g2,p1,p2,winner}; }
 
+/* ---------- MATCH SCORE HELPERS ---------- */
+function goalsFor(a,b,team){ const r=RESULTS[keyOf(a,b)]; if(!r||r.g1==null||r.g2==null) return null; return r.a===team?r.g1:r.g2; }
+function pensFor(a,b,team){ const r=RESULTS[keyOf(a,b)]; if(!r||r.p1==null||r.p2==null) return null; return r.a===team?r.p1:r.p2; }
+
+/* ---------- PUNDIT CARICATURES (parody) ---------- */
+function punHash(s){ let h=0; for(let i=0;i<(s||'').length;i++) h=(h*31+s.charCodeAt(i))|0; return Math.abs(h); }
+const AV_ZLATAN=`<svg viewBox='0 0 40 40'><circle cx='20' cy='20' r='20' fill='#141c2c'/><path d='M6 40c1-8 6-12 14-12s13 4 14 12z' fill='#eef0f4'/><circle cx='20' cy='18' r='10' fill='#cf9d6b'/><path d='M10 15c0-7 4-10 10-10s10 3 10 10c-2-4-5-5-5-5s0 2-1 2c-2-2-5-2-8-1-3 1-6 2-6 4z' fill='#241a12'/><rect x='22' y='2.5' width='8' height='4' rx='2' fill='#241a12'/><path d='M13 24c2 3 12 3 14 0 0 4-3 6-7 6s-7-2-7-6z' fill='#2a1e14'/><rect x='12.5' y='14.6' width='5.2' height='1.7' rx='.8' fill='#241a12' transform='rotate(-8 15 15)'/><rect x='22.3' y='14.6' width='5.2' height='1.7' rx='.8' fill='#241a12' transform='rotate(8 25 15)'/><circle cx='16' cy='18' r='1.3' fill='#20140c'/><circle cx='24' cy='18' r='1.3' fill='#20140c'/></svg>`;
+const AV_HENRY=`<svg viewBox='0 0 40 40'><circle cx='20' cy='20' r='20' fill='#14211c'/><path d='M7 40c1-7 6-11 13-11s12 4 13 11z' fill='#2b2f3a'/><circle cx='20' cy='18' r='10' fill='#7b4a2d'/><path d='M11 14c1-6 5-8 9-8s8 2 9 8c-3-3-6-3-9-3s-6 0-9 3z' fill='#0f0d0c'/><rect x='13' y='15' width='4.5' height='1.4' rx='.7' fill='#0f0d0c'/><rect x='22.5' y='15' width='4.5' height='1.4' rx='.7' fill='#0f0d0c'/><circle cx='16' cy='18' r='1.2' fill='#0c0a08'/><circle cx='24' cy='18' r='1.2' fill='#0c0a08'/><path d='M16 22q4 2.5 8 0' stroke='#3a2418' stroke-width='1.3' fill='none' stroke-linecap='round'/></svg>`;
+const AV_MICAH=`<svg viewBox='0 0 40 40'><circle cx='20' cy='20' r='20' fill='#0f1c2b'/><path d='M7 40c1-7 6-11 13-11s12 4 13 11z' fill='#6cabdd'/><circle cx='20' cy='18' r='10' fill='#6b3f26'/><path d='M11 13c1-5 5-7 9-7s8 2 9 7c-3-2-6-2-9-2s-6 0-9 2z' fill='#0d0b0a'/><rect x='12.6' y='13.4' width='4.6' height='1.5' rx='.7' fill='#0d0b0a' transform='rotate(-7 15 14)'/><rect x='22.8' y='13.4' width='4.6' height='1.5' rx='.7' fill='#0d0b0a' transform='rotate(7 25 14)'/><circle cx='16' cy='17' r='1.3' fill='#0a0806'/><circle cx='24' cy='17' r='1.3' fill='#0a0806'/><path d='M14.5 21q5.5 5.5 11 0z' fill='#2a160e'/><rect x='15.6' y='21' width='8.8' height='2.4' rx='1' fill='#fff'/></svg>`;
+const AV_MEL=`<svg viewBox='0 0 40 40'><circle cx='20' cy='20' r='20' fill='#1c2230'/><path d='M6 40c1-7 6-11 14-11s13 4 14 11z' fill='#2c3e63'/><path d='M12 40c-1-6-2-14 0-20l3 1 5-1 5 1 3-1c2 6 1 14 0 20z' fill='#6b4a2e'/><circle cx='20' cy='19' r='9' fill='#d8ab82'/><path d='M11 11c2-4 6-6 9-6s7 2 9 6c-3-2-6-2.5-9-2.5s-6 .5-9 2.5z' fill='#6b4a2e'/><path d='M8 12l12-4 12 4-2-5-10-3-10 3z' fill='#20303f'/><rect x='13.5' y='16' width='4' height='1.3' rx='.6' fill='#4a3320'/><rect x='22.5' y='16' width='4' height='1.3' rx='.6' fill='#4a3320'/><circle cx='16.6' cy='18.6' r='1.2' fill='#2a1c10'/><circle cx='23.4' cy='18.6' r='1.2' fill='#2a1c10'/><path d='M16 23.2h8' stroke='#7a4a30' stroke-width='1.3' stroke-linecap='round'/></svg>`;
+const PUNDIT_MEL={name:'Mel Gibson from the Patriot',av:AV_MEL,
+  reg:[
+    "{W} did what had to be done. I take no pleasure in it. But when a man comes for your land, your sons, your midfield — you answer. {W} answered.",
+    "Before the match I told {W} one thing. Aim small, miss small. And they aimed very small indeed. {L} never stood a chance.",
+    "{L} came dressed in red, marching in straight lines, certain of victory. That is precisely how you lose a war, son. Ask the redcoats. Ask {L}.",
+    "I did not want this fight. I hung up the tomahawk years ago. But {L} left me no choice — and God forgive me, {W} and I did what we do.",
+    "They burned my barn. Metaphorically, {L} burned my barn. So {W} took the field and left nothing standing. Nothing. That is the cost of it.",
+    "A man must decide what he is willing to lose. {W} were willing to lose everything. {L} were willing to lose, and did. There is the difference.",
+    "Stay the course, I told them. Stay the course. And {W} stayed it, all ninety minutes, until {L} had no course left to stay.",
+    "I fought beside {W} today. I have buried better men than {L} — though few who defended a set piece quite so poorly.",
+    "This was never a game to me. {W} understood that. {L} thought it was sport. And sport, son, is what gets your village burned.",
+    "One shot. That is all a free man needs. {W} took theirs. {L} are on the boat back to England, spiritually, where they belong.",
+    "My boy asked me why we fight. I said: so that {W} might live free, and {L} might learn their place. He is nine. He understood.",
+    "There is a time for the musket and a time for the hatchet. {W} brought the hatchet — and what they did to {L} after the break, I'll not say in front of children.",
+    "{L} had the numbers, the drill, the discipline. {W} had the swamp, the fury, and a reason. A reason beats a redcoat every time.",
+    "I mended the flag before kick-off. Stitched it whole. {W} carried it forward, and {L} learned that some colonies do not kneel.",
+    "You want the plan? There was no plan. There was only {W}, the ball, and a righteous anger the likes of which {L} will see in their nightmares.",
+    "It is done. {W} are through. Bury the dead, salt the earth, say a prayer for {L} — then we march. The next redcoat is already coming."
+  ],
+  pen:[
+    "It came down to single shots. Twelve yards, one ball, one chance. Aim small, miss small — {W} did. {L} closed their eyes and prayed. Prayer is not a plan.",
+    "A penalty is a duel, sir. Two men, one line, honour at stake. {W} had the steadier hand. {L} flinched, as the guilty always do.",
+    "I have stood across a field from a man who meant to kill me. That is a penalty. {W} did not blink. {L} were already halfway to the boats.",
+    "They lined up like a firing squad, and one by one {W} held their nerve while {L} fell. In war and in penalties, the calm heart wins.",
+    "The shootout is where cowards are found out. {W} were no cowards today. {L} — well, history is not kind to the men who miss.",
+    "One ball. One keeper. Everything you love standing behind you. {W} struck true. {L} will hear that miss for the rest of their natural lives.",
+    "Penalties. God's own cruelty. {W} were spared it, {L} were not, and I have learned not to question the Almighty's aim — only to match it.",
+    "Twelve yards, a nation holding its breath — you do not think, you commit. {W} committed. {L} hesitated, and hesitation, son, is a grave."
+  ]};
+const PUNDITS={
+  zlatan:{name:'Zlatan',av:AV_ZLATAN,
+    reg:[
+      "{L} did not lose to {W}. {L} lost to destiny. Zlatan knows destiny personally. Alexi knows nothing personally.",
+      "They call {W} lucky. Lucky is a word invented by small men — like the one Zlatan refuses to name on live television.",
+      "It is not arrogance from {W}. It is confidence. Alexi cannot tell the difference. Alexi cannot tell you the offside rule.",
+      "{W} kept their identity. {L} lost theirs — like Koeman, like the Dutch, like Alexi lost his chair at the desk.",
+      "A fine performance from {W}. Zlatan would have scored six. But Zlatan was busy, sitting beside a man whose name escapes him.",
+      "When {W} scored, Zlatan felt nothing. You cannot impress the sea. You cannot impress Zlatan. Alexi tries both, daily.",
+      "{L} had a plan. Zlatan respects a plan. Then {W} arrived and the plan became a memory, like Alexi's television career.",
+      "People ask Zlatan who will win. Zlatan does not predict, Zlatan decides. Today Zlatan decided {W}. You are welcome.",
+      "{W} were men out there. {L} were tourists. And one man in the studio was neither — he was furniture. I will not say which.",
+      "That was football. {W} understood it. {L} admired it. Alexi attempted to explain it and the room quietly emptied.",
+      "Zlatan does not celebrate {W}. Zlatan acknowledges them. It is the same difference as the one between Zlatan and Alexi.",
+      "{L} ran ninety minutes. {W} ran the game. Zlatan once ran a marathon to see if the road was worthy. It was not.",
+      "Confidence from {W}. Rebecca called it arrogance. Rebecca wore black. I asked who died. It was Alexi's relevance.",
+      "{W} did what champions do. {L} did what {L} do. And somewhere Alexi made a graphic about it that nobody requested.",
+      "Zlatan watched {W} and saw a lion. Zlatan watched {L} and saw lunch. Zlatan watched Alexi and changed the channel.",
+      "In the end {W} won because they wanted it more — and because Zlatan was watching. These, honestly, are the same reason."
+    ],
+    pen:[
+      "A shootout? Zlatan does not gamble. The ball goes where Zlatan points. {L} pointed where Alexi points — nowhere.",
+      "{W} won on penalties. Nerve, not luck. The only thing Zlatan fears is a mirror — it is simply too much to take in.",
+      "Penalties. {L} blinked. Zlatan has never blinked. This is why they moved Alexi's chair while he was mid-blink.",
+      "From twelve yards {W} were men, {L} were tourists with a camera. Zlatan does not take penalties; penalties take Zlatan.",
+      "A shootout is a test of the soul. {W} had one. {L} had one, briefly. Alexi is, to this day, still looking for his.",
+      "They say penalties are a lottery. Zlatan has already won the lottery of being Zlatan. {W} merely won this smaller one.",
+      "{W} held their nerve. {L} lost theirs. Zlatan lost his nerve once — it came back within the hour and apologised.",
+      "Penalties decided it, a shame, since Zlatan had decided it already. {W}. Obviously. Ask Alexi, then do the opposite."
+    ]},
+  micah:{name:'Micah',av:AV_MICAH,
+    reg:[
+      "HAHAHA listen — I have LOST games {L} would kill for, mate! {W} were unbelievable. UN-BE-LIEVABLE. Woooo!",
+      "Nah nah listen, {W} were brilliant but did you SEE that defending?! I was worse, obviously — but STILL! Mel, help me out!",
+      "I'm telling you man, {W} deserved it all day. {L} tried, bless 'em — reminds me of my knees in 2015. Gone. HAHAHA!",
+      "Come ONNN {W}! That's what I'm talking about! Carra's gonna hate this and I do NOT care, hahaha — scenes, man, scenes!",
+      "{W}, my WORD. I've not seen movement like that since Kate told me to sit down and behave, HAHAHA. Loved every second.",
+      "Listen. LISTEN. {W} were that good I nearly stood up — and I don't stand for anyone, I've got dodgy knees! Unbelievable.",
+      "{L}, mate, I feel for ya — but {W}?! A masterclass. I'd have given away three pens by half-time. HAHAHA!",
+      "I'm buzzing! {W} played with a smile, man. That's how I played — well, that's how I THOUGHT I played. HAHAHA. Brilliant.",
+      "Did you SEE it?! {W} tore {L} apart! Carra reckons it was tactical — nah mate, it was just LOVELY. Give me lovely all day.",
+      "{W} were sensational. And listen — I've been relegated, I've been booed, so trust me I know the other end. Sorry, {L}!",
+      "WOOO! {W}! Best thing I've seen all week and I'm INCLUDING my own old highlights, which are, admittedly, very short. HAHAHA.",
+      "That {W} performance had EVERYTHING. Mel's doing his serious face, I'm doing my happy face, and Carra's just wrong again.",
+      "Listen man, {W} bossed it. {L} gave it a go, fair play, but that was men against — nah I can't even finish it. Poor {L}!",
+      "I LOVED that. {W} with the swagger! Reminds me of prime me — except good, and quick, and actually at it. HAHAHA!",
+      "{W} were different class. And {L}, don't be sad, mate — I lost bigger on live telly and look at me now, grinning like a fool!",
+      "Ohhh that's lovely from {W}! Kate's telling me to calm down. I will NOT calm down. Best job in the world, this, man!"
+    ],
+    pen:[
+      "PENALTIES?! My heart, man! HAHAHA I couldn't watch. {W} held their nerve — I'd have ballooned it into row Z, honest!",
+      "{W} on pens! LISTEN. Bravest thing I've seen — braver than me trying to mark Messi, and THAT went terrible. Hahaha!",
+      "Shootout, mate! I'd have been in the toilet, no chance I'm taking one. {W} stood up though — unbelievable bottle. WOOO!",
+      "{L} lost on pens and my heart breaks, it does — but {W} were ICE. I was never ice. I was, like, lukewarm. HAHAHA!",
+      "Penalties! Carra's aged ten years, I've aged twenty — {W} didn't blink! I'd have blinked, cried, AND missed. Honest.",
+      "{W} won the shootout and I'm SHAKING! Never scored a pen that mattered in me life — {W} just did it like it's easy!",
+      "That's why we LOVE this game! {W} nerveless from twelve yards. Me? I'd have asked Mel to take it for me. HAHAHA!",
+      "Pens, mate, PENS! {W} through, {L} heartbroken, and I'm somehow BOTH — no composure, and neither had that game!"
+    ]},
+  mel:PUNDIT_MEL};
+function punditQuip(p,idx,W,L,pens){ const pool=(pens&&p.pen.length)?p.pen:p.reg; const n=pool.length; const q=pool[((idx%n)+n)%n]; return q.replace(/\{W\}/g,W).replace(/\{L\}/g,L); }
+function punditRow(idx,W,L,pens){
+  return `<div class="punds">`+['zlatan','micah','mel'].map((k,pi)=>{ const p=PUNDITS[k];
+    return `<div class="pund"><span class="pav">${p.av}</span><span class="pq"><b>${p.name}:</b> ${punditQuip(p,idx+pi,W,L,pens)}</span></div>`;
+  }).join('')+`</div>`;
+}
+
+
 let punter=(typeof localStorage!=='undefined' && localStorage.getItem('lgm_punter'))||null;
 let bets=[];
 let roster=[];
 let legs=[];   // bet slip: 1 leg = single, 2+ = accumulator
+let slipOpen=true, slipStake=100, curTab='pool';
+const RECAP_OPEN=new Set();
+function recapToggle(k,open){ if(open) RECAP_OPEN.add(k); else RECAP_OPEN.delete(k); }
 let betServer=false;
 const BET_URL='/.netlify/functions/bets';
 
@@ -1354,6 +1812,16 @@ async function registerPunter(n){
     if(r.ok){ const j=await r.json(); if(j&&Array.isArray(j.roster)) roster=j.roster; if(j&&Array.isArray(j.bets)) bets=j.bets; betServer=true; renderBetting(); } }catch(e){}
 }
 
+let bookSub='place';   // 'place' | 'overview'  — which Book sub-tab is showing
+function applyBookSub(){
+  const p=document.getElementById('bkPlace'), o=document.getElementById('bkOverview');
+  if(p) p.style.display = bookSub==='place'?'':'none';
+  if(o) o.style.display = bookSub==='overview'?'':'none';
+  const bp=document.getElementById('bktabPlace'), bo=document.getElementById('bktabOverview');
+  if(bp) bp.className='bktab'+(bookSub==='place'?' on':'');
+  if(bo) bo.className='bktab'+(bookSub==='overview'?' on':'');
+}
+function setBookSub(x){ bookSub=x; applyBookSub(); }
 function renderBetting(){
   const el=document.getElementById('betting'); if(!el) return;
   const names=Object.keys(OWN);
@@ -1369,47 +1837,62 @@ function renderBetting(){
   const bal=myBalance();
   const mine=bets.filter(b=>b.punter===punter);
   const atRisk=mine.filter(b=>betResult(b)==='open').reduce((s,b)=>s+b.stake,0);
+
+  // shared top bar
   let h=`<div class="betbar">
     <div>Betting as <b>${punter}</b> · <a href="#" onclick="changePunter();return false" style="color:var(--mut)">change</a></div>
     <div class="balpill">Balance <b>${Math.round(bal)}</b> pts${atRisk?` · <span style="color:var(--mut)">${atRisk} at risk</span>`:''}</div>
     <div class="tag">${betServer?'shared live':'local only'}</div></div>`;
+
+  // sub-tabs
+  const openCount=bets.filter(b=>betResult(b)==='open').length;
+  h+=`<div class="booktabs">
+    <button id="bktabPlace" class="bktab" onclick="setBookSub('place')">🎯 Place Bets</button>
+    <button id="bktabOverview" class="bktab" onclick="setBookSub('overview')">📊 Overview</button></div>`;
+
+  const betRow=(b,showPunter)=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
+    const mg=OWN[b.punter]; const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
+    const who=showPunter?`<span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b>${mg?'':'<span class="crowdtag">crowd</span>'} <span style="color:var(--dim)">·</span> `:'';
+    const meCls=b.punter===punter?' me':'';
+    return `<div class="mybet ${cls}${meCls}"><span>${who}${betDesc(b)}${b.ts?` <span style="color:var(--dim)">· ${fmtTs(b.ts)}</span>`:''}</span>
+      <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; };
+
+  /* ===== PLACE BETS panel — markets first, one tap away ===== */
+  let hp='';
+  const km=knockoutMatches();
+  const inplay=km.filter(m=>!m.finished&&m.live);
+  const open=km.filter(m=>!m.finished&&!m.live);
+  if(inplay.length){
+    hp+=`<div class="bsub">In play — bets locked</div><div class="inplay">`+
+      inplay.map(m=>{ const lv=liveScore(m.a,m.b); const sc=lv?`${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}`:`${m.a} v ${m.b}`;
+        return `<div class="inplayrow"><span><span class="pulse" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>${m.round} · ${sc}</span><span class="locktag">🔒 locked · settles at FT</span></div>`; }).join('')+`</div>`;
+  }
+  hp+=`<div class="bsub">Open matches</div>`;
+  if(!open.length) hp+=`<div class="note" style="padding:2px 0 8px">Nothing to bet on this second — new matches open the moment the next round's teams are decided.</div>`;
+  open.forEach(m=>{
+    hp+=`<div class="bmatch"><div class="bmh">${m.round} · ${FLAG[m.a]||''} ${m.a} <span class="vs">v</span> ${FLAG[m.b]||''} ${m.b}</div>`;
+    marketsFor(m).forEach(mk=>{
+      hp+=`<div class="bmk"><span class="bmkl">${mk.label}</span><span class="bopt">`+
+        mk.opts.map(o=>{ const data={key:m.key,a:m.a,b:m.b,round:m.round,market:mk.id,mlabel:mk.label,selection:o.sel,sellabel:o.label,odds:o.odds};
+          return `<button class="oddbtn" onclick='addLeg(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${o.label} <b>${o.odds}</b></button>`; }).join('')+
+        `</span></div>`;
+    });
+    hp+=`</div>`;
+  });
+
+  /* ===== OVERVIEW panel — standings & honours up top, bets grouped at the bottom ===== */
+  let ho='';
   const mv=roundMovers();
   if(mv){
     const g=OWN[mv.top.p], l=OWN[mv.bottom.p];
-    h+=`<div class="bsub">Round movers — ${mv.roundName}</div><div class="movers">
+    ho+=`<div class="bsub">Round movers — ${mv.roundName}</div><div class="movers">
       <div class="mover up"><div class="ml">📈 Biggest winner</div><div class="mv"><span class="chip" style="width:9px;height:13px;background:${g?g.color:'#5E687E'};display:inline-block;vertical-align:middle;margin-right:6px"></span>${mv.top.p} <span class="mn">+${mv.top.n}</span></div></div>
       <div class="mover down"><div class="ml">📉 Biggest loser</div><div class="mv"><span class="chip" style="width:9px;height:13px;background:${l?l.color:'#5E687E'};display:inline-block;vertical-align:middle;margin-right:6px"></span>${mv.bottom.p} <span class="mn">${mv.bottom.n}</span></div></div>
     </div>`;
   }
-  if(legs.length){
-    const co=combinedOdds();
-    h+=`<div class="slip">
-      <div class="sliphd">${legs.length>1?`<b>Accumulator</b><span class="accapill">${legs.length} legs</span> combined odds <b>${co}</b>`:'Bet slip'}</div>
-      <div class="sliplegs">`+legs.map((l,i)=>`<div class="leg"><span>${FLAG[l.a]||''} ${l.a} v ${l.b} ${FLAG[l.b]||''} — <b>${l.mlabel}</b>: ${l.sellabel} @ ${l.odds}</span><button class="btn ghost" onclick="removeLeg(${i})">✕</button></div>`).join('')+`</div>
-      <div class="slipin">
-        <span>Stake</span>
-        <input id="stakeInput" type="number" min="1" value="100" oninput="updateRet()">
-        ${[50,100,250].map(v=>`<button class="btn ghost" onclick="setStake(${v})">${v}</button>`).join('')}
-        <button class="btn ghost" onclick="setStake(${Math.floor(bal)})">Max</button>
-        <span class="ret" id="retLbl"></span>
-        <button class="btn" onclick="placeSlip()">${legs.length>1?'Place acca':'Place bet'}</button>
-        <button class="btn ghost" onclick="clearSlip()">clear</button>
-      </div>
-      ${legs.length===1?`<div class="note" style="padding:6px 0 0">Tap more odds to build an accumulator — every leg must land, but the odds multiply.</div>`:''}
-    </div>`;
-  }
-  const feed=[...bets].sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,15);
-  h+=`<div class="bsub">Live bets — the whole book</div>`;
-  if(!feed.length) h+=`<div class="note" style="padding:2px 0 8px">No bets on the board yet — be the first.</div>`;
-  else h+=`<div class="feed">`+feed.map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
-    const mg=OWN[b.punter]; const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
-    return `<div class="mybet ${cls}"><span><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'};margin-right:6px"></span><b>${b.punter}</b>${mg?'':'<span class="crowdtag">crowd</span>'} <span style="color:var(--dim)">·</span> ${betDesc(b)}${b.ts?` <span style="color:var(--dim)">· ${fmtTs(b.ts)}</span>`:''}</span>
-      <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`;
-  }).join('')+`</div>`;
-
   const bd=balances();
   if(bd.length){
-    h+=`<div class="bsub">Book standings</div><div class="blead">`+
+    ho+=`<div class="bsub">Book standings</div><div class="blead">`+
       bd.map((p,i)=>{ const mg=OWN[p.punter];
         return `<div class="brow"><span class="bpos">${i+1}</span>
         <span class="bnmx ${p.punter===punter?'me':''}"><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'}"></span>${p.punter}${mg?'':'<span class="crowdtag">crowd</span>'}</span>
@@ -1417,43 +1900,62 @@ function renderBetting(){
         <span class="bbal">${Math.round(p.bal)}<small>pts</small></span></div>`;}).join('')+`</div>`;
     const bb=computeBookBadges();
     const withB=Object.keys(bb).filter(p=>bb[p]&&bb[p].length);
-    if(withB.length){ h+=`<div class="bsub">Book honours</div><div class="honours" style="padding:0">`+
+    if(withB.length){ ho+=`<div class="bsub">Book honours</div><div class="honours" style="padding:0">`+
       withB.map(p=>{ const mg=OWN[p]; return `<div class="hrow"><span class="hn"><span class="chip" style="width:9px;height:13px;background:${mg?mg.color:'#5E687E'}"></span>${p}</span>`+
         bb[p].map(x=>`<span class="badge2"><span class="be">${x[0]}</span>${x[1]}</span>`).join('')+`</div>`; }).join('')+`</div>`; }
   }
-  const km=knockoutMatches();
-  const inplay=km.filter(m=>!m.finished&&m.live);
-  const open=km.filter(m=>!m.finished&&!m.live);
-  if(inplay.length){
-    h+=`<div class="bsub">In play — bets locked</div><div class="inplay">`+
-      inplay.map(m=>{ const lv=liveScore(m.a,m.b); const sc=lv?`${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}`:`${m.a} v ${m.b}`;
-        return `<div class="inplayrow"><span><span class="pulse" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>${m.round} · ${sc}</span><span class="locktag">🔒 locked · settles at FT</span></div>`; }).join('')+`</div>`;
+  // live bets at the bottom, grouped open vs settled (newest first), yours highlighted
+  const sorted=[...bets].sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const openB=sorted.filter(b=>betResult(b)==='open');
+  const settledB=sorted.filter(b=>betResult(b)!=='open');
+  const settledShown=settledB.slice(0,30);
+  ho+=`<div class="bsub">Live bets — the whole book</div>`;
+  if(!bets.length){ ho+=`<div class="note" style="padding:2px 0 8px">No bets on the board yet — be the first.</div>`; }
+  else {
+    ho+=`<div class="betgrouphd">🟢 Open <span class="cnt">${openB.length}</span></div>`;
+    ho+= openB.length ? `<div class="feed">`+openB.map(b=>betRow(b,true)).join('')+`</div>` : `<div class="note" style="padding:2px 0 8px">No open bets right now.</div>`;
+    ho+=`<div class="betgrouphd">⚪ Settled <span class="cnt">${settledB.length}</span></div>`;
+    ho+= settledShown.length ? `<div class="feed">`+settledShown.map(b=>betRow(b,true)).join('')+`</div>`+(settledB.length>settledShown.length?`<div class="note" style="padding:2px 0 8px">Showing the ${settledShown.length} most recent settled bets.</div>`:'') : `<div class="note" style="padding:2px 0 8px">Nothing settled yet.</div>`;
   }
-  h+=`<div class="bsub">Open matches</div>`;
-  if(!open.length) h+=`<div class="note" style="padding:2px 0 8px">Nothing to bet on this second — new matches open the moment the next round's teams are decided.</div>`;
-  open.forEach(m=>{
-    h+=`<div class="bmatch"><div class="bmh">${m.round} · ${FLAG[m.a]||''} ${m.a} <span class="vs">v</span> ${FLAG[m.b]||''} ${m.b}</div>`;
-    marketsFor(m).forEach(mk=>{
-      h+=`<div class="bmk"><span class="bmkl">${mk.label}</span><span class="bopt">`+
-        mk.opts.map(o=>{ const data={key:m.key,a:m.a,b:m.b,round:m.round,market:mk.id,mlabel:mk.label,selection:o.sel,sellabel:o.label,odds:o.odds};
-          return `<button class="oddbtn" onclick='addLeg(${JSON.stringify(data).replace(/'/g,"&#39;")})'>${o.label} <b>${o.odds}</b></button>`; }).join('')+
-        `</span></div>`;
-    });
-    h+=`</div>`;
-  });
-  if(mine.length){
-    h+=`<div class="bsub">Your bets</div><div class="mybets">`+
-      [...mine].reverse().map(b=>{ const r=betResult(b); const cls=r==='won'?'bwon':r==='lost'?'blost':'bopen';
-        const st=r==='won'?'WON +'+Math.round(b.stake*b.odds-b.stake):r==='lost'?'lost −'+b.stake:'open';
-        return `<div class="mybet ${cls}"><span>${betDesc(b)}${b.ts?` <span style="color:var(--dim)">· placed ${fmtTs(b.ts)}</span>`:''}</span>
-          <span class="ms">${b.stake}@${b.odds}</span><span class="bst">${st}</span></div>`; }).join('')+`</div>`;
-  }
-  el.innerHTML=h; updateRet(); if(typeof renderAdmin==='function') renderAdmin();
+
+  h+=`<div id="bkPlace" class="booksub">${hp}</div><div id="bkOverview" class="booksub">${ho}</div>`;
+  el.innerHTML=h; applyBookSub(); renderSlip(); if(typeof renderAdmin==='function') renderAdmin();
 }
+
 function setPunter(n){ punter=n; try{localStorage.setItem('lgm_punter',n);}catch(e){} if(!OWN[n]) registerPunter(n); renderBetting(); }
 function setPunterCustom(){ let n=(prompt('Your name?')||'').trim().slice(0,20); if(!n) return; if(OWN[n]){ alert(n+" is a pool manager - if that's you, tap your name instead."); return; } setPunter(n); }
 function changePunter(){ punter=null; try{localStorage.removeItem('lgm_punter');}catch(e){} slip=null; renderBetting(); }
 function combinedOdds(){ return round2(legs.reduce((p,l)=>p*(l.odds||1),1)); }
+function toggleSlip(){ slipOpen=!slipOpen; renderSlip(); }
+function onStakeInput(){ const i=document.getElementById('stakeInput'); if(!i) return;
+  slipStake=Math.max(0,parseInt(i.value)||0); const co=combinedOdds(); const ret=Math.round(slipStake*co);
+  const m=document.getElementById('slipMeta'); if(m) m.textContent=`odds ${co} · returns ${ret} pts`;
+  const p=document.querySelector('#betSlip .slipplace'); if(p) p.textContent=`${legs.length>1?'Place acca':'Place bet'} · ${ret} pts`; }
+function renderSlip(){
+  const el=document.getElementById('betSlip'); if(!el) return;
+  if(!legs.length || !punter || curTab!=='book'){ el.style.display='none'; document.body.classList.remove('has-slip','has-slip-min'); return; }
+  el.style.display=''; document.body.classList.toggle('has-slip', slipOpen); document.body.classList.toggle('has-slip-min', !slipOpen);
+  el.className='betslip-float'+(slipOpen?'':' collapsed');
+  const co=combinedOdds(), bal=Math.floor(myBalance()), ret=Math.round((slipStake||0)*co), isAcca=legs.length>1;
+  el.innerHTML=`
+    <div class="sliphead" onclick="toggleSlip()">
+      <div class="slipl"><span class="slipdot"></span>
+        <span class="sliptitle">${isAcca?`Acca · ${legs.length} legs`:'Bet slip'}</span>
+        <span class="slipmeta" id="slipMeta">odds ${co} · returns ${ret} pts</span></div>
+      <span class="slipchev">▾</span>
+    </div>
+    <div class="slipbody">
+      <div class="sliplegs">${legs.map((l,i)=>`<div class="leg"><span>${FLAG[l.a]||''} ${l.a} v ${l.b} ${FLAG[l.b]||''} — <b>${l.mlabel}</b>: ${l.sellabel} @ ${l.odds}</span><button class="btn ghost slipx" onclick="removeLeg(${i})">✕</button></div>`).join('')}</div>
+      <div class="slipin"><span>Stake</span>
+        <input id="stakeInput" type="number" min="1" value="${slipStake}" oninput="onStakeInput()">
+        ${[50,100,250].map(v=>`<button class="btn ghost" onclick="setStake(${v})">${v}</button>`).join('')}
+        <button class="btn ghost" onclick="setStake(${bal})">Max</button></div>
+      <div class="slipact">
+        <button class="btn slipplace" onclick="placeSlip()">${isAcca?'Place acca':'Place bet'} · ${ret} pts</button>
+        <button class="btn ghost" onclick="clearSlip()">clear</button></div>
+      ${legs.length===1?`<div class="note slipnote">Tap more odds to build an accumulator — every leg must land, odds multiply.</div>`:''}
+    </div>`;
+}
 function addLeg(o){
   if(isLivePair(o.a,o.b)){ alert('That match has kicked off — bets are closed.'); return; }
   if(RESULTS[o.key]){ alert('That match is already finished.'); return; }
@@ -1464,7 +1966,7 @@ function addLeg(o){
 }
 function removeLeg(i){ legs.splice(i,1); renderBetting(); }
 function clearSlip(){ legs=[]; renderBetting(); }
-function setStake(v){ const i=document.getElementById('stakeInput'); if(i){ i.value=v; updateRet(); } }
+function setStake(v){ slipStake=v; const i=document.getElementById('stakeInput'); if(i) i.value=v; onStakeInput(); }
 function updateRet(){ const i=document.getElementById('stakeInput'),l=document.getElementById('retLbl'); if(!i||!l||!legs.length) return;
   const s=Math.max(0,parseInt(i.value)||0); l.textContent='returns '+Math.round(s*combinedOdds())+' pts'; }
 async function placeSlip(){
@@ -1481,7 +1983,7 @@ async function placeSlip(){
     bet={id,punter,acca:true,odds:combinedOdds(),stake,ts:Date.now(),sellabel:'ACCA',mlabel:legs.length+'-leg acca',
       legs:legs.map(l=>({key:l.key,a:l.a,b:l.b,round:l.round,market:l.market,mlabel:l.mlabel,selection:l.selection,sellabel:l.sellabel,odds:l.odds}))};
   }
-  bets.push(bet); legs=[]; renderBetting();
+  bets.push(bet); legs=[]; slipStake=100; renderBetting();
   try{ const r=await fetch(BET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bet)});
     if(!r.ok) throw 0; const j=await r.json(); if(j&&Array.isArray(j.bets)){ bets=j.bets; betServer=true; } renderBetting(); }
   catch(e){ try{localStorage.setItem('lgm_bets',JSON.stringify(bets));}catch(_){}; renderBetting(); }
@@ -1535,6 +2037,7 @@ async function syncLive(){
 
 /* ---------- TABS ---------- */
 function setTab(t){
+  curTab=t;
   document.querySelectorAll('section').forEach(s=>{
     const which = s.id==='secBook' ? 'book' : (s.id==='secAdmin' ? 'admin' : (s.id==='secWrapped' ? 'wrapped' : 'pool'));
     s.style.display = (which===t)?'':'none';
@@ -1547,6 +2050,7 @@ function setTab(t){
   const hash=t==='book'?'#book':t==='admin'?'#admin':t==='wrapped'?'#wrapped':location.pathname+location.search;
   try{ history.replaceState(null,'',hash); }catch(e){}
   if(t==='admin') ensureAdmin();
+  if(typeof renderSlip==='function') renderSlip();
 }
 
 /* ---------- ADMIN ---------- */
@@ -1658,5 +2162,6 @@ setInterval(loadBets, 60000);
 try{ const _h=(typeof location!=='undefined'&&location.hash)||''; setTab(_h==='#admin'?'admin':_h==='#book'?'book':_h==='#wrapped'?'wrapped':'pool'); }catch(e){}
 
 </script>
+  <div id="betSlip" class="betslip-float" style="display:none"></div>
 </body>
 </html>
