@@ -24,6 +24,10 @@ export default async (req) => {
         let list = (await store.get(KEY, { type:'json' })) || [];
         if (b.action === 'delete' && b.id) { list = list.filter(x => x.id !== String(b.id)); await store.setJSON(KEY, list); }
         else if (b.action === 'wipe') { list = []; await store.setJSON(KEY, list); }
+        else if (b.action === 'import' && b.data) {                       // one-time migration to a new site
+          if (Array.isArray(b.data.bets))   { list = b.data.bets.slice(-2000); await store.setJSON(KEY, list); }
+          if (Array.isArray(b.data.roster)) { await store.setJSON(RKEY, b.data.roster.slice(-50)); }
+        }
         else if (b.action !== 'ping') return Response.json({ ok:false, error:'bad admin action' }, { status:400 });
         const roster = (await store.get(RKEY, { type:'json' })) || [];
         return Response.json({ ok:true, bets:list, roster });

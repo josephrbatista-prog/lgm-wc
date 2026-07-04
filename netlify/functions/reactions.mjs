@@ -8,7 +8,15 @@ export default async (req) => {
   const KEY = 'tallies';
   try {
     if (req.method === 'POST') {
-      const { manager, emoji, delta } = await req.json();
+      const body = await req.json();
+      if (body && body.import === true) {                                 // one-time migration to a new site
+        const admin = process.env.BOOK_ADMIN_KEY;
+        if (!admin || body.adminKey !== admin) return Response.json({ error: 'unauthorized' }, { status: 403 });
+        const seed = (body.data && typeof body.data === 'object' && !Array.isArray(body.data)) ? body.data : {};
+        await store.setJSON(KEY, seed);
+        return Response.json(seed);
+      }
+      const { manager, emoji, delta } = body;
       if (!manager || !emoji) return Response.json({ error: 'bad request' }, { status: 400 });
       const data = (await store.get(KEY, { type: 'json' })) || {};
       data[manager] = data[manager] || {};

@@ -738,32 +738,61 @@ const DERBY_LINE={
  "Argentina":"The tournament FAVOURITE (Fink) vs Harris's plucky Cape Verde. If the minnows win, it's the greatest day in this group chat's history.",
  "Colombia":"Fink vs Harris, the sequel. Harris can lose Ghana and yawn; Fink needs Colombia deep or his season flatlines in mid-table."
 };
-/* ---------- JAKE'S ANALYSIS (Jake — shirtless, flag bandana, zero chill; any tie) ---------- */
-const JAKE_PRE=[
- "Alright, listen up. {a} vs {b}, {pts} points on the line. {oa} thinks they've got this, {ob} thinks they've got this — they're BOTH wrong, because chaos is my love language and I can smell a shootout from here. LET'S GO.",
- "{ob} trotting out {b} like it's a done deal. Buddy. It's a {round}. One bad touch and you're on a flight home crying into a customs form. {a} smells blood.",
- "{pts} points, {round}, win or go home. This is what we LIVE for. {oa}'s {a} against {ob}'s {b}, and I'll be watching shirtless with a cold one either way. Somebody's summer ends tonight.",
- "Real talk — {a} or {b}, I don't care who wins, I care who CHOKES. And somebody's about to. {oa}, {ob}: hydrate, pray, do whatever. It will not help you.",
- "{oa} vs {ob}. Two guys who talk a massive game in the chat. Now there's {pts} points where your mouth is. {a} or {b} — no do-overs, no next time, just pain.",
- "They asked me for a serious {round} preview. Nah. {a} beats {b} if {a} wants it more, and want is the only stat that matters. Ask my delts.",
- "{b} has looked shaky and {ob} knows it. {a} is coming in HOT for {pts} points and a ticket to the next round. One of these owners is about to get a hard lesson in hubris.",
- "Everybody's sleeping on this one. {a} vs {b}, {round}, and it is going to be a WAR. {oa} and {ob} better strap in — I've seen quieter bar fights, and I've started a few.",
- "Expert breakdown: {a} good. {b} also good. {pts} points make grown men do stupid things. Prediction? Somebody cries. Probably {ob}. Maybe {oa}. Not me — I'm just here for the carnage.",
- "{oa}'s got {a}, {ob}'s got {b}, and I've got a front-row seat and zero chill. Knockout football, baby — you win, or you go home and think long and hard about what you did.",
- "This is a {round}, not a group game. No hiding, no 'we'll get 'em next time.' {a} or {b} marches on with {pts}. The other owner gets to explain himself to the group chat. Brutal. Beautiful.",
- "I ran the numbers (I did not). {a} takes {b} on pure vibes and {pts} points swing on it. {oa} celebrates, {ob} rage-texts the chat at 2am. God bless the knockouts."
+/* ---------- JAKE'S ANALYSIS (real Jake: sharp degenerate gambler, measured hedger, Terps superfan, good-natured trash) ---------- */
+// Reads the book's odds (favourite vs dog), the live scoreline and the stakes so each read is about THIS game.
+const JAKE_CHALK=[
+ "The book's got {fav} laying a full sleeve of points here and I get it — but knockout soccer, one weird deflection and {dog} nick it 1–0. I've watched {fav} beat anyone when they're on and look totally lost when they're not. {favO} better hope it's the good version. {pts} on the line.",
+ "Chalk city. {fav} are the play on paper and {favO} knows it. But I had {dog} in a parlay once and stranger things have happened in a {round}. If {dog} steal it, {dogO} will never let {favO} hear the end of it. Must-watch.",
+ "Listen, I'd bet {fav} here and I'd feel fine about it — doesn't mean I'd feel GOOD about it. {dog}'s live, it's win-or-go-home, and {pts} points swing on one bounce. {favO} favored, {dogO} dangerous. Lol, buckle up.",
+ "{fav} are the class of this tie, full stop, and {favO}'s sitting pretty. But I've lost enough sure things to know a {round} is where favorites go to get embarrassed — yeesh, ask me about my bracket. Give me {dog} and the points and sweat it out.",
+ "On talent it's {fav} and it's not close — {favO} should be cruising for {pts}. But {dog}'s got nothing to lose and everything's a coin flip once it's 0–0 in the 80th. If {dogO} pulls the upset I'm framing it.",
+ "The line says {fav}. My gut says {fav}. My scars say never trust a {round}. {favO} favored, {dogO} lurking, {pts} on the table. I'll be watching every single minute of this one.",
+ "{fav} to advance is the smart money and I won't pretend otherwise — {favO}'s in a great spot. But one red card, one set piece, and suddenly {dog} are through and {dogO}'s doing a lap. That's exactly why we watch.",
+ "Give me {fav} to win but take {dog} to cover — that's the degenerate's hedge and yes I'd place both. {favO} vs {dogO} for {pts} and a spot in the next round. May the best man win, but I hope it's the guy I bet on.",
+ "{fav} are favored for a reason and {favO}'s feeling good. Feeling good is exactly when you get got. I've seen this movie. {dog}'s a live dog, {pts} points, {round}, no do-overs."
+];
+const JAKE_COIN=[
+ "Pure coin flip and the book agrees — {a} and {b} priced right on top of each other. {oa} vs {ob} for {pts}, no favorite, no excuses. I don't have a lean, which means I'll bet it anyway. Wild watch coming.",
+ "Pick'em. Dead even. {a} or {b}, whoever wants it more in the 90th. {oa} and {ob} both know this is the kind of {round} you chew on all summer. Give me the slight dog and the points and let's ride.",
+ "No edge here and I've stared at it — {a} and {b} are basically the same price. {oa}, {ob}, one of you is going home on a coin toss and {pts} points. Low-key the best game of the round.",
+ "The kind of tie where I'd bet draw-no-bet just to sleep. {a} vs {b} is a true 50/50. {oa} vs {ob}, {pts} on the line, comes down to one moment of magic or one brutal mistake.",
+ "Coin's in the air. {a} can beat anyone on a good day and look lost on a bad one — same with {b}. {oa}, {ob}, buckle up, a {round} this even is where legends and goats get made.",
+ "Can't call it and neither can Vegas — {a}/{b} is a pick'em. Whoever's keeper has the game of his life goes through. {oa} vs {ob} for {pts}. I'll have a little something on it, obviously.",
+ "Even money, even teams, everything to play for. {a} vs {b}, {oa} against {ob}, {pts} points and a place in the next round. This is the one I'm actually clearing my schedule for."
+];
+const JAKE_LIVE=[
+ "It's LIVE and I've got a sweat on — {score}. Exactly the {round} nailbiter I warned you about. {oa} vs {ob}, {pts} riding on it. Somebody's about to be sick.",
+ "Currently {score} and my heart rate is not okay. Knockout soccer, baby — one goal flips everything for {oa} and {ob}. Do NOT change the channel.",
+ "{score} as we speak. I said this'd be a wild watch and here we are. {pts} points swinging on every touch. {oa}, {ob} — hope you're sitting down.",
+ "Live look-in: {score}. Must-watch stuff. Whoever grabs the next one is basically through. {oa} vs {ob}, and I regret every bet I placed.",
+ "{score} right now and it's everything I hoped for — a {round} living up to the billing. {pts} on the line for {oa} and {ob}. Yeesh.",
+ "It's on and it's {score}. I called it a coin flip and the coin's still in the air. {oa} vs {ob}, {pts} points, win or fly home. Glued to this."
 ];
 const JAKE_SELF=[
- "Hold up — {oa} owns BOTH {a} and {b}? HA. Can't lose, can't win, just sweats it out for {pts} points that move from one pocket to the other. Enjoy the existential crisis, pal.",
- "{oa} versus {oa}. Both teams his. This is a man arm-wrestling himself in the mirror for {pts} points. I've done it. It's weird. Godspeed, brother.",
- "Civil war in {oa}'s squad: {a} vs {b}, both his. No trash talk available, so I'll just say — imagine caring this much and being guaranteed to knock yourself out. Poetry."
+ "Funny one — {oa} owns {a} AND {b}, so there's no bet to make and nobody to trash talk. Just a man guaranteed to knock himself out for {pts} points. I've been there. Weird kind of hell. Enjoy, pal.",
+ "{oa} vs himself: {a} and {b} both his. Can't lose, can't win, just sweats {pts} points from one hand to the other. No line for the rest of us — but I'll still watch, because I watch everything.",
+ "Civil war in {oa}'s stable — {a} against {b}, both his. Nothing to bet, nothing to say, except imagine caring this hard about a game you're guaranteed to half-lose. {pts} points, a {round}, a headache.",
+ "{oa} double-owns this one — {a} vs {b} are both his. Rare tie with no gambling angle, so I'll just note that whoever wins, {oa} also loses. Poetic. Painful. Peak fantasy."
 ];
 function jakePregame(m){
   const a=m.a,b=m.b,oa=ownerOf(a),ob=ownerOf(b);
-  const pts=({'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12})[m.round]||4;
-  const pool=(oa===ob)?JAKE_SELF:JAKE_PRE;
+  const pts=({'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12})[m.round]||6;
   const key=m.key||(a+'|'+b); let h=0; for(let i=0;i<key.length;i++){ h=(h*31+key.charCodeAt(i))>>>0; }
+  const lv=(typeof liveScore==='function')?liveScore(a,b):null;
+  const oo=ODDS[a]||60000, po=ODDS[b]||60000;
+  const fav = oo<=po ? a : b, dog = (fav===a)?b:a;
+  const favO=ownerOf(fav)||'someone', dogO=ownerOf(dog)||'someone';
+  const ratio = Math.max(oo,po)/Math.max(1,Math.min(oo,po));
+  let pool;
+  if(oa===ob) pool=JAKE_SELF;
+  else if(lv) pool=JAKE_LIVE;
+  else if(ratio>=2.5) pool=JAKE_CHALK;
+  else pool=JAKE_COIN;
+  const score = lv?(lv.t1+' '+lv.g1+'–'+lv.g2+' '+lv.t2):'';
   return pool[h%pool.length]
+    .replace(/\{favO\}/g,favO).replace(/\{dogO\}/g,dogO)
+    .replace(/\{fav\}/g,fav).replace(/\{dog\}/g,dog)
+    .replace(/\{score\}/g,score)
     .replace(/\{a\}/g,a).replace(/\{b\}/g,b)
     .replace(/\{oa\}/g,oa||'someone').replace(/\{ob\}/g,ob||'someone')
     .replace(/\{pts\}/g,pts).replace(/\{round\}/g,m.round);
@@ -1137,7 +1166,7 @@ function renderAll(){
         <span class="ow"><span class="miniChip" style="background:${cb}"></span>${ob}</span></div>
       ${canPick?`<div class="picks">${btn(a,ca)}${btn(b,cb)}</div>`:''}
       <div class="stake">${framing}</div>
-      <div class="jkpre"><span class="jkhd">🇺🇸 Jake's analysis</span><span class="jkbody">${jakePregame(m)}</span></div>
+      <div class="jkpre"><span class="jkhd">🎲 Jake's analysis</span><span class="jkbody">${jakePregame(m)}</span></div>
     </div>`;
   });
   if(!db) db=`<div class="note" style="padding:2px 0">No ties teed up right now — the next round's fixtures appear here the moment their teams are decided.</div>`;
