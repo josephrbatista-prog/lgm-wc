@@ -444,6 +444,75 @@ details.rc .punds{margin-top:9px}
 .reactopt b{font-size:10px;color:var(--mut);font-weight:700}
 .reactopt.mine{background:rgba(212,160,23,.2)}
 .reactopt:hover{background:rgba(255,255,255,.08)}
+/* ---------- THE BRACKET (business end) ---------- */
+.r16hd{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:#ff5da2;padding:12px 14px 2px}
+.bracketWrap{overflow-x:auto;overflow-y:visible;padding:10px 14px 4px;-webkit-overflow-scrolling:touch}
+.bracket{display:flex;gap:0;min-width:max-content;align-items:stretch}
+.bkcol{display:flex;flex-direction:column;min-width:158px;padding:0 12px;position:relative}
+.bkcol+.bkcol{border-left:1px dashed rgba(255,255,255,.09)}
+.bkcolhd{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.09em;font-size:12px;color:var(--gold);text-align:center;margin:0 0 10px;white-space:nowrap}
+.bkcolhd span{color:var(--dim);font-weight:600;margin-left:5px;font-size:11px}
+.bkcolbody{display:flex;flex-direction:column;justify-content:space-around;gap:12px;flex:1}
+.bkmatch{background:linear-gradient(180deg,#161f30,#0d1420);border:1px solid rgba(255,255,255,.09);border-radius:11px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.bkmatch.scen{border-color:rgba(212,160,23,.55);box-shadow:0 0 0 1px rgba(212,160,23,.25),0 6px 18px rgba(0,0,0,.4)}
+.bkmatch.live{border-color:rgba(255,93,162,.6)}
+details.bkmatch>summary{list-style:none;cursor:pointer}
+details.bkmatch>summary::-webkit-details-marker{display:none}
+.bkslot{display:flex;align-items:center;gap:7px;padding:9px 10px;font-size:13px;font-weight:700;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s}
+.bkslot:last-child{border-bottom:0}
+.bkslot .bkfl{font-size:15px;line-height:1}
+.bkslot .bkmid{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.12}
+.bkslot .bktn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bkslot .bkown{font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92}
+.bkslot .bktick{color:var(--gold);font-weight:900}
+.bkslot.win{color:#fff;background:linear-gradient(90deg,rgba(212,160,23,.20),rgba(212,160,23,.04))}
+.bkslot.lose{opacity:.4}
+.bkslot.lose .bktn{text-decoration:line-through}
+.bkslot.tbd{color:var(--dim);font-style:italic;justify-content:center;font-weight:600}
+.bkslot.pick{cursor:pointer}
+.bkslot.pick:active,.bkslot.pick:hover{background:rgba(255,255,255,.07)}
+.bkscore{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);text-align:center;padding:5px 4px;background:rgba(0,0,0,.25)}
+.bkscore.live{color:#ff5da2;font-weight:800}
+.bkscore .bktakes{color:var(--gold);font-weight:800}
+.bktalk{padding:4px 8px 8px;background:rgba(0,0,0,.22)}
+.bkchamp .bkcolbody{justify-content:center}
+.bktrophy{text-align:center;padding:14px 10px;background:linear-gradient(180deg,rgba(212,160,23,.20),rgba(212,160,23,.03));border:1px solid rgba(212,160,23,.55);border-radius:13px;box-shadow:0 0 22px rgba(212,160,23,.18)}
+.bktrophy.tbd{opacity:.45;box-shadow:none;filter:grayscale(.6)}
+.bktrophy .tro{font-size:30px;line-height:1;filter:drop-shadow(0 0 10px rgba(212,160,23,.55))}
+.bktrophy .bkfl.big{font-size:26px;margin-top:4px}
+.bktrophy .bkchname{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:#fff;margin-top:3px;letter-spacing:.02em}
+.bktrophy .bkchown{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:5px;justify-content:center;margin-top:3px}
+/* ---------- #AnyoneButHarris ---------- */
+.abhwrap{padding:12px 14px 14px}
+.abhHero{text-align:center;padding:6px 0 8px}
+.abhlabel{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--dim)}
+.abhbig{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:54px;line-height:1}
+.abhbig span{font-size:24px;margin-left:2px}
+.abhmeter{height:8px;border-radius:5px;background:rgba(255,255,255,.09);overflow:hidden;margin:8px auto;max-width:320px}
+.abhfill{height:100%;border-radius:5px;transition:width .5s}
+.abhsub{font-size:13px;color:var(--mut);margin-top:4px;font-weight:700}
+.abhcol{margin-top:12px}
+.abhh{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:13px;color:var(--ink);margin-bottom:7px}
+.abhrow{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#131b28;border:1px solid rgba(255,255,255,.06);border-radius:9px;margin-bottom:6px;font-size:13px}
+.abhrow.lead{border-color:rgba(34,211,160,.45)}
+.abhrow .abhfl{font-size:16px;line-height:1}
+.abhrow .abhtm{font-weight:800;color:#fff;white-space:nowrap}
+.abhrow .abhvs{flex:1;color:var(--dim);font-size:11.5px}
+.abhimp{font-weight:800;font-size:12px;color:#22d3a0;white-space:nowrap}
+.abhnote{font-size:12px;color:var(--mut);padding:1px 2px 8px;line-height:1.45}
+.abhactions{margin-top:10px}
+.abhactions .btn{width:100%}
+/* ---------- LIVE WIN-PROB TICKER ---------- */
+.tickerbar{display:flex;align-items:center;gap:9px;padding:9px 12px;background:linear-gradient(90deg,#0b1220,#151d2e);border-bottom:1px solid rgba(255,255,255,.08)}
+.tklive{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;color:#ff4d4d;white-space:nowrap;animation:tkpulse 1.6s infinite}
+@keyframes tkpulse{0%,100%{opacity:1}50%{opacity:.35}}
+.tklabel{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:.1em;color:var(--gold);white-space:nowrap}
+.tktrack{display:flex;gap:6px;overflow-x:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tktrack::-webkit-scrollbar{display:none}
+.tk{white-space:nowrap;font-size:12px;font-weight:800;color:var(--mut);background:rgba(255,255,255,.05);border-radius:6px;padding:3px 8px}
+.tk i{font-style:normal;color:var(--dim);font-weight:600}
+.tk.up{color:#22d3a0}
+.tk.dn{color:#ff6b6b}
 </style>
 </head>
 <body>
@@ -483,26 +552,20 @@ details.rc .punds{margin-top:9px}
 
   <!-- KNOCKOUTS -->
   <section>
-    <div class="h"><span class="disp">Knockouts</span><span class="tag" id="koTag">the bracket, live</span></div>
+    <div class="h"><span class="disp">The Bracket</span><span class="tag" id="koTag">the road to the final</span></div>
     <div class="card">
-      <div style="padding:14px 14px 2px" class="note"><b style="color:var(--ink)">Done and dusted.</b> Every settled knockout tie — the score, who banked the points, and the punditry. Updates itself as each round is played.</div>
-      <div class="recap" id="recap"></div>
-      <div style="padding:6px 14px 2px" class="note"><b style="color:var(--gold)">Still to come — every tie a manager derby.</b> The current round's fixtures, live. Two of you own the teams in each one; the winner banks the points and marches on, the loser's out. The bracket advances itself all the way to the final.</div>
+      <div class="tickerbar" id="ticker"></div>
+      <div id="r16pending"></div>
       <div id="scenarioBar"></div>
-      <div class="derbies" id="derbies"></div>
+      <div class="bracketWrap"><div class="bracket" id="bracket"></div></div>
+      <div style="padding:2px 14px 14px" class="note"><b style="color:var(--gold)">Tap a team to send them through.</b> Real results lock the winners in as games finish — until then, click your way to the trophy and watch it flow through the table, ceilings and odds. Tap a finished tie for the score and the desk's takes.</div>
     </div>
   </section>
 
-  <!-- FULL POTENTIAL -->
+  <!-- #ANYONEBUTHARRIS -->
   <section>
-    <div class="h"><span class="disp">Full Potential</span><span class="tag">every surviving team, maxed out</span></div>
-    <div class="card">
-      <div class="pot" id="pot"></div>
-      <div class="note" style="padding:0 14px 14px">
-        Solid bar = points banked now. Ghost bar = the ceiling: your points now <b>plus every one of your surviving teams winning out to the final</b>
-        (R32 win +4, then +6, +8, +10, +12). They obviously can't <i>all</i> lift the trophy — it's the absolute max still on the table, and a fair read on who's got the most ammunition left.
-      </div>
-    </div>
+    <div class="h"><span class="disp">#AnyoneButHarris</span><span class="tag">how to stop the front-runner</span></div>
+    <div class="card"><div class="abhwrap" id="abh"></div></div>
   </section>
 
   <!-- SIMULATOR -->
@@ -543,12 +606,6 @@ details.rc .punds{margin-top:9px}
     </div>
   </section>
 
-  <!-- AWARDS -->
-  <section>
-    <div class="h"><span class="disp">Superlatives</span><span class="tag">as it stands</span></div>
-    <div class="card"><div class="awards" id="awards"></div></div>
-  </section>
-
   <!-- ZLATAN POWER RANKINGS -->
   <section>
     <div class="h"><span class="disp">Zlatan's Power Rankings</span><span class="tag">by Zlatan</span></div>
@@ -569,12 +626,6 @@ details.rc .punds{margin-top:9px}
     <div class="card"><div class="boot" id="boot"></div>
       <div class="note" style="padding:0 14px 14px">Total goals scored by each manager's six nations, <b>auto-updated from the live results feed</b>. (Falls back to a manual count if the feed can't be reached.)</div>
     </div>
-  </section>
-
-  <!-- ROAST GENERATOR -->
-  <section>
-    <div class="h"><span class="disp">Roast Generator</span><span class="tag">ammo for the group chat</span></div>
-    <div class="card"><div class="roasts" id="roasts"></div></div>
   </section>
 
   <!-- STORY CARDS -->
@@ -1109,52 +1160,15 @@ function renderAll(){
       <button class="btn ghost" onclick="resetScenario()">Reset to real results</button></div>`;
   } else { bar.innerHTML=''; }
 
-  // Recap — ONLY the latest round with results (previous rounds drop off as the bracket advances).
-  // Each tie is an accordion: score always visible, pundit takes expand on tap.
-  const _RB = buildStatus(false).rounds;
-  // Show the round in progress (its finished ties, or a placeholder). Completed earlier rounds
-  // drop off — once R32 is done we hold the space for R16, and so on up the bracket.
-  let _showRi=-1;
-  for(let ri=0; ri<_RB.length; ri++){ if(_RB[ri].matches.some(m=>m.a&&m.b&&!m.w)){ _showRi=ri; break; } }
-  if(_showRi<0){ for(let ri=0; ri<_RB.length; ri++){ if(_RB[ri].matches.some(m=>m.a&&m.b&&m.w)) _showRi=ri; } }
-  let rc='';
-  const _rdNow=_showRi>=0?_RB[_showRi]:null;
-  const _played=_rdNow?_rdNow.matches.filter(m=>m.a&&m.b&&m.w):[];
-  if(_showRi<0){
-    rc=`<div class="note" style="padding:2px 0">No knockout ties settled yet — the first result lands here with the score and the pundit takes.</div>`;
-  } else if(!_played.length){
-    rc=`<div class="note" style="padding:2px 0"><b style="color:var(--ink)">${_rdNow.name}</b> is up next — settled ties land here with scores and pundit takes the moment games finish.</div>`;
-  } else {
-    const rd=_rdNow;
-    const played=_played;
-    rc+=`<div class="recapRound">${rd.name} <span>${played.length} settled</span></div><div class="recapGrid">`;
-    rd.matches.forEach((m,i)=>{
-      if(!(m.a&&m.b&&m.w)) return;
-      const a=m.a,b=m.b,w=m.w; const loser=(w===a)?b:a; const ow=ownerOf(w),ol=ownerOf(loser); const internal=ow===ol;
-      const gw=goalsFor(a,b,w),gl=goalsFor(a,b,loser),pw=pensFor(a,b,w),pl=pensFor(a,b,loser);
-      const pens=(pw!=null&&pl!=null),haveScore=(gw!=null&&gl!=null);
-      const head=haveScore?`${FLAG[w]} <span class="w">${w}</span> <span class="rcsc">${gw}–${gl}</span> <span class="x">${loser}</span> ${FLAG[loser]}${pens?` <span class="pens">${pw}–${pl} pens</span>`:''}`
-        :`${FLAG[w]} <span class="w">${w}</span> <span class="adv">▲</span> <span style="color:var(--dim)">bt</span> ${FLAG[loser]} <span class="x">${loser}</span>`;
-      const key=keyOf(a,b); const ek=key.replace(/'/g,"\\'"); const isOpen=RECAP_OPEN.has(key)?' open':'';
-      const idx=i + _showRi*7;
-      rc+=`<details class="rc"${isOpen} ontoggle="recapToggle('${ek}',this.open)">
-        <summary class="rchd">${head}<span class="tagi">${internal?(ow||'—')+' (both)':(ow||'—')+' ▸ '+(ol||'—')}</span><span class="rcchev">▾</span></summary>
-        ${punditRow(idx,w,loser,pens)}</details>`;
-    });
-    rc+=`</div>`;
-  }
-  document.getElementById('recap').innerHTML=rc;
-
-  // Still to come — the current round's ties (auto-advances R32 -> Final). What-if picks on R32.
+  // Round of 16 — the last unfinished R16 tie(s) stay as full cards above the bracket.
   let db=''; const PTS_LINE={'Round of 32':4,'Round of 16':6,'Quarter-final':8,'Semi-final':10,'Final':12};
-  knockoutMatches().filter(m=>!m.finished).forEach(m=>{
+  knockoutMatches().filter(m=>!m.finished && m.round==='Round of 16').forEach(m=>{
     const a=m.a,b=m.b; const oa=ownerOf(a), ob=ownerOf(b); if(!oa||!ob) return;
     const ca=OWN[oa].color, cb=OWN[ob].color; const lv=liveScore(a,b);
-    const pts=PTS_LINE[m.round]||4;
+    const pts=PTS_LINE[m.round]||6;
     const pick = scenario[m.key]||null;
-    const canPick = !m.finished;                       // what-if now available on any pending tie (the R16)
     const ek=m.key.replace(/'/g,"\\'");
-    const btn=(team,c)=> canPick?`<button class="pickbtn ${pick===team?'on':''}" style="--pc:${c}" onclick="setPick('${ek}','${team.replace(/'/g,"\\'")}')">${pick===team?'✓ ':''}${team} through</button>`:'';
+    const btn=(team,c)=>`<button class="pickbtn ${pick===team?'on':''}" style="--pc:${c}" onclick="setPick('${ek}','${team.replace(/'/g,"\\'")}')">${pick===team?'✓ ':''}${team} through</button>`;
     const framing = oa===ob ? (oa+' owns both — a guaranteed points-mover') : (DERBY_LINE[a]||(oa+' vs '+ob+' — winner survives, loser out.'));
     db+=`<div class="derby ${pick?'decided':''} ${lv?'live':''}">
       ${lv?`<div class="derbyLive"><span class="pulse"></span>LIVE · ${lv.t1} <b>${lv.g1}–${lv.g2}</b> ${lv.t2}</div>`:''}
@@ -1164,26 +1178,18 @@ function renderAll(){
       <div class="vs">— vs —</div>
       <div class="side ${pick===b?'winr':pick&&pick!==b?'losr':''}"><span class="fl">${FLAG[b]}</span><span class="tn">${b}</span>
         <span class="ow"><span class="miniChip" style="background:${cb}"></span>${ob}</span></div>
-      ${canPick?`<div class="picks">${btn(a,ca)}${btn(b,cb)}</div>`:''}
+      <div class="picks">${btn(a,ca)}${btn(b,cb)}</div>
       <div class="stake">${framing}</div>
       <div class="jkpre"><span class="jkhd">🎲 Jake's analysis</span><span class="jkbody">${jakePregame(m)}</span></div>
     </div>`;
   });
-  if(!db) db=`<div class="note" style="padding:2px 0">No ties teed up right now — the next round's fixtures appear here the moment their teams are decided.</div>`;
-  document.getElementById('derbies').innerHTML=db;
+  document.getElementById('r16pending').innerHTML = db ? `<div class="r16hd">🔴 Round of 16 · still to be decided</div>${db}` : '';
 
-  // Full potential
-  const maxCeil=Math.max(...MGRS.map(m=>m.ceiling));
-  let pot='';
-  [...MGRS].sort((a,b)=>b.ceiling-a.ceiling).forEach(m=>{
-    const cW=m.pts/maxCeil*100, gW=m.ceiling/maxCeil*100;
-    pot+=`<div class="pbar"><div class="top"><span class="chip" style="width:11px;height:16px;background:${m.color}"></span>
-      <span class="nm">${m.name}</span><span class="live">${m.alive} alive · +${m.remain} on the table</span></div>
-      <div class="track"><div class="fillG" style="left:0;width:${gW}%;background:${m.color}"></div>
-      <div class="fillC" style="width:${cW}%;background:${m.color}"><span class="clab">${m.pts}</span></div>
-      <span class="tlab">ceiling ${m.ceiling}</span></div></div>`;
-  });
-  document.getElementById('pot').innerHTML=pot;
+  // The bracket — quarter-finals to the trophy. Real results advance teams; tap a team to simulate.
+  renderBracket();
+
+  renderABH();
+  renderTicker();
 
   // Stats: W/D/L stacked
   let sk='';
@@ -1329,21 +1335,54 @@ document.getElementById('simBtn').addEventListener('click',()=>{
   setTimeout(()=>{ SIM_N=8000; runSim(); SIM_N=6000; btn.textContent='▶ Run again'; },30);
 });
 
-/* ---------- ROAST GENERATOR ---------- */
-function renderRoasts(){
-  document.getElementById('roasts').innerHTML = Object.keys(OWN).map(o=>`
-    <div class="roastcard" style="--rc:${OWN[o].color}">
-      <div class="rtop"><span class="chip" style="width:10px;height:15px;background:${OWN[o].color}"></span>${o}</div>
-      <div class="rline" id="roast-${o}">Tap for ammo.</div>
-      <div class="rbtns"><button class="btn" onclick="fireRoast('${o}')">🔥 Roast</button>
-        <button class="btn ghost" onclick="copyRoast('${o}')">Copy</button></div>
-    </div>`).join('');
+/* ---------- #AnyoneButHarris — the group's rooting guide ---------- */
+function abhBoot(){
+  knockoutMatches().filter(m=>!m.finished && m.a && m.b).forEach(m=>{
+    const ho = ownerOf(m.a)==='Harris'?m.a:(ownerOf(m.b)==='Harris'?m.b:null);
+    if(!ho) return; const opp=(ho===m.a)?m.b:m.a; scenario[keyOf(m.a,m.b)]=opp;
+  });
+  renderAll();
 }
-function fireRoast(o){ const line=pickRoast(o);
-  const el=document.getElementById('roast-'+o); el.textContent='“'+line+'”'; el.dataset.line=line; }
-function copyRoast(o){ const el=document.getElementById('roast-'+o); const line=el.dataset.line||pickRoast(o);
-  const txt=`${o}: “${line}”`; navigator.clipboard&&navigator.clipboard.writeText(txt);
-  const b=event.target; const t=b.textContent; b.textContent='Copied!'; setTimeout(()=>b.textContent=t,1200); }
+function renderABH(){
+  const el=document.getElementById('abh'); if(!el) return;
+  const N=2000, NCF=900, names=Object.keys(OWN);
+  const base=simulate(N); const hp=(base.wins['Harris']||0)/N*100;
+  const pend=knockoutMatches().filter(m=>!m.finished && m.a && m.b);
+  const hTies=pend.filter(m=>ownerOf(m.a)==='Harris'||ownerOf(m.b)==='Harris').map(m=>{
+    const t=ownerOf(m.a)==='Harris'?m.a:m.b; const opp=(t===m.a)?m.b:m.a;
+    return {team:t,opp,key:keyOf(m.a,m.b),round:m.round};
+  });
+  const withTemp=(k,w,fn)=>{ const has=Object.prototype.hasOwnProperty.call(scenario,k), prev=scenario[k];
+    scenario[k]=w; try{ return fn(); } finally { if(has) scenario[k]=prev; else delete scenario[k]; } };
+  const threats=hTies.map(h=>{ const cf=withTemp(h.key,h.opp,()=>simulate(NCF)); const cfp=(cf.wins['Harris']||0)/NCF*100; return {...h, drop:Math.max(0,hp-cfp)}; }).sort((a,b)=>b.drop-a.drop);
+  const chasers=names.filter(m=>m!=='Harris').map(m=>({m,pct:(base.wins[m]||0)/N*100})).sort((a,b)=>b.pct-a.pct);
+  const top=chasers[0];
+  let dream=null;
+  if(hTies.length){ const had={}; hTies.forEach(h=>{ had[h.key]=Object.prototype.hasOwnProperty.call(scenario,h.key)?scenario[h.key]:undefined; scenario[h.key]=h.opp; });
+    const d=simulate(NCF); hTies.forEach(h=>{ if(had[h.key]===undefined) delete scenario[h.key]; else scenario[h.key]=had[h.key]; });
+    dream=names.map(m=>({m,pct:(d.wins[m]||0)/NCF*100})).sort((a,b)=>b.pct-a.pct)[0]; }
+  const tone = hp>=45?'#ff4d4d':hp>=25?'#f5a623':'#22d3a0';
+  let h=`<div class="abhHero"><div class="abhlabel">Harris title odds</div>
+    <div class="abhbig" style="color:${tone}">${hp.toFixed(0)}<span>%</span></div>
+    <div class="abhmeter"><div class="abhfill" style="width:${Math.min(100,hp).toFixed(0)}%;background:${tone}"></div></div>
+    <div class="abhsub">${hp>=45?'He is running away with it. Code red.':hp>=25?'Clear favourite. Time to organise.':hp>=10?'Beatable — hold the line.':'The people are winning. Keep it up.'}</div></div>`;
+  h+=`<div class="abhcol"><div class="abhh">🚫 Root against — Harris's live teams</div>`;
+  if(!threats.length){ h+=`<div class="abhnote">Harris has no teams left in play — he can't add a single point. Now it's purely on the rest of you to outscore him.</div>`; }
+  else threats.forEach(t=>{ const oo=ownerOf(t.opp); h+=`<div class="abhrow"><span class="abhfl">${FLAG[t.team]||'⚽'}</span><span class="abhtm">${t.team}</span><span class="abhvs">${t.round} · vs ${FLAG[t.opp]||''} ${t.opp}${oo?` (${oo})`:''}</span><span class="abhimp">knock out → −${t.drop.toFixed(0)}%</span></div>`; });
+  h+=`</div>`;
+  h+=`<div class="abhcol"><div class="abhh">📣 Get behind — the resistance</div>`;
+  if(top){ const tt=pend.filter(m=>ownerOf(m.a)===top.m||ownerOf(m.b)===top.m).map(m=>ownerOf(m.a)===top.m?m.a:m.b);
+    h+=`<div class="abhrow lead"><span class="abhfl">🥇</span><span class="abhtm">${top.m}</span><span class="abhvs">best placed to deny him</span><span class="abhimp">${top.pct.toFixed(0)}%</span></div>`;
+    if(tt.length) h+=`<div class="abhnote">Cheer on ${tt.map(t=>`${FLAG[t]||''} ${t}`).join(' · ')} — every win for them is a nail in the coffin.</div>`;
+    if(chasers[1]&&chasers[1].pct>=3) h+=`<div class="abhrow"><span class="abhfl">🥈</span><span class="abhtm">${chasers[1].m}</span><span class="abhvs">next best hope</span><span class="abhimp">${chasers[1].pct.toFixed(0)}%</span></div>`;
+  }
+  h+=`</div>`;
+  h+=`<div class="abhactions"><button class="btn" onclick="abhBoot()">🧨 Dream scenario — boot every Harris team next round</button>`;
+  if(dream && dream.m!=='Harris') h+=`<div class="abhnote">Pull that off and <b style="color:${OWN[dream.m].color}">${dream.m}</b> becomes the favourite (${dream.pct.toFixed(0)}%). Tap to load it into the bracket.</div>`;
+  else if(dream) h+=`<div class="abhnote">Grim news: even booting his teams, Harris stays out front. This one may be out of your hands.</div>`;
+  h+=`</div>`;
+  el.innerHTML=h;
+}
 
 /* ---------- STORY CARDS (canvas → PNG + copy text) ---------- */
 let jakeImg=null;
@@ -1467,6 +1506,66 @@ const AWARDS=[
 function renderAwards(){
   document.getElementById('awards').innerHTML = AWARDS.map(a=>
     `<div class="aw"><div class="em">${a[0]}</div><div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div></div>`).join('');
+}
+
+/* ---------- THE BRACKET (QF -> Final; real results advance, clicks simulate) ---------- */
+function bkMatch(m, ri){
+  const a=m.a,b=m.b,w=m.w;
+  const key=(a&&b)?keyOf(a,b):null;
+  const rr=key?RESULTS[key]:null; const real=rr?rr.winner:null; const locked=!!real;
+  const lv=(a&&b)?liveScore(a,b):null;
+  const slot=(team)=>{
+    if(!team) return `<div class="bkslot tbd">TBD</div>`;
+    const own=ownerOf(team), oc=own?OWN[own].color:'#556';
+    const isW=w===team, isL=w&&w!==team, pickable=!locked&&!!a&&!!b;
+    const ek=key?key.replace(/'/g,"\\'"):'', et=team.replace(/'/g,"\\'");
+    const click=pickable?` onclick="setPick('${ek}','${et}')"`:'';
+    return `<div class="bkslot${isW?' win':''}${isL?' lose':''}${pickable?' pick':''}"${click}><span class="bkfl">${FLAG[team]||'⚽'}</span><span class="bkmid"><span class="bktn">${team}</span>${own?`<span class="bkown" style="color:${oc}">${own}</span>`:''}</span>${isW?'<span class="bktick">✓</span>':''}</div>`;
+  };
+  const body=`${slot(a)}${slot(b)}`;
+  if(locked){
+    const loser=(real===a)?b:a;
+    const gw=goalsFor(a,b,real), gl=goalsFor(a,b,loser), pw=pensFor(a,b,real), pl=pensFor(a,b,loser);
+    const pens=(pw!=null&&pl!=null), sc=(gw!=null&&gl!=null)?`${gw}–${gl}${pens?` (${pw}–${pl}p)`:''}`:'FT';
+    const ek=key.replace(/'/g,"\\'"), isOpen=RECAP_OPEN.has(key)?' open':'', idx=(ri||0)*7+(a?a.length:0);
+    return `<details class="bkmatch locked"${isOpen} ontoggle="recapToggle('${ek}',this.open)"><summary>${body}<div class="bkscore">${sc} · <span class="bktakes">takes ▾</span></div></summary><div class="bktalk">${punditRow(idx, real, loser, pens)}</div></details>`;
+  }
+  return `<div class="bkmatch${w?' scen':''}${lv?' live':''}">${body}${lv?`<div class="bkscore live">${lv.g1}–${lv.g2} LIVE</div>`:''}</div>`;
+}
+function renderBracket(){
+  const rounds=buildStatus(true).rounds;
+  const spec=[[2,'Quarter-finals',8],[3,'Semi-finals',10],[4,'Final',12]];
+  let html='';
+  spec.forEach(([ri,label,pts])=>{
+    html+=`<div class="bkcol"><div class="bkcolhd">${label}<span>+${pts}</span></div><div class="bkcolbody">`;
+    rounds[ri].matches.forEach(m=>{ html+=bkMatch(m,ri); });
+    html+=`</div></div>`;
+  });
+  const champ=rounds[4].matches[0]?rounds[4].matches[0].w:null, cown=champ?ownerOf(champ):null;
+  html+=`<div class="bkcol bkchamp"><div class="bkcolhd">Champion</div><div class="bkcolbody"><div class="bktrophy${champ?'':' tbd'}"><div class="tro">🏆</div>${champ?`<div class="bkfl big">${FLAG[champ]||'⚽'}</div><div class="bkchname">${champ}</div><div class="bkchown"><span class="miniChip" style="background:${cown?OWN[cown].color:'#888'}"></span>${cown||''}</div>`:`<div class="bkchname" style="color:var(--dim)">—</div>`}</div></div></div>`;
+  document.getElementById('bracket').innerHTML=html;
+}
+
+/* ---------- LIVE WIN-PROBABILITY SWING TICKER (recomputes only on a real state change) ---------- */
+let WINPROB_LAST=null, WINPROB_SIG=null;
+function stateSig(){ return Object.keys(RESULTS).sort().join(',')+'|'+Object.keys(scenario).sort().map(k=>k+':'+scenario[k]).join(','); }
+function renderTicker(){
+  const el=document.getElementById('ticker'); if(!el) return;
+  const sig=stateSig();
+  if(sig===WINPROB_SIG && WINPROB_LAST) return;                 // nothing changed -> leave the ticker untouched (no sim noise)
+  const res=simulate(4000); const cur={}; Object.keys(OWN).forEach(m=>cur[m]=res.wins[m]/res.N*100);
+  const sorted=Object.keys(OWN).map(m=>({m,pct:cur[m]})).sort((a,b)=>b.pct-a.pct);
+  const swings = WINPROB_LAST ? Object.keys(OWN).map(m=>({m,d:cur[m]-(WINPROB_LAST[m]||0),pct:cur[m]})).filter(x=>Math.abs(x.d)>=2).sort((a,b)=>Math.abs(b.d)-Math.abs(a.d)) : [];
+  let label,chips;
+  if(swings.length){
+    label='ODDS SWING';
+    chips=swings.map(s=>`<span class="tk ${s.d>0?'up':'dn'}">${s.d>0?'▲':'▼'} ${s.m} ${s.d>0?'+':''}${s.d.toFixed(0)}% <i>(${s.pct.toFixed(0)}%)</i></span>`).join('');
+  } else {
+    label='TITLE ODDS';
+    chips=sorted.slice(0,6).map((r,i)=>`<span class="tk${i===0?' up':''}">${r.m} ${r.pct.toFixed(0)}%</span>`).join('');
+  }
+  WINPROB_LAST=cur; WINPROB_SIG=sig;
+  el.innerHTML=`<span class="tklive">◉ LIVE</span><span class="tklabel">${label}</span><div class="tktrack">${chips}</div>`;
 }
 
 /* ---------- ZLATAN'S POWER RANKINGS (live opinion — deliberately NOT the table) ---------- */
@@ -2162,8 +2261,6 @@ async function syncLiveAPI(){
 
 /* ---------- BOOT ---------- */
 renderAll();          // instant paint from built-in results
-renderAwards();
-renderRoasts();
 renderCardButtons();
 loadReactions();
 // Results: try the to-the-minute API first, fall back to openfootball (daily, no key), else built-in.
